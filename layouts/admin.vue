@@ -1,0 +1,21 @@
+<template>
+    <main
+        class="max-w-screen-xl mx-auto md:grid md:grid-cols-[240px_minmax(0,1fr)]"
+    >
+        <SideBar />
+        <section>
+            <ResponsiveSpace />
+            <div class="h-20 p-2 border-b border-dashed">
+                <div class="flex items-center justify-end gap-2">
+                    <h1>Root</h1>
+                    <UiAvatar>
+                        <UiAvatarImage src="https://i.pravatar.cc/300" />
+                    </UiAvatar>
+                </div>
+            </div>
+            <section class="px-6 py-4">
+                <slot></slot>
+            </section>
+        </section>
+    </main>
+</template>

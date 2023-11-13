@@ -8,6 +8,16 @@ export default defineNuxtConfig({
         '@vueuse/nuxt',
         'nuxt-icon',
     ],
+    components: [
+        {
+            path: '~/components',
+        },
+        {
+            path: '~/components/ui',
+            extensions: ['.vue'],
+            prefix: 'Ui',
+        },
+    ],
     tailwindcss: {
         exposeConfig: true,
     },

@@ -15,11 +15,19 @@
     "@nuxtjs/tailwindcss": "^6.8.1",
     "nuxt": "^3.8.0",
     "nuxt-icon": "^0.6.1",
+    "typescript": "^5.2.2",
     "vue": "^3.3.7",
     "vue-router": "^4.2.5"
   },
   "dependencies": {
     "@pinia/nuxt": "^0.5.1",
-    "@vueuse/nuxt": "^10.5.0"
+    "@radix-icons/vue": "^1.0.0",
+    "@vueuse/core": "^10.6.1",
+    "@vueuse/nuxt": "^10.5.0",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.0.0",
+    "radix-vue": "^1.0.2",
+    "tailwind-merge": "^2.0.0",
+    "tailwindcss-animate": "^1.0.7"
   }
 }
