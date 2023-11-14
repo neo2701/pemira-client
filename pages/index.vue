@@ -5,7 +5,7 @@
                 <h1 class="text-xl">List Event</h1>
                 <div class="text-sm">Event pemilihan yang telah dibuat</div>
             </div>
-            <NuxtLink to="create">
+            <NuxtLink to="login">
                 <UiButton>
                     Tambah Event <i name="fluent:add-12-filled"></i>
                 </UiButton>
