@@ -1,10 +1,19 @@
 export default defineNuxtConfig({
-    devtools: { enabled: true },
+    app: {
+        head: {
+            title: 'PEMIRA 2024',
+        },
+    },
     css: ['~/assets/css/main.css'],
+    devtools: { enabled: true },
+    ssr: false,
     runtimeConfig: {
         public: {
             apiBase: process.env.API_BASE,
         },
+    },
+    imports: {
+        dirs: ['~/types'],
     },
     modules: [
         '@nuxtjs/tailwindcss',
@@ -28,7 +37,7 @@ export default defineNuxtConfig({
     },
     googleFonts: {
         families: {
-            Inter: true,
+            Inter: [400, 500, 600, 700, 800, 900],
         },
     },
 });

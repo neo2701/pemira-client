@@ -5,17 +5,12 @@ onMounted(async () => {
 
     if (!accessToken) navigateTo('/login');
 
-    const { data, error, response } = await useApiFetch('/auth/login', {
+    const response = await useApiFetch('/auth/login', {
         method: 'POST',
         body: JSON.stringify({ accessToken }),
     });
 
-    if (error.value || !data.value) {
-        navigateTo('/login');
-    }
-
-    useAuth().signIn(data.value);
-    navigateTo('/');
+    console.log(response.data.value);
 });
 </script>
 

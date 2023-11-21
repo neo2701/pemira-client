@@ -5,15 +5,12 @@ const fetchCookie = async () => {
 
     await useFetchCore(config.public.apiBase + '/../sanctum/csrf-cookie', {
         credentials: 'include',
-        headers: {
-            'Content-Type': 'application/json',
-        },
     });
 
     return useCookie('XSRF-TOKEN')?.value;
 };
 
-export const useFetch = async (url: string, options) => {
+export const useApiFetch = async (url: string, options: RequestInit = {}) => {
     let token = useCookie('XSRF-TOKEN')?.value;
 
     if (!token) token = await fetchCookie();
@@ -21,9 +18,12 @@ export const useFetch = async (url: string, options) => {
     const config = useRuntimeConfig();
 
     return await useFetchCore(config.public.apiBase + url, {
+        credentials: 'include',
         headers: {
+            Accept: 'application/json',
             'Content-Type': 'application/json',
-            'X-XSRF-TOKEN': token,
+            'X-XSRF-TOKEN': token ?? '',
         },
+        ...options,
     }).json();
 };
