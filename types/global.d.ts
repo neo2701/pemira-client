@@ -9,3 +9,11 @@ type User = {
     picture: string;
     role: number;
 };
+
+interface Event {
+    title: string;
+    description: string;
+    logo: string;
+    open_election_at: string;
+    close_election_at: string;
+}

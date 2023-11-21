@@ -1,3 +1,9 @@
+<script lang="ts" setup>
+defineProps<{
+    event: Event;
+}>();
+</script>
+
 <template>
     <UiCard
         class="relative cursor-pointer transition select-none overflow-hidden group hover:ring-2 hover:ring-black active:scale-95"
@@ -10,12 +16,12 @@
             </UiButton>
         </UiCardHeader>
         <UiCardHeader class="flex items-center border-b">
-            <img src="/himatifa.jpg" alt="HIMATIFA" class="w-1/2" />
+            <img :src="$props.event.logo" alt="HIMATIFA" class="w-1/2" />
         </UiCardHeader>
         <UiCardHeader>
-            <UiCardTitle>PEMIRA IF 2024</UiCardTitle>
+            <UiCardTitle>{{ $props.event.title }}</UiCardTitle>
             <UiCardDescription>
-                Pemilihan BLJ dan Ketua Wakil HIMATIFA
+                {{ $props.event.description }}
             </UiCardDescription>
         </UiCardHeader>
     </UiCard>

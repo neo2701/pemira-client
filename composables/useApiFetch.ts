@@ -17,7 +17,7 @@ export const useApiFetch = async (url: string, options: RequestInit = {}) => {
 
     const config = useRuntimeConfig();
 
-    return await useFetchCore(config.public.apiBase + url, {
+    const response = await useFetchCore(config.public.apiBase + url, {
         credentials: 'include',
         headers: {
             Accept: 'application/json',
@@ -26,4 +26,14 @@ export const useApiFetch = async (url: string, options: RequestInit = {}) => {
         },
         ...options,
     }).json();
+
+    if (response.statusCode.value === 401) {
+        const route = useRoute();
+        const loginPath = route.fullPath.includes('/admin')
+            ? '/admin/login'
+            : '/login';
+        navigateTo('/login');
+    }
+
+    return response;
 };
