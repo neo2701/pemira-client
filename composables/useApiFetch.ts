@@ -1,6 +1,6 @@
 import { useFetch as useFetchCore } from '@vueuse/core';
 
-const fetchCookie = async () => {
+export const fetchCookie = async () => {
     const config = useRuntimeConfig();
 
     await useFetchCore(config.public.apiBase + '/../sanctum/csrf-cookie', {
@@ -17,14 +17,22 @@ export const useApiFetch = async (url: string, options: RequestInit = {}) => {
 
     const config = useRuntimeConfig();
 
+    const isMultipart = options.body instanceof FormData;
+    const defaultHeaders = {
+        Accept: 'application/json',
+        'Cache-Control': 'no-cache',
+        'X-XSRF-TOKEN': token ?? '',
+    } as Record<string, string>;
+
+    if (!isMultipart) defaultHeaders['Content-Type'] = 'application/json';
+
     const response = await useFetchCore(config.public.apiBase + url, {
         credentials: 'include',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            'X-XSRF-TOKEN': token ?? '',
-        },
         ...options,
+        headers: {
+            ...defaultHeaders,
+            ...options.headers,
+        },
     }).json();
 
     if (response.statusCode.value === 401) {

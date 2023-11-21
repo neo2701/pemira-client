@@ -2,10 +2,13 @@
 definePageMeta({
     layout: 'admin',
 });
+
+const route = useRoute();
 </script>
 
 <template>
-    <NuxtLayout>
+    <NuxtLayout v-if="route.path !== '/admin/login'">
         <NuxtPage />
     </NuxtLayout>
+    <NuxtPage v-else />
 </template>

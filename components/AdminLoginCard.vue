@@ -40,6 +40,7 @@ const form = reactive({
                     :disabled="$props.loading"
                     type="password"
                     placeholder="Masukkan password"
+                    @keydown.enter="emit('signIn', form.email, form.password)"
                 />
             </div>
             <UiButton

@@ -5,7 +5,7 @@ onMounted(async () => {
 
     if (!accessToken) navigateTo('/login');
 
-    const { data, error, response } = await useApiFetch('/auth/login', {
+    const { data, error } = await useApiFetch('/auth/login', {
         method: 'POST',
         body: JSON.stringify({ accessToken }),
     });

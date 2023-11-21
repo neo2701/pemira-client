@@ -2,6 +2,9 @@
 defineProps<{
     event: Event;
 }>();
+
+const runtimeConfig = useRuntimeConfig();
+const baseURL = runtimeConfig.public.apiBase + '/../storage/';
 </script>
 
 <template>
@@ -16,7 +19,11 @@ defineProps<{
             </UiButton>
         </UiCardHeader>
         <UiCardHeader class="flex items-center border-b">
-            <img :src="$props.event.logo" alt="HIMATIFA" class="w-1/2" />
+            <img
+                :src="baseURL + $props.event.logo"
+                :alt="$props.event.title"
+                class="w-1/2 rounded-lg"
+            />
         </UiCardHeader>
         <UiCardHeader>
             <UiCardTitle>{{ $props.event.title }}</UiCardTitle>

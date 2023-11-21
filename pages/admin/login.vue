@@ -4,6 +4,8 @@ const loading = ref(false);
 const signIn = async (email: string, password: string) => {
     loading.value = true;
 
+    await fetchCookie();
+
     const { data, error } = await useApiFetch('/auth/login', {
         method: 'POST',
         body: JSON.stringify({

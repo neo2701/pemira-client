@@ -9,7 +9,7 @@ const user = useAuth().user();
         <SideBar />
         <section>
             <ResponsiveSpace />
-            <div class="h-20 p-2 border-b border-dashed">
+            <div class="px-4 h-20 border-b border-dashed">
                 <div class="flex items-center justify-end gap-2">
                     <h1>{{ user?.name }}</h1>
                     <UiAvatar>
