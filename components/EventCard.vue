@@ -3,6 +3,10 @@ defineProps<{
     event: Event;
 }>();
 
+defineEmits<{
+    (e: 'click', event: Event): void;
+}>();
+
 const runtimeConfig = useRuntimeConfig();
 const baseURL = runtimeConfig.public.apiBase + '/../storage/';
 </script>
@@ -10,6 +14,7 @@ const baseURL = runtimeConfig.public.apiBase + '/../storage/';
 <template>
     <UiCard
         class="relative cursor-pointer transition select-none overflow-hidden group hover:ring-2 hover:ring-black active:scale-95"
+        @click="$emit('click', $props.event)"
     >
         <UiCardHeader
             class="w-full h-full absolute flex items-center justify-center bg-black bg-opacity-0 transition group-hover:bg-opacity-50"

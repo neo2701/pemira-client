@@ -82,7 +82,7 @@ const submit = async () => {
                         @click="openFilePicker"
                     >
                         <Icon
-                            name="fluent:upload-24-filled"
+                            name="fluent:upload-24-regular"
                             size="24"
                             class="opacity-0 group-hover:opacity-100"
                         />

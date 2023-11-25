@@ -6,6 +6,8 @@ const getEvents = async () => {
     events.value = data.value;
 };
 
+const openEvent = (event: Event) => navigateTo('/admin/events/' + event.id);
+
 onMounted(getEvents);
 </script>
 
@@ -17,9 +19,9 @@ onMounted(getEvents);
         </div>
         <NuxtLink to="/admin/events/create">
             <UiButton>
-                Tambah Event <i name="fluent:add-12-filled"></i>
+                Tambah Event <Icon name="fluent:add-12-regular" />
             </UiButton>
         </NuxtLink>
     </div>
-    <EventList :events="events" />
+    <EventList :events="events" @click="openEvent" />
 </template>

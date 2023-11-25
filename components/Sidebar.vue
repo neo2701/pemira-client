@@ -5,5 +5,10 @@
             <h2 class="text-3xl">PEMIRA</h2>
             <div class="text-sm font-semibold">E-Vote HIMATIFA</div>
         </div>
+        <div class="p-4">
+            <ul class="grid gap-2">
+                <slot />
+            </ul>
+        </div>
     </aside>
 </template>
