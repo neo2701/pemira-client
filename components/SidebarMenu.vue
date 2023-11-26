@@ -12,10 +12,10 @@ const active = computed(() => route.path.startsWith(props.to));
         <NuxtLink
             :to="props.to"
             :class="{
-                'bg-gray-100 text-black': active,
+                'bg-muted text-black': active,
                 'text-muted-foreground': !active,
             }"
-            class="flex px-4 py-2 items-center gap-2 text-sm font-medium rounded-lg cursor-pointer transition hover:bg-gray-100"
+            class="flex px-4 py-2 items-center gap-2 text-sm font-medium rounded-lg cursor-pointer transition hover:bg-muted"
         >
             <slot />
         </NuxtLink>

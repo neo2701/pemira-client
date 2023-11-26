@@ -17,7 +17,7 @@ const eventStore = useEventStore();
                     <span>Dashboard</span>
                 </SidebarMenu>
                 <SidebarMenu
-                    :to="`/admin/events/${eventStore.event?.id}/candidates`"
+                    :to="`/admin/events/${eventStore.event?.id}/divisions`"
                 >
                     <Icon name="fluent:people-16-regular" size="20" />
                     <span>Kandidat</span>

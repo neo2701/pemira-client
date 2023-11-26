@@ -24,3 +24,8 @@ interface Whitelist {
     event_id: number;
     npm: number;
 }
+
+interface Division {
+    id: number;
+    name: string;
+}
