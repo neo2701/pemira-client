@@ -1,5 +1,6 @@
 export const useEventStore = defineStore('event', () => {
     const event = ref<Event>();
+    const division = ref<Division>();
 
     const get = async (id: string | string[] | number) => {
         const { data, statusCode } = await useApiFetch(`/events/${id}`);
@@ -11,5 +12,5 @@ export const useEventStore = defineStore('event', () => {
         event.value = newEvent;
     };
 
-    return { event, get, set };
+    return { event, division, get, set };
 });

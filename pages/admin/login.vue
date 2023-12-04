@@ -53,10 +53,6 @@ const signInGoogle = () => {
 
 <template>
     <div class="h-[calc(100dvh)] flex items-center justify-center">
-        <AdminLoginCard
-            :loading="loading"
-            @sign-in="signIn"
-            @sign-in-google="signInGoogle"
-        />
+        <AdminLoginCard :loading="loading" @sign-in="signIn" />
     </div>
 </template>

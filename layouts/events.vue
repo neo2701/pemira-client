@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-const route = useRoute();
-const user = useAuth().user();
 const eventStore = useEventStore();
 </script>
 

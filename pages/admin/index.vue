@@ -3,7 +3,7 @@ const events = ref<Event[]>([]);
 
 const getEvents = async () => {
     const { data } = await useApiFetch('/events');
-    events.value = data.value;
+    events.value = data.value ?? [];
 };
 
 const openEvent = (event: Event) => navigateTo('/admin/events/' + event.id);

@@ -43,6 +43,8 @@ const form = reactive({
                     @keydown.enter="emit('signIn', form.email, form.password)"
                 />
             </div>
+        </UiCardContent>
+        <UiCardFooter>
             <UiButton
                 :loading="$props.loading"
                 class="w-full"
@@ -50,16 +52,6 @@ const form = reactive({
             >
                 Masuk
             </UiButton>
-            <UiCardDescription class="text-center">atau</UiCardDescription>
-            <UiButton
-                :disabled="$props.loading"
-                variant="outline"
-                class="w-full gap-2"
-                @click="emit('signInGoogle')"
-            >
-                <Icon name="bxl:google" size="16"></Icon>
-                Masuk dengan Google
-            </UiButton>
-        </UiCardContent>
+        </UiCardFooter>
     </UiCard>
 </template>

@@ -36,11 +36,12 @@ export const useApiFetch = async (url: string, options: RequestInit = {}) => {
     }).json();
 
     if (response.statusCode.value === 401) {
+        useAuth().signOut();
         const route = useRoute();
         const loginPath = route.fullPath.includes('/admin')
             ? '/admin/login'
             : '/login';
-        navigateTo('/login');
+        navigateTo(loginPath);
     }
 
     return response;

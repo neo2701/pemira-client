@@ -9,7 +9,7 @@ defineEmits<{
 </script>
 
 <template>
-    <div class="grid grid-cols-4">
+    <div class="grid grid-cols-4 gap-4">
         <EventCard
             v-for="event in $props.events"
             :event="event"
