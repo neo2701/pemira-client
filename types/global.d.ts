@@ -28,4 +28,18 @@ interface Whitelist {
 interface Division {
     id: number;
     name: string;
+    candidates_count: number;
+}
+
+interface Candidate {
+    id: number;
+    division_id: number;
+    first: string;
+    first_name: string;
+    second: string;
+    second_name: string;
+    vision: string;
+    mission: string;
+    picture: string;
+    order: number;
 }

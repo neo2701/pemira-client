@@ -48,9 +48,9 @@ const eventStore = useEventStore();
                     </div>
                     <div>
                         Status:
-                        <span class="text-red-500 font-medium"
-                            >Belum dimulai</span
-                        >
+                        <span class="text-red-500 font-medium">
+                            Belum dimulai
+                        </span>
                     </div>
                 </div>
             </div>

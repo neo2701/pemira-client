@@ -12,5 +12,12 @@ export const useEventStore = defineStore('event', () => {
         event.value = newEvent;
     };
 
-    return { event, division, get, set };
+    const getDivision = async (id: string | number) => {
+        const { data, error } = await useApiFetch(
+            `/events/${event.value?.id}/divisions/${id}`,
+        );
+        division.value = data.value;
+    };
+
+    return { event, division, get, set, getDivision };
 });

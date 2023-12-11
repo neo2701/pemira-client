@@ -8,10 +8,12 @@ interface Props {
     as?: string;
     loading?: boolean;
     disabled?: boolean;
+    type?: 'button' | 'submit' | 'reset';
 }
 
 const props = withDefaults(defineProps<Props>(), {
     as: 'button',
+    type: 'button',
 });
 </script>
 
@@ -20,6 +22,7 @@ const props = withDefaults(defineProps<Props>(), {
         :is="as"
         :class="cn(buttonVariants({ variant, size }), $attrs.class ?? '')"
         :disabled="disabled || loading"
+        :type="type"
     >
         <Icon v-if="props.loading" name="svg-spinners:90-ring-with-bg" />
         <slot />

@@ -37,7 +37,10 @@ onMounted(getDivisions);
             >
                 <UiCardHeader>
                     <UiCardTitle>{{ division.name }}</UiCardTitle>
-                    <UiCardDescription>0 Kandidat</UiCardDescription>
+                    <UiCardDescription>
+                        {{ division.candidates_count }}
+                        Kandidat
+                    </UiCardDescription>
                 </UiCardHeader>
             </UiCard>
             <DivisionFormDialog

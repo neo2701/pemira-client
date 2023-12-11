@@ -1,39 +1,29 @@
 <script lang="ts" setup>
+const runtimeConfig = useRuntimeConfig();
 const route = useRoute();
 const eventStore = useEventStore();
 
-const getDivision = async () => {
-    if (!eventStore.event) return;
+const baseURL = runtimeConfig.public.apiBase + '/../storage/';
 
-    const { data, error } = await useApiFetch(
-        `/events/${eventStore.event?.id}/divisions/${route.params.division}`,
+const candidates = ref<Candidate[]>([]);
+
+const { data } = await useApiFetch(
+    `/events/${route.params.event}/candidates?division_id=${route.params.division}`,
+);
+
+candidates.value = data.value ?? [];
+
+const editCandidate = (candidate: Candidate) => {
+    navigateTo(
+        `/admin/events/${route.params.event}/divisions/${route.params.division}/candidates/${candidate.id}/edit`,
     );
-
-    if (error.value) {
-        navigateTo(`/admin/events/${eventStore.event?.id}/divisions`);
-        return;
-    }
-
-    eventStore.division = data.value;
 };
-
-onMounted(getDivision);
 </script>
 
 <template>
     <div class="grid gap-4">
         <div>
-            <UiButton
-                variant="link"
-                class="px-0"
-                @click="
-                    navigateTo(
-                        `/admin/events/${eventStore.event?.id}/divisions`,
-                    )
-                "
-            >
-                <Icon name="fluent:arrow-left-16-regular" /> Kembali
-            </UiButton>
+            <BackButton :to="`/admin/events/${route.params.event}/divisions`" />
         </div>
         <div>
             <h2 class="text-xl font-bold">
@@ -45,49 +35,32 @@ onMounted(getDivision);
             </div>
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
-            <UiCard class="overflow-hidden">
-                <UiAspectRatio :ratio="3 / 4">
+            <UiCard v-for="candidate in candidates" class="overflow-hidden">
+                <UiAspectRatio :ratio="9 / 16">
                     <img
-                        src="/dummy_candidate1.jpg"
+                        :src="baseURL + candidate.picture"
                         class="object-cover w-full h-full"
                     />
                 </UiAspectRatio>
                 <UiCardHeader>
-                    <UiCardTitle>Prabowo</UiCardTitle>
-                    <UiCardDescription>22081010158</UiCardDescription>
+                    <UiCardTitle>
+                        <ul
+                            v-if="candidate.second"
+                            class="grid gap-2 list-disc list-inside"
+                        >
+                            <li>{{ candidate.first_name }}</li>
+                            <li>{{ candidate.second_name }}</li>
+                        </ul>
+                        <template v-else>{{ candidate.first_name }}</template>
+                    </UiCardTitle>
                 </UiCardHeader>
                 <UiCardFooter>
-                    <UiButton class="w-full">Buka</UiButton>
-                </UiCardFooter>
-            </UiCard>
-            <UiCard class="overflow-hidden">
-                <UiAspectRatio :ratio="3 / 4">
-                    <img
-                        src="/dummy_candidate2.jpg"
-                        class="object-cover w-full h-full"
-                    />
-                </UiAspectRatio>
-                <UiCardHeader>
-                    <UiCardTitle>Jokowi</UiCardTitle>
-                    <UiCardDescription>22081010158</UiCardDescription>
-                </UiCardHeader>
-                <UiCardFooter>
-                    <UiButton class="w-full">Buka</UiButton>
-                </UiCardFooter>
-            </UiCard>
-            <UiCard class="overflow-hidden">
-                <UiAspectRatio :ratio="3 / 4">
-                    <img
-                        src="/dummy_candidate3.jpg"
-                        class="object-cover w-full h-full"
-                    />
-                </UiAspectRatio>
-                <UiCardHeader>
-                    <UiCardTitle>Gibran</UiCardTitle>
-                    <UiCardDescription>22081010158</UiCardDescription>
-                </UiCardHeader>
-                <UiCardFooter>
-                    <UiButton class="w-full">Buka</UiButton>
+                    <UiButton
+                        variant="outline"
+                        @click="editCandidate(candidate)"
+                    >
+                        Manage
+                    </UiButton>
                 </UiCardFooter>
             </UiCard>
             <div>
@@ -96,7 +69,7 @@ onMounted(getDivision);
                         class="h-full flex items-center justify-center bg-muted border-dashed cursor-pointer transition hover:bg-white"
                         @click="
                             navigateTo(
-                                `/admin/events/${eventStore.event?.id}/divisions/${eventStore.division?.id}/candidates/create`,
+                                `/admin/events/${route.params.event}/divisions/${route.params.division}/candidates/create`,
                             )
                         "
                     >

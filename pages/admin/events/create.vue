@@ -43,7 +43,7 @@ const submit = async () => {
     formData.append('description', form.description);
     formData.append('logo', form.logo);
 
-    const { data, error } = await useApiFetch('/events', {
+    const { error } = await useApiFetch('/events', {
         method: 'POST',
         body: formData,
     });

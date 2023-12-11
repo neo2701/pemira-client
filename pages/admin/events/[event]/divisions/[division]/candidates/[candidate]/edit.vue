@@ -1,8 +1,14 @@
 <script lang="ts" setup>
 import * as z from 'zod';
 
+const runtimeConfig = useRuntimeConfig();
 const route = useRoute();
 const alertStore = useAlertStore();
+
+const baseURL = runtimeConfig.public.apiBase + '/../storage/';
+
+const candidate = ref<Candidate>();
+const confirmDelete = ref(false);
 
 const formSchema = toTypedSchema(
     z.object({
@@ -12,8 +18,8 @@ const formSchema = toTypedSchema(
         first_name: z.string({
             required_error: 'Nama tidak boleh kosong',
         }),
-        second: z.optional(z.string()),
-        second_name: z.optional(z.string()),
+        second: z.optional(z.nullable(z.string())),
+        second_name: z.optional(z.nullable(z.string())),
         vision: z.string({
             required_error: 'Visi tidak boleh kosong',
         }),
@@ -21,25 +27,15 @@ const formSchema = toTypedSchema(
             required_error: 'Visi tidak boleh kosong',
         }),
         picture: z.any(),
-        order: z.string({
+        order: z.coerce.number({
             required_error: 'Urutan tidak boleh kosong',
+            invalid_type_error: 'Urutan harus berupa angka',
         }),
     }),
 );
 
 const form = useForm({
     validationSchema: formSchema,
-    initialValues: {
-        first: '22081010124',
-        first_name: 'Silvia Dwi Cahyani',
-        second: '22081010158',
-        second_name: 'Heaven Ade Aldrico',
-        vision: 'Menciptakan lingkungan harmonis dan progresif di antara mahasiswa, dengan tujuan utama mencapai kemajuan bersama dalam segala aspek kehidupan akademis, sosial, dan profesional. Saya ingin membangun sebuah Himpunan Mahasiswa yang inklusif, berdaya saing, dan berwawasan masa depan.',
-        mission:
-            '- Mengadvokasi peningkatan kualitas pembelajaran dan fasilitas akademis.\n- Memperjuangkan hak mahasiswa dalam mendapatkan pendidikan berkualitas dan relevan dengan perkembangan zaman.',
-        picture: null,
-        order: '1',
-    },
 });
 
 const tempLogo = ref('');
@@ -61,11 +57,38 @@ const openFilePicker = () => {
     input.click();
 };
 
+const getCandidate = async () => {
+    const { data, statusCode } = await useApiFetch(
+        `/events/${route.params.event}/candidates/${route.params.candidate}`,
+    );
+
+    if (statusCode.value === 404) {
+        navigateTo(
+            `/admin/events/${route.params.event}/divisions/${route.params.division}/candidates`,
+        );
+        return;
+    }
+
+    candidate.value = data.value;
+
+    form.setValues({
+        first: data.value.first,
+        first_name: data.value.first_name,
+        second: data.value.second,
+        second_name: data.value.second_name,
+        vision: data.value.vision,
+        mission: data.value.mission,
+        order: data.value.order,
+    });
+};
+
 const submit = form.handleSubmit(async (values) => {
     const formData = new FormData();
 
     for (const [key, value] of Object.entries(values)) {
         if ((key === 'second' || key === 'second_name') && !value) {
+            continue;
+        } else if (key === 'picture' && !value) {
             continue;
         }
 
@@ -75,7 +98,7 @@ const submit = form.handleSubmit(async (values) => {
     formData.append('division_id', route.params.division as string);
 
     const { error } = await useApiFetch(
-        `/events/${route.params.event}/candidates`,
+        `/events/${route.params.event}/candidates/${route.params.candidate}?_method=put`,
         {
             method: 'POST',
             body: formData,
@@ -91,6 +114,29 @@ const submit = form.handleSubmit(async (values) => {
         `/admin/events/${route.params.event}/divisions/${route.params.division}/candidates`,
     );
 });
+
+const confirmDeleteCandidate = (confirm: boolean = true) => {
+    confirmDelete.value = confirm;
+};
+
+const deleteCandidate = async (id: string | number) => {
+    const { error } = await useApiFetch(
+        `/events/${route.params.event}/candidates/${id}`,
+        {
+            method: 'DELETE',
+        },
+    );
+
+    if (error.value) {
+        return;
+    }
+
+    navigateTo(
+        `/admin/events/${route.params.event}/divisions/${route.params.division}/candidates`,
+    );
+};
+
+onMounted(getCandidate);
 </script>
 
 <template>
@@ -207,8 +253,8 @@ const submit = form.handleSubmit(async (values) => {
                         <UiFormLabel>Foto</UiFormLabel>
                         <div class="flex gap-2">
                             <img
-                                v-if="tempLogo"
-                                :src="tempLogo"
+                                v-if="tempLogo || candidate?.picture"
+                                :src="tempLogo || baseURL + candidate?.picture"
                                 class="w-1/3 rounded-lg"
                             />
                             <UiFormControl>
@@ -231,21 +277,35 @@ const submit = form.handleSubmit(async (values) => {
                         <UiFormMessage />
                     </UiFormItem>
                 </Field>
-                <div class="flex gap-2">
-                    <UiButton
-                        variant="outline"
-                        type="button"
-                        @click="
-                            navigateTo(
-                                `/admin/events/${route.params.event}/divisions/${route.params.division}/candidates`,
-                            )
-                        "
-                    >
-                        Kembali
-                    </UiButton>
+                <div class="flex justify-between">
                     <UiButton :loading="form.isSubmitting.value" type="submit">
                         Simpan
                     </UiButton>
+                    <UiButton
+                        v-if="!confirmDelete"
+                        :disabled="form.isSubmitting.value"
+                        variant="destructive"
+                        @click="confirmDeleteCandidate()"
+                    >
+                        Hapus
+                    </UiButton>
+                    <div v-else-if="candidate" class="flex gap-2">
+                        <UiButton
+                            :disabled="form.isSubmitting.value"
+                            variant="outline"
+                            @click="confirmDeleteCandidate(false)"
+                        >
+                            Batal
+                        </UiButton>
+                        <UiButton
+                            v-if="confirmDelete"
+                            :disabled="form.isSubmitting.value"
+                            variant="destructive"
+                            @click="deleteCandidate(candidate?.id)"
+                        >
+                            Konfirmasi Hapus
+                        </UiButton>
+                    </div>
                 </div>
             </div>
         </form>
