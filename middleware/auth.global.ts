@@ -3,7 +3,9 @@ export default defineNuxtRouteMiddleware((to, from) => {
         ? '/admin/login'
         : '/login';
 
-    if (to.path === '/login' || to.path === '/admin/login') {
+    const allowedPaths = ['/login', '/authenticate', '/admin/login'];
+
+    if (allowedPaths.includes(to.path)) {
         return;
     }
 

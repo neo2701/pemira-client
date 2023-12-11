@@ -26,14 +26,31 @@ export const useApiFetch = async (url: string, options: RequestInit = {}) => {
 
     if (!isMultipart) defaultHeaders['Content-Type'] = 'application/json';
 
-    const response = await useFetchCore(config.public.apiBase + url, {
-        credentials: 'include',
-        ...options,
-        headers: {
-            ...defaultHeaders,
-            ...options.headers,
+    let errorCtx = null;
+    let response = await useFetchCore(
+        config.public.apiBase + url,
+        {
+            credentials: 'include',
+            ...options,
+            headers: {
+                ...defaultHeaders,
+                ...options.headers,
+            },
         },
-    }).json();
+        {
+            onFetchError(ctx) {
+                errorCtx = ctx;
+                return ctx;
+            },
+        },
+    ).json();
+
+    if (errorCtx !== null) {
+        response = {
+            ...response,
+            data: ref((errorCtx as Record<string, unknown>).data),
+        };
+    }
 
     if (response.statusCode.value === 401) {
         useAuth().signOut();

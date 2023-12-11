@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 definePageMeta({
-    middleware: 'auth',
     layout: 'main',
 });
 
@@ -12,7 +11,7 @@ const cancel = () => {
 };
 
 onMounted(async () => {
-    await useApiFetch('/user');
+    await useApiFetch('/auth/user');
 });
 </script>
 

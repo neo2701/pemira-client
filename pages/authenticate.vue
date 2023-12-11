@@ -11,7 +11,8 @@ onMounted(async () => {
     });
 
     if (error.value || !data.value) {
-        navigateTo('/login');
+        navigateTo(`/login?error=${data.value.message || error.value}`);
+        return;
     }
 
     useAuth().signIn(data.value);

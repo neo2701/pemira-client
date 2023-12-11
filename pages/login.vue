@@ -1,4 +1,11 @@
 <script lang="ts" setup>
+const route = useRoute();
+const alert = useAlertStore();
+
+if (route.query.error) {
+    alert.show(route.query.error as string, 'error');
+}
+
 const signIn = () => {
     const url = 'https://accounts.google.com/o/oauth2/v2/auth';
     const params = {
@@ -27,7 +34,9 @@ const signIn = () => {
 </script>
 
 <template>
-    <div class="h-[calc(100dvh)] flex items-center justify-center">
-        <LoginCard @signIn="signIn" />
-    </div>
+    <NuxtLayout>
+        <div class="h-[calc(100dvh)] flex items-center justify-center">
+            <LoginCard @signIn="signIn" />
+        </div>
+    </NuxtLayout>
 </template>

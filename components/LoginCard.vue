@@ -5,13 +5,13 @@ const emit = defineEmits<{
 </script>
 
 <template>
-    <UiCard class="w-96">
-        <UiCardHeader class="grid gap-4 pt-10 text-center">
-            <div>
-                <UiAvatar size="lg">
-                    <UiAvatarFallback>PDD 🙏</UiAvatarFallback>
-                </UiAvatar>
-            </div>
+    <UiCard class="max-w-sm">
+        <UiCardHeader class="pt-10 text-center">
+            <img
+                src="/logo.png"
+                alt="Logo"
+                class="w-32 h-32 aspect-square mx-auto"
+            />
             <div class="grid gap-2">
                 <div>
                     <h2 class="text-3xl">PEMIRA</h2>
@@ -24,7 +24,8 @@ const emit = defineEmits<{
                 </UiCardDescription>
             </div>
         </UiCardHeader>
-        <UiCardHeader class="grid gap-4 border-t">
+        <UiCardHeader class="grid gap-4 md:border-t">
+            <Alert />
             <UiButton size="lg" class="w-full gap-2" @click="emit('signIn')">
                 <Icon name="bxl:google" size="16"></Icon>
                 Masuk dengan Google

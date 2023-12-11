@@ -3,7 +3,11 @@ const alertStore = useAlertStore();
 </script>
 
 <template>
-    <UiAlert v-if="alertStore.active" :variant="'destructive'">
+    <UiAlert
+        v-if="alertStore.active"
+        :variant="'destructive'"
+        class="overflow-hidden"
+    >
         <UiAlertDescription>
             {{ alertStore.data.text }}
         </UiAlertDescription>

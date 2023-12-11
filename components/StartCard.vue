@@ -3,9 +3,12 @@ const emit = defineEmits<{
     (e: 'start'): void;
     (e: 'cancel'): void;
 }>();
+
 const props = defineProps<{
     user: User;
 }>();
+
+console.log(props.user);
 </script>
 
 <template>
