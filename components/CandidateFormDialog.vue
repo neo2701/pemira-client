@@ -64,7 +64,6 @@ const submit = form.handleSubmit(async (values) => {
                                     v-bind="componentField"
                                     :disabled="form.isSubmitting.value"
                                     placeholder="NPM Kandidat Pertama"
-                                    @change="console.log('test')"
                                 />
                             </UiFormControl>
                             <UiFormMessage />
@@ -77,7 +76,6 @@ const submit = form.handleSubmit(async (values) => {
                                 <UiInput
                                     v-bind="componentField"
                                     :disabled="form.isSubmitting.value"
-                                    @change="console.log('test')"
                                 />
                             </UiFormControl>
                             <UiFormMessage />

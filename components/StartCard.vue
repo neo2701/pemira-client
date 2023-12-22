@@ -7,8 +7,6 @@ const emit = defineEmits<{
 const props = defineProps<{
     user: User;
 }>();
-
-console.log(props.user);
 </script>
 
 <template>

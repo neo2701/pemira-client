@@ -98,7 +98,9 @@ const submit = async () => {
                 <UiTextarea v-model="form.description" :disabled="isLoading" />
             </div>
             <div class="flex gap-2">
-                <UiButton :loading="isLoading">Buat Event</UiButton>
+                <UiButton :loading="isLoading" type="submit"
+                    >Buat Event</UiButton
+                >
                 <NuxtLink to="/admin">
                     <UiButton :disabled="isLoading" variant="outline">
                         Kembali

@@ -6,9 +6,11 @@ const divisions = ref<Division[]>([]);
 const getDivisions = async () => {
     if (!eventStore.event) return;
 
-    const { data } = await useApiFetch(
+    const { data, error } = await useApiFetch(
         `/events/${eventStore.event?.id}/divisions`,
     );
+
+    if (error.value) return;
 
     divisions.value = data.value;
 };

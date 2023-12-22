@@ -22,6 +22,7 @@ export default defineNuxtConfig({
         '@vueuse/nuxt',
         'nuxt-icon',
         '@vee-validate/nuxt',
+        "@nuxt/image"
     ],
     components: [
         {
