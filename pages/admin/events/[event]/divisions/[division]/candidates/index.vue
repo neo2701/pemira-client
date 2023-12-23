@@ -36,11 +36,18 @@ const editCandidate = (candidate: Candidate) => {
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
             <UiCard v-for="candidate in candidates" class="overflow-hidden">
-                <UiAspectRatio :ratio="9 / 16">
+                <UiAspectRatio :ratio="1" class="relative">
                     <img
                         :src="baseURL + candidate.picture"
                         class="object-cover w-full h-full"
                     />
+                    <div class="absolute bottom-0 right-0 p-4">
+                        <div
+                            class="w-10 h-10 bg-white flex items-center justify-center rounded-full"
+                        >
+                            {{ candidate.order }}
+                        </div>
+                    </div>
                 </UiAspectRatio>
                 <UiCardHeader>
                     <UiCardTitle>
