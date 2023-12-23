@@ -48,8 +48,23 @@ const eventStore = useEventStore();
                     </div>
                     <div>
                         Status:
-                        <span class="text-red-500 font-medium">
+                        <span
+                            v-if="eventStore.status === 0"
+                            class="text-red-600 font-medium"
+                        >
                             Belum dimulai
+                        </span>
+                        <span
+                            v-else-if="eventStore.status === 1"
+                            class="text-yellow-600 font-medium"
+                        >
+                            Sedang berlangsung
+                        </span>
+                        <span
+                            v-else-if="eventStore.status === 2"
+                            class="text-green-600 font-meidum"
+                        >
+                            Sudah berakhir
                         </span>
                     </div>
                 </div>
