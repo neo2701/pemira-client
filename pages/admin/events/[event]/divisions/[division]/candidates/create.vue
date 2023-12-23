@@ -29,17 +29,6 @@ const formSchema = toTypedSchema(
 
 const form = useForm({
     validationSchema: formSchema,
-    initialValues: {
-        first: '22081010124',
-        first_name: 'Silvia Dwi Cahyani',
-        second: '22081010158',
-        second_name: 'Heaven Ade Aldrico',
-        vision: 'Menciptakan lingkungan harmonis dan progresif di antara mahasiswa, dengan tujuan utama mencapai kemajuan bersama dalam segala aspek kehidupan akademis, sosial, dan profesional. Saya ingin membangun sebuah Himpunan Mahasiswa yang inklusif, berdaya saing, dan berwawasan masa depan.',
-        mission:
-            '- Mengadvokasi peningkatan kualitas pembelajaran dan fasilitas akademis.\n- Memperjuangkan hak mahasiswa dalam mendapatkan pendidikan berkualitas dan relevan dengan perkembangan zaman.',
-        picture: null,
-        order: '1',
-    },
 });
 
 const tempLogo = ref('');
