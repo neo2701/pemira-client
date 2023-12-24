@@ -18,6 +18,8 @@ export const useApiFetch = async (url: string, options: RequestInit = {}) => {
         secure: config.public.build === 'production',
     })?.value;
 
+    console.log(token, config.public.build);
+
     if (!token) token = await fetchCookie();
 
     const isMultipart = options.body instanceof FormData;
