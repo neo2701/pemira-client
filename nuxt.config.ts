@@ -9,6 +9,7 @@ export default defineNuxtConfig({
     ssr: false,
     runtimeConfig: {
         public: {
+            build: process.env.BUILD,
             apiBase: process.env.API_BASE,
             googleClientId: process.env.GOOGLE_CLIENT_ID,
             googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
