@@ -10,6 +10,9 @@ export default defineNuxtConfig({
     runtimeConfig: {
         public: {
             apiBase: process.env.API_BASE,
+            googleClientId: process.env.GOOGLE_CLIENT_ID,
+            googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            googleRedirectUrl: process.env.GOOGLE_REDIRECT_URL,
         },
     },
     imports: {
@@ -22,7 +25,7 @@ export default defineNuxtConfig({
         '@vueuse/nuxt',
         'nuxt-icon',
         '@vee-validate/nuxt',
-        "@nuxt/image"
+        '@nuxt/image',
     ],
     components: [
         {

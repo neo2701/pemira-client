@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 const route = useRoute();
+const runtimeConfig = useRuntimeConfig();
 const alert = useAlertStore();
 
 if (route.query.error) {
@@ -9,9 +10,8 @@ if (route.query.error) {
 const signIn = () => {
     const url = 'https://accounts.google.com/o/oauth2/v2/auth';
     const params = {
-        client_id:
-            '1026031797826-55q6gfg5mvjcu9u1pmt02me73g2lo5so.apps.googleusercontent.com',
-        redirect_uri: 'http://localhost:3000/authenticate',
+        client_id: runtimeConfig.public.googleClientId as string,
+        redirect_uri: runtimeConfig.public.googleRedirectUrl as string,
         response_type: 'token',
         scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
         include_granted_scopes: 'true',
