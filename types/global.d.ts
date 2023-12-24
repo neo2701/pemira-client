@@ -43,3 +43,8 @@ interface Candidate {
     picture: string;
     order: number;
 }
+
+interface BallotDetail {
+    division_id: number;
+    candidate_id: number;
+}

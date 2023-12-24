@@ -25,7 +25,7 @@ defineEmits<{
                     {{ $props.description }}
                 </UiAlertDialogDescription>
             </UiAlertDialogHeader>
-            <UiAlertDialogFooter>
+            <UiAlertDialogFooter class="flex-col-reverse">
                 <UiAlertDialogCancel>
                     {{ $props.cancelText ?? 'Cancel' }}
                 </UiAlertDialogCancel>

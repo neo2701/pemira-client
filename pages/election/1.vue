@@ -80,6 +80,9 @@ watch(deviceId, async (newDeviceId) => {
         <UiCard class="grow flex flex-col">
             <UiCardHeader class="flex items-center">
                 <UiCardTitle>Foto Wajah & KTM</UiCardTitle>
+                <UiCardDescription>
+                    Pastikan foto wajah & ktm terlihat jelas dan tidak blur
+                </UiCardDescription>
             </UiCardHeader>
             <UiCardContent class="flex items-center">
                 <UiSelect v-model="deviceId">
@@ -103,7 +106,7 @@ watch(deviceId, async (newDeviceId) => {
             </UiCardContent>
             <UiCardContent>
                 <div
-                    class="lg:max-w-2xl xl:max-w-3xl mx-auto rounded-lg overflow-hidden"
+                    class="relative lg:max-w-2xl xl:max-w-3xl mx-auto rounded-lg overflow-hidden"
                 >
                     <UiAspectRatio
                         v-show="picture"
@@ -120,6 +123,15 @@ watch(deviceId, async (newDeviceId) => {
                         ref="video"
                         class="w-full h-auto object-cover"
                     ></video>
+                    <div
+                        v-if="!picture"
+                        class="absolute top-0 right-0 flex gap-2 items-center text-white text-xs font-medium p-4 animate-pulse"
+                    >
+                        <div>Recording</div>
+                        <span
+                            class="w-4 h-4 bg-red-400 border border-white rounded-full"
+                        ></span>
+                    </div>
                 </div>
             </UiCardContent>
             <UiCardFooter class="flex justify-center gap-4">
@@ -131,9 +143,13 @@ watch(deviceId, async (newDeviceId) => {
                     >
                         Ulangi Pengambilan Foto
                     </UiButton>
-                    <UiButton :disabled="!deviceId" @click="next">
-                        Selanjutnya
-                    </UiButton>
+                    <ConfirmationDialog
+                        title="Apakah Kamu Yakin?"
+                        description="Pastikan foto wajah & ktm terlihat jelas dan tidak blur karena akan digunakan untuk verifikasi pemilihanmu."
+                        @confirm="next"
+                    >
+                        <UiButton :disabled="!deviceId"> Selanjutnya </UiButton>
+                    </ConfirmationDialog>
                 </template>
                 <UiButton v-else :disabled="!deviceId" @click="capture">
                     Ambil Foto

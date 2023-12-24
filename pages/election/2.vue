@@ -5,7 +5,7 @@ definePageMeta({
 
 const electionStore = useElectionStore();
 
-electionStore.setProgress(1);
+electionStore.setProgress(2);
 
 const video = ref<HTMLVideoElement>();
 const sources = ref<MediaDeviceInfo[]>([]);
@@ -46,11 +46,17 @@ const capture = () => {
 };
 
 const next = () => {
-    electionStore.setVerificationPicture(picture.value);
-    navigateTo('/election/2');
+    electionStore.setKtmPicture(picture.value);
+    navigateTo('/election/3');
 };
 
-onMounted(getDevices);
+onMounted(() => {
+    if (electionStore.verificationPicture === undefined) {
+        navigateTo('/election/1');
+    }
+
+    getDevices();
+});
 
 watch(deviceId, async (newDeviceId) => {
     if (!navigator.mediaDevices || video.value === undefined) {
@@ -80,7 +86,31 @@ watch(deviceId, async (newDeviceId) => {
         <UiCard class="grow flex flex-col">
             <UiCardHeader class="flex items-center">
                 <UiCardTitle>Foto KTM</UiCardTitle>
+                <UiCardDescription>
+                    Pastikan ktm terlihat jelas dan tidak blur
+                </UiCardDescription>
             </UiCardHeader>
+            <UiCardFooter class="flex justify-center gap-4">
+                <template v-if="picture">
+                    <UiButton
+                        :disabled="!deviceId"
+                        variant="outline"
+                        @click="() => (picture = undefined)"
+                    >
+                        Ulangi Pengambilan Foto
+                    </UiButton>
+                    <ConfirmationDialog
+                        title="Apakah kamu yakin?"
+                        description="Pastikan foto ktm terlihat jelas dan tidak blur karena akan digunakan untuk verifikasi pemilihanmu."
+                        @confirm="next"
+                    >
+                        <UiButton :disabled="!deviceId"> Selanjutnya </UiButton>
+                    </ConfirmationDialog>
+                </template>
+                <UiButton v-else :disabled="!deviceId" @click="capture">
+                    Ambil Foto
+                </UiButton>
+            </UiCardFooter>
             <UiCardContent class="flex items-center">
                 <UiSelect v-model="deviceId">
                     <UiSelectTrigger class="mx-auto max-w-sm">
@@ -103,7 +133,7 @@ watch(deviceId, async (newDeviceId) => {
             </UiCardContent>
             <UiCardContent>
                 <div
-                    class="lg:max-w-2xl xl:max-w-3xl mx-auto rounded-lg overflow-hidden"
+                    class="relative lg:max-w-2xl xl:max-w-3xl mx-auto rounded-lg overflow-hidden"
                 >
                     <UiAspectRatio
                         v-show="picture"
@@ -120,25 +150,17 @@ watch(deviceId, async (newDeviceId) => {
                         ref="video"
                         class="w-full h-auto object-cover"
                     ></video>
+                    <div
+                        v-if="!picture"
+                        class="absolute top-0 right-0 flex gap-2 items-center text-white text-xs font-medium p-4 animate-pulse"
+                    >
+                        <div>Recording</div>
+                        <span
+                            class="w-4 h-4 bg-red-400 border border-white rounded-full"
+                        ></span>
+                    </div>
                 </div>
             </UiCardContent>
-            <UiCardFooter class="flex justify-center gap-4">
-                <template v-if="picture">
-                    <UiButton
-                        :disabled="!deviceId"
-                        variant="outline"
-                        @click="() => (picture = undefined)"
-                    >
-                        Ulangi Pengambilan Foto
-                    </UiButton>
-                    <UiButton :disabled="!deviceId" @click="next">
-                        Selanjutnya
-                    </UiButton>
-                </template>
-                <UiButton v-else :disabled="!deviceId" @click="capture">
-                    Ambil Foto
-                </UiButton>
-            </UiCardFooter>
         </UiCard>
     </NuxtLayout>
 </template>

@@ -1,5 +1,11 @@
 <script lang="ts" setup>
 const electionStore = useElectionStore();
+
+onMounted(() => {
+    if (electionStore.event === undefined) {
+        navigateTo('/');
+    }
+});
 </script>
 
 <template>

@@ -4,6 +4,7 @@ definePageMeta({
 });
 
 const user = useAuth().user();
+const electionStore = useElectionStore();
 
 const cancel = () => {
     useAuth().signOut();
@@ -15,6 +16,7 @@ const start = () => {
 };
 
 onMounted(async () => {
+    await electionStore.getEvent(1);
     await useApiFetch('/auth/user');
 });
 </script>

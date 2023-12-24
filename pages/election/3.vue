@@ -7,43 +7,45 @@ const electionStore = useElectionStore();
 
 electionStore.setProgress(3);
 
-const video = ref<HTMLVideoElement>();
-const sources = ref<MediaDeviceInfo[]>([]);
-const deviceId = ref<string>();
-const photo = ref();
+const divisionId = 1;
+const candidates = ref<Candidate[]>([]);
+const loading = ref(false);
+const selected = ref<Candidate>();
 
-const getDevices = async () => {
-    if (!navigator.mediaDevices) {
+const getCandidates = async () => {
+    loading.value = true;
+
+    const { data, error } = await useApiFetch(
+        `/events/${electionStore.event?.id}/candidates?division_id=${divisionId}`,
+    );
+
+    if (error.value) {
         return;
     }
 
-    const devices = await navigator.mediaDevices.enumerateDevices();
-    sources.value = devices.filter((device) => device.kind === 'videoinput');
-    deviceId.value = sources.value[0].deviceId;
+    candidates.value = data.value;
+    loading.value = false;
 };
 
-onMounted(getDevices);
-
-watch(deviceId, async (newDeviceId) => {
-    if (!navigator.mediaDevices || video.value === undefined) {
+const confirm = () => {
+    if (!selected.value) {
         return;
     }
 
-    navigator.mediaDevices
-        .getUserMedia({
-            video: {
-                deviceId: newDeviceId,
-                aspectRatio: 16 / 9,
-            },
-            audio: false,
-        })
-        .then((stream) => {
-            video.value!.srcObject = stream;
-            video.value!.play();
-        })
-        .catch((err) => {
-            console.error(err);
-        });
+    electionStore.ballots[divisionId] = {
+        division_id: divisionId,
+        candidate_id: selected.value.id,
+    };
+
+    navigateTo('/election/4');
+};
+
+onMounted(() => {
+    if (electionStore.ktmPicture === undefined) {
+        navigateTo('/election/2');
+    }
+
+    getCandidates();
 });
 </script>
 
@@ -52,15 +54,43 @@ watch(deviceId, async (newDeviceId) => {
         <UiCard class="grow flex flex-col">
             <UiCardHeader class="flex items-center">
                 <UiCardTitle>BLJ Angkatan 2023</UiCardTitle>
+                <UiCardDescription>
+                    Pilih salah satu untuk melihat visi & misi
+                </UiCardDescription>
             </UiCardHeader>
             <UiCardFooter class="flex justify-center gap-4">
                 <UiButton variant="outline" @click="navigateTo('/election/2')">
                     Kembali
                 </UiButton>
-                <UiButton @click="() => navigateTo('/election/4')">
+                <ConfirmationDialog
+                    v-if="selected"
+                    title="Apakah kamu yakin?"
+                    :description="`Pilih ${selected?.first_name} sebagai BLJ Angkatan 2023`"
+                    @confirm="confirm"
+                >
+                    <UiButton>Selanjutnya</UiButton>
+                </ConfirmationDialog>
+                <UiButton
+                    v-else
+                    variant="secondary"
+                    class="border cursor-not-allowed"
+                >
                     Selanjutnya
                 </UiButton>
             </UiCardFooter>
+            <UiCardContent>
+                <div class="max-w-screen-lg mx-auto grid grid-cols-4 gap-4">
+                    <ElectionCandidateCard
+                        v-for="candidate in candidates"
+                        :candidate="candidate"
+                        :active="selected === candidate"
+                        :class="{
+                            'col-span-2': selected === candidate,
+                        }"
+                        @click="selected = candidate"
+                    />
+                </div>
+            </UiCardContent>
         </UiCard>
     </NuxtLayout>
 </template>
