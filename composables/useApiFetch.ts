@@ -8,14 +8,14 @@ export const fetchCookie = async () => {
     });
 
     return useCookie('XSRF-TOKEN', {
-        httpOnly: config.public.build === 'production',
+        secure: config.public.build === 'production',
     })?.value;
 };
 
 export const useApiFetch = async (url: string, options: RequestInit = {}) => {
     const config = useRuntimeConfig();
     let token = useCookie('XSRF-TOKEN', {
-        httpOnly: config.public.build === 'production',
+        secure: config.public.build === 'production',
     })?.value;
 
     if (!token) token = await fetchCookie();
