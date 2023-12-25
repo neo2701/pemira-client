@@ -9,6 +9,7 @@ const electionStore = useElectionStore();
 electionStore.setProgress(2);
 
 const video = ref<HTMLVideoElement>();
+const videoStream = ref<MediaStream>();
 const sources = ref<MediaDeviceInfo[]>([]);
 const canvas = ref<HTMLCanvasElement>();
 const picture = ref();
@@ -34,6 +35,14 @@ const getDevices = async () => {
     }
 };
 
+const stopCamera = () => {
+    if (videoStream.value) {
+        videoStream.value.getTracks().forEach((track) => {
+            track.stop();
+        });
+    }
+};
+
 const startCamera = (id?: string) => {
     navigator.mediaDevices
         .getUserMedia({
@@ -46,6 +55,7 @@ const startCamera = (id?: string) => {
         .then((stream) => {
             getDevices();
 
+            videoStream.value = stream;
             video.value!.srcObject = stream;
             video.value!.play();
         })
@@ -77,6 +87,7 @@ const capture = () => {
 };
 
 const next = () => {
+    stopCamera();
     electionStore.setKtmPicture(picture.value);
     navigateTo('/election/3');
 };
