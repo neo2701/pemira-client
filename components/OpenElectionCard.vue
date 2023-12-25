@@ -39,8 +39,14 @@ const open = async () => {
         </UiCardContent>
         <UiCardFooter>
             <ConfirmationDialog
-                title="Buka Kembali Pemilihan"
-                description="Apakah anda yakin ingin membuka kembali pemilihan?"
+                :title="
+                    $props.reopen ? 'Buka Kembali Pemilihan' : 'Mulai Pemilihan'
+                "
+                :description="
+                    $props.reopen
+                        ? 'Apakah kamu yakin ingin membuka kembali pemilihan?'
+                        : 'Apakah kamu yakin ingin memulai pemilihan?'
+                "
                 @confirm="open"
             >
                 <UiButton

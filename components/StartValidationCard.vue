@@ -20,7 +20,7 @@ const open = () =>
         <UiCardFooter>
             <ConfirmationDialog
                 title="Mulai Validasi"
-                description="Apakah anda yakin ingin mulai validasi surat suara?"
+                description="Apakah kamu yakin ingin mulai validasi surat suara?"
                 @confirm="open"
             >
                 <UiButton :loading="loading" color="primary" class="w-full">

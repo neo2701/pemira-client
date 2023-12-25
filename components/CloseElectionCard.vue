@@ -30,7 +30,7 @@ const close = async () => {
         <UiCardFooter>
             <ConfirmationDialog
                 title="Tutup Pemilihan"
-                description="Apakah anda yakin ingin menutup pemilihan?"
+                description="Apakah kamu yakin ingin menutup pemilihan?"
                 @confirm="close"
             >
                 <UiButton
