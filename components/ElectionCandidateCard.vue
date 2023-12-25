@@ -71,10 +71,7 @@ const baseURL = useRuntimeConfig().public.apiBase + '/../storage/';
                 </UiAspectRatio>
                 <UiCardHeader>
                     <UiCardTitle class="text-sm text-center">
-                        <div
-                            v-if="candidate.second === null"
-                            class="text-center"
-                        >
+                        <div v-if="!candidate.second" class="text-center">
                             {{ candidate.first_name }}
                         </div>
                         <ul v-else>

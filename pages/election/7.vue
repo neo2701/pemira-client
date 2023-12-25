@@ -41,8 +41,6 @@ const submitBallot = async () => {
         navigateTo('/');
         return;
     }
-
-    loading.value = false;
 };
 
 const confirm = async () => {

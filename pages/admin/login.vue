@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 const loading = ref(false);
 
+useAuth().signOut();
+
 const signIn = async (email: string, password: string) => {
     loading.value = true;
 
