@@ -1,21 +1,26 @@
 export const useElectionStore = defineStore('election', () => {
-    const event = ref<Event>({
-        id: 1,
-        title: '',
-        description: '',
-        logo: '',
-        open_election_at: '',
-        close_election_at: '',
-    } as Event);
+    const event = ref<Event>();
     const progress = ref(0);
-    const verificationPicture = ref('1');
-    const ktmPicture = ref('1');
-    const ballots = reactive<Record<string, BallotDetail | null>>({
-        '1': null,
-        '2': null,
-        '3': null,
-        '4': null,
-    });
+    const deviceId = ref();
+    const verificationPicture = ref();
+    const ktmPicture = ref();
+    const ballots = ref<Record<string, BallotDetail>>({});
+
+    const checkUserStatus = async () => {
+        if (!event.value) {
+            return false;
+        }
+
+        const { error } = await useApiFetch(
+            `/events/${event.value.id}/ballots/user`,
+        );
+
+        if (error.value) {
+            return false;
+        }
+
+        return true;
+    };
 
     const getEvent = async (id: number) => {
         const { data, error } = await useApiFetch(`/events/${id}`);
@@ -54,6 +59,7 @@ export const useElectionStore = defineStore('election', () => {
     return {
         event,
         progress,
+        deviceId,
         verificationPicture,
         ktmPicture,
         ballots,
@@ -61,5 +67,6 @@ export const useElectionStore = defineStore('election', () => {
         setProgress,
         setVerificationPicture,
         setKtmPicture,
+        checkUserStatus,
     };
 });

@@ -23,6 +23,8 @@
   "dependencies": {
     "@pinia/nuxt": "^0.5.1",
     "@radix-icons/vue": "^1.0.0",
+    "@tsparticles/slim": "^3.0.2",
+    "@tsparticles/vue3": "^3.0.0",
     "@vee-validate/nuxt": "^4.12.3",
     "@vee-validate/zod": "^4.12.3",
     "@vueuse/core": "^10.7.0",
@@ -32,6 +34,7 @@
     "radix-vue": "^1.2.5",
     "tailwind-merge": "^2.2.0",
     "tailwindcss-animate": "^1.0.7",
+    "tsparticles": "^3.0.2",
     "vee-validate": "^4.12.3",
     "zod": "^3.22.4"
   }

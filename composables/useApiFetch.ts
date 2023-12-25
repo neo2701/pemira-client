@@ -7,20 +7,12 @@ export const fetchCookie = async () => {
         credentials: 'include',
     });
 
-    return useCookie('XSRF-TOKEN', {
-        secure: config.public.build === 'production',
-    })?.value;
+    return useCookie('XSRF-TOKEN')?.value;
 };
 
 export const useApiFetch = async (url: string, options: RequestInit = {}) => {
     const config = useRuntimeConfig();
-    let token = useCookie('XSRF-TOKEN', {
-        secure: config.public.build === 'production',
-    })?.value;
-
-    console.log(token, config.public.build);
-
-    if (!token) token = await fetchCookie();
+    const token = await fetchCookie();
 
     const isMultipart = options.body instanceof FormData;
     const defaultHeaders = {

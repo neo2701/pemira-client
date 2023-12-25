@@ -47,4 +47,6 @@ interface Candidate {
 interface BallotDetail {
     division_id: number;
     candidate_id: number;
+    division: Division;
+    candidate: Candidate;
 }

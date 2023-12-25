@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 definePageMeta({
     layout: 'election',
+    middleware: 'election',
 });
 
 const electionStore = useElectionStore();
@@ -10,8 +11,11 @@ electionStore.setProgress(1);
 const video = ref<HTMLVideoElement>();
 const sources = ref<MediaDeviceInfo[]>([]);
 const canvas = ref<HTMLCanvasElement>();
-const deviceId = ref<string>();
 const picture = ref();
+
+const back = () => {
+    navigateTo('/');
+};
 
 const getDevices = async () => {
     if (!navigator.mediaDevices) {
@@ -20,7 +24,34 @@ const getDevices = async () => {
 
     const devices = await navigator.mediaDevices.enumerateDevices();
     sources.value = devices.filter((device) => device.kind === 'videoinput');
-    deviceId.value = sources.value[0].deviceId;
+
+    if (sources.value.length === 0) {
+        return;
+    }
+
+    if (electionStore.deviceId === undefined) {
+        electionStore.deviceId = sources.value[0].deviceId;
+    }
+};
+
+const startCamera = (id?: string) => {
+    navigator.mediaDevices
+        .getUserMedia({
+            video: {
+                deviceId: id,
+                aspectRatio: 16 / 9,
+            },
+            audio: false,
+        })
+        .then((stream) => {
+            getDevices();
+
+            video.value!.srcObject = stream;
+            video.value!.play();
+        })
+        .catch((err) => {
+            console.error(err);
+        });
 };
 
 const capture = () => {
@@ -50,29 +81,18 @@ const next = () => {
     navigateTo('/election/2');
 };
 
-onMounted(getDevices);
+onMounted(() => startCamera(electionStore.deviceId));
 
-watch(deviceId, async (newDeviceId) => {
-    if (!navigator.mediaDevices || video.value === undefined) {
-        return;
-    }
+watch(
+    () => electionStore.deviceId,
+    async () => {
+        if (!navigator.mediaDevices || video.value === undefined) {
+            return;
+        }
 
-    navigator.mediaDevices
-        .getUserMedia({
-            video: {
-                deviceId: newDeviceId,
-                aspectRatio: 16 / 9,
-            },
-            audio: false,
-        })
-        .then((stream) => {
-            video.value!.srcObject = stream;
-            video.value!.play();
-        })
-        .catch((err) => {
-            console.error(err);
-        });
-});
+        startCamera(electionStore.deviceId);
+    },
+);
 </script>
 
 <template>
@@ -84,8 +104,39 @@ watch(deviceId, async (newDeviceId) => {
                     Pastikan foto wajah & ktm terlihat jelas dan tidak blur
                 </UiCardDescription>
             </UiCardHeader>
+            <UiCardFooter class="flex justify-center gap-4">
+                <template v-if="picture">
+                    <UiButton
+                        :disabled="!electionStore.deviceId"
+                        variant="outline"
+                        @click="() => (picture = undefined)"
+                    >
+                        Ulangi Pengambilan Foto
+                    </UiButton>
+                    <ConfirmationDialog
+                        title="Apakah kamu yakin?"
+                        description="Pastikan foto wajah & ktm terlihat jelas dan tidak blur karena akan digunakan untuk verifikasi pemilihanmu."
+                        @confirm="next"
+                    >
+                        <UiButton :disabled="!electionStore.deviceId">
+                            Selanjutnya
+                        </UiButton>
+                    </ConfirmationDialog>
+                </template>
+                <template v-else>
+                    <UiButton variant="outline" @click="back">
+                        Kembali
+                    </UiButton>
+                    <UiButton
+                        :disabled="!electionStore.deviceId"
+                        @click="capture"
+                    >
+                        Ambil Foto
+                    </UiButton>
+                </template>
+            </UiCardFooter>
             <UiCardContent class="flex items-center">
-                <UiSelect v-model="deviceId">
+                <UiSelect v-model="electionStore.deviceId">
                     <UiSelectTrigger class="mx-auto max-w-sm">
                         <UiSelectValue
                             placeholder="Pilih Perangkat"
@@ -106,7 +157,7 @@ watch(deviceId, async (newDeviceId) => {
             </UiCardContent>
             <UiCardContent>
                 <div
-                    class="relative lg:max-w-2xl xl:max-w-3xl mx-auto rounded-lg overflow-hidden"
+                    class="relative lg:max-w-2xl xl:max-w-3xl mx-auto border-4 rounded-lg overflow-hidden"
                 >
                     <UiAspectRatio
                         v-show="picture"
@@ -132,29 +183,18 @@ watch(deviceId, async (newDeviceId) => {
                             class="w-4 h-4 bg-red-400 border border-white rounded-full"
                         ></span>
                     </div>
+                    <div
+                        class="absolute bottom-[10%] left-[5%] w-1/2 border-4 border-dashed rounded-lg opacity-50"
+                    >
+                        <UiAspectRatio :ratio="17 / 10"></UiAspectRatio>
+                    </div>
+                    <div
+                        class="absolute top-[10%] right-[5%] w-1/3 border-4 border-dashed rounded-full opacity-50"
+                    >
+                        <UiAspectRatio :ratio="3 / 4"></UiAspectRatio>
+                    </div>
                 </div>
             </UiCardContent>
-            <UiCardFooter class="flex justify-center gap-4">
-                <template v-if="picture">
-                    <UiButton
-                        :disabled="!deviceId"
-                        variant="outline"
-                        @click="() => (picture = undefined)"
-                    >
-                        Ulangi Pengambilan Foto
-                    </UiButton>
-                    <ConfirmationDialog
-                        title="Apakah Kamu Yakin?"
-                        description="Pastikan foto wajah & ktm terlihat jelas dan tidak blur karena akan digunakan untuk verifikasi pemilihanmu."
-                        @confirm="next"
-                    >
-                        <UiButton :disabled="!deviceId"> Selanjutnya </UiButton>
-                    </ConfirmationDialog>
-                </template>
-                <UiButton v-else :disabled="!deviceId" @click="capture">
-                    Ambil Foto
-                </UiButton>
-            </UiCardFooter>
         </UiCard>
     </NuxtLayout>
 </template>

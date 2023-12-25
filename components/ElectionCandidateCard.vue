@@ -3,6 +3,7 @@ const props = withDefaults(
     defineProps<{
         candidate: Candidate;
         active?: boolean;
+        display?: boolean;
     }>(),
     {
         active: false,
@@ -19,10 +20,11 @@ const baseURL = useRuntimeConfig().public.apiBase + '/../storage/';
 <template>
     <UiCard
         :class="{
-            'hover:outline hover:scale-105': !active,
+            'hover:outline hover:scale-105': !active && !display,
             'border-0 outline': active,
+            'cursor-pointer': !display,
         }"
-        class="overflow-hidden cursor-pointer transition"
+        class="overflow-hidden transition"
         @click="$emit('click', candidate)"
     >
         <div :class="{ 'grid-cols-2': active }" class="grid">

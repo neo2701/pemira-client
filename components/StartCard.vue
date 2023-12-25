@@ -6,7 +6,45 @@ const emit = defineEmits<{
 
 const props = defineProps<{
     user: User;
+    loading?: boolean;
 }>();
+
+const electionStore = useElectionStore();
+const disabled = computed(() => {
+    if (!electionStore.event) {
+        return false;
+    } else if (
+        electionStore.event?.open_election_at !== null &&
+        electionStore.event?.close_election_at !== null
+    ) {
+        return true;
+    } else if (
+        electionStore.event?.open_election_at !== null &&
+        electionStore.event?.close_election_at === null
+    ) {
+        return false;
+    } else {
+        return true;
+    }
+});
+
+const buttonText = computed(() => {
+    if (!electionStore.event) {
+        return 'Mulai Pemilihan';
+    } else if (
+        electionStore.event?.open_election_at !== null &&
+        electionStore.event?.close_election_at !== null
+    ) {
+        return 'Pemilihan sudah ditutup';
+    } else if (
+        electionStore.event?.open_election_at !== null &&
+        electionStore.event?.close_election_at === null
+    ) {
+        return 'Mulai Pemilihan';
+    } else {
+        return 'Pemilihan belum dimulai';
+    }
+});
 </script>
 
 <template>
@@ -25,20 +63,25 @@ const props = defineProps<{
                 Sebagai:
                 <div class="text-black font-bold">{{ props.user.name }}</div>
             </UiCardDescription>
-            <div class="w-full grid gap-2 text-center">
-                <UiButton size="lg" class="w-full" @click="emit('start')">
-                    Mulai Pemilihan
-                </UiButton>
-                <UiCardDescription>Atau</UiCardDescription>
-                <UiButton
-                    size="lg"
-                    variant="outline"
-                    class="w-full"
-                    @click="emit('cancel')"
-                >
-                    Kembali
-                </UiButton>
-            </div>
         </UiCardContent>
+        <UiCardFooter class="w-full grid gap-2 text-center">
+            <UiButton
+                :loading="$props.loading"
+                :disabled="disabled"
+                class="w-full"
+                @click="emit('start')"
+            >
+                {{ buttonText }}
+            </UiButton>
+            <UiCardDescription>Atau</UiCardDescription>
+            <UiButton
+                :disabled="$props.loading"
+                variant="outline"
+                class="w-full"
+                @click="emit('cancel')"
+            >
+                Kembali
+            </UiButton>
+        </UiCardFooter>
     </UiCard>
 </template>

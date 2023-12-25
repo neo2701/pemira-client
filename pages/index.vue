@@ -6,6 +6,8 @@ definePageMeta({
 const user = useAuth().user();
 const electionStore = useElectionStore();
 
+const loading = ref(false);
+
 const cancel = () => {
     useAuth().signOut();
     navigateTo('/login');
@@ -16,15 +18,29 @@ const start = () => {
 };
 
 onMounted(async () => {
+    loading.value = true;
+
     await electionStore.getEvent(1);
-    await useApiFetch('/auth/user');
+    const done = await electionStore.checkUserStatus();
+
+    if (done) {
+        navigateTo('/election/done');
+        return;
+    }
+
+    loading.value = false;
 });
 </script>
 
 <template>
     <NuxtLayout>
         <div v-if="user" class="grow flex items-center justify-center">
-            <StartCard :user="user" @start="start" @cancel="cancel" />
+            <StartCard
+                :user="user"
+                :loading="loading"
+                @start="start"
+                @cancel="cancel"
+            />
         </div>
     </NuxtLayout>
 </template>

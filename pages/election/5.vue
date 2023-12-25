@@ -1,100 +1,20 @@
 <script lang="ts" setup>
 definePageMeta({
     layout: 'election',
+    middleware: 'election',
 });
 
-const electionStore = useElectionStore();
-
-electionStore.setProgress(5);
+useElectionStore().setProgress(5);
 
 const divisionId = 3;
-const candidates = ref<Candidate[]>([]);
-const loading = ref(false);
-const selected = ref<Candidate>();
-
-const getCandidates = async () => {
-    loading.value = true;
-
-    const { data, error } = await useApiFetch(
-        `/events/${electionStore.event?.id}/candidates?division_id=${divisionId}`,
-    );
-
-    if (error.value) {
-        return;
-    }
-
-    candidates.value = data.value;
-    loading.value = false;
-};
-
-const confirm = () => {
-    if (!selected.value) {
-        return;
-    }
-
-    electionStore.ballots[divisionId] = {
-        division_id: divisionId,
-        candidate_id: selected.value.id,
-    };
-
-    navigateTo('/election/6');
-};
-
-onMounted(() => {
-    if (
-        electionStore.ktmPicture === undefined ||
-        electionStore.ballots[1] == undefined ||
-        electionStore.ballots[2] === undefined
-    ) {
-        navigateTo('/election/4');
-    }
-
-    getCandidates();
-});
 </script>
 
 <template>
     <NuxtLayout>
-        <UiCard class="grow flex flex-col">
-            <UiCardHeader class="flex items-center">
-                <UiCardTitle>BLJ Angkatan 2021</UiCardTitle>
-                <UiCardDescription>
-                    Pilih salah satu untuk melihat visi & misi
-                </UiCardDescription>
-            </UiCardHeader>
-            <UiCardFooter class="flex justify-center gap-4">
-                <UiButton variant="outline" @click="navigateTo('/election/4')">
-                    Kembali
-                </UiButton>
-                <ConfirmationDialog
-                    v-if="selected"
-                    title="Apakah kamu yakin?"
-                    :description="`Pilih ${selected?.first_name} sebagai BLJ Angkatan 2021`"
-                    @confirm="confirm"
-                >
-                    <UiButton>Selanjutnya</UiButton>
-                </ConfirmationDialog>
-                <UiButton
-                    v-else
-                    variant="secondary"
-                    class="border cursor-not-allowed"
-                >
-                    Selanjutnya
-                </UiButton>
-            </UiCardFooter>
-            <UiCardContent>
-                <div class="max-w-screen-lg mx-auto grid grid-cols-4 gap-4">
-                    <ElectionCandidateCard
-                        v-for="candidate in candidates"
-                        :candidate="candidate"
-                        :active="selected === candidate"
-                        :class="{
-                            'col-span-2': selected === candidate,
-                        }"
-                        @click="selected = candidate"
-                    />
-                </div>
-            </UiCardContent>
-        </UiCard>
+        <ElectionDivisionCandidates
+            :divisionId="divisionId"
+            previous="4"
+            next="6"
+        />
     </NuxtLayout>
 </template>

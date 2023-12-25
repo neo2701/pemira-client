@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 definePageMeta({
     layout: 'election',
+    middleware: 'election',
 });
 
 const electionStore = useElectionStore();
@@ -10,8 +11,11 @@ electionStore.setProgress(2);
 const video = ref<HTMLVideoElement>();
 const sources = ref<MediaDeviceInfo[]>([]);
 const canvas = ref<HTMLCanvasElement>();
-const deviceId = ref<string>();
 const picture = ref();
+
+const back = () => {
+    navigateTo('/election/1');
+};
 
 const getDevices = async () => {
     if (!navigator.mediaDevices) {
@@ -20,7 +24,34 @@ const getDevices = async () => {
 
     const devices = await navigator.mediaDevices.enumerateDevices();
     sources.value = devices.filter((device) => device.kind === 'videoinput');
-    deviceId.value = sources.value[0].deviceId;
+
+    if (sources.value.length === 0) {
+        return;
+    }
+
+    if (electionStore.deviceId === undefined) {
+        electionStore.deviceId = sources.value[0].deviceId;
+    }
+};
+
+const startCamera = (id?: string) => {
+    navigator.mediaDevices
+        .getUserMedia({
+            video: {
+                deviceId: id,
+                aspectRatio: 16 / 9,
+            },
+            audio: false,
+        })
+        .then((stream) => {
+            getDevices();
+
+            video.value!.srcObject = stream;
+            video.value!.play();
+        })
+        .catch((err) => {
+            console.error(err);
+        });
 };
 
 const capture = () => {
@@ -50,35 +81,18 @@ const next = () => {
     navigateTo('/election/3');
 };
 
-onMounted(() => {
-    if (electionStore.verificationPicture === undefined) {
-        navigateTo('/election/1');
-    }
+onMounted(() => startCamera(electionStore.deviceId));
 
-    getDevices();
-});
+watch(
+    () => electionStore.deviceId,
+    async () => {
+        if (!navigator.mediaDevices || video.value === undefined) {
+            return;
+        }
 
-watch(deviceId, async (newDeviceId) => {
-    if (!navigator.mediaDevices || video.value === undefined) {
-        return;
-    }
-
-    navigator.mediaDevices
-        .getUserMedia({
-            video: {
-                deviceId: newDeviceId,
-                aspectRatio: 16 / 9,
-            },
-            audio: false,
-        })
-        .then((stream) => {
-            video.value!.srcObject = stream;
-            video.value!.play();
-        })
-        .catch((err) => {
-            console.error(err);
-        });
-});
+        startCamera(electionStore.deviceId);
+    },
+);
 </script>
 
 <template>
@@ -87,13 +101,13 @@ watch(deviceId, async (newDeviceId) => {
             <UiCardHeader class="flex items-center">
                 <UiCardTitle>Foto KTM</UiCardTitle>
                 <UiCardDescription>
-                    Pastikan ktm terlihat jelas dan tidak blur
+                    Pastikan foto ktm terlihat jelas dan tidak blur
                 </UiCardDescription>
             </UiCardHeader>
             <UiCardFooter class="flex justify-center gap-4">
                 <template v-if="picture">
                     <UiButton
-                        :disabled="!deviceId"
+                        :disabled="!electionStore.deviceId"
                         variant="outline"
                         @click="() => (picture = undefined)"
                     >
@@ -101,18 +115,28 @@ watch(deviceId, async (newDeviceId) => {
                     </UiButton>
                     <ConfirmationDialog
                         title="Apakah kamu yakin?"
-                        description="Pastikan foto ktm terlihat jelas dan tidak blur karena akan digunakan untuk verifikasi pemilihanmu."
+                        description="Pastikan ktm terlihat jelas dan tidak blur karena akan digunakan untuk verifikasi pemilihanmu."
                         @confirm="next"
                     >
-                        <UiButton :disabled="!deviceId"> Selanjutnya </UiButton>
+                        <UiButton :disabled="!electionStore.deviceId">
+                            Selanjutnya
+                        </UiButton>
                     </ConfirmationDialog>
                 </template>
-                <UiButton v-else :disabled="!deviceId" @click="capture">
-                    Ambil Foto
-                </UiButton>
+                <template v-else>
+                    <UiButton variant="outline" @click="back">
+                        Kembali
+                    </UiButton>
+                    <UiButton
+                        :disabled="!electionStore.deviceId"
+                        @click="capture"
+                    >
+                        Ambil Foto
+                    </UiButton>
+                </template>
             </UiCardFooter>
             <UiCardContent class="flex items-center">
-                <UiSelect v-model="deviceId">
+                <UiSelect v-model="electionStore.deviceId">
                     <UiSelectTrigger class="mx-auto max-w-sm">
                         <UiSelectValue
                             placeholder="Pilih Perangkat"
@@ -133,7 +157,7 @@ watch(deviceId, async (newDeviceId) => {
             </UiCardContent>
             <UiCardContent>
                 <div
-                    class="relative lg:max-w-2xl xl:max-w-3xl mx-auto rounded-lg overflow-hidden"
+                    class="relative lg:max-w-2xl xl:max-w-3xl mx-auto border-4 rounded-lg overflow-hidden"
                 >
                     <UiAspectRatio
                         v-show="picture"
@@ -158,6 +182,11 @@ watch(deviceId, async (newDeviceId) => {
                         <span
                             class="w-4 h-4 bg-red-400 border border-white rounded-full"
                         ></span>
+                    </div>
+                    <div
+                        class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3/4 border-4 border-dashed rounded-lg opacity-50"
+                    >
+                        <UiAspectRatio :ratio="17 / 10"></UiAspectRatio>
                     </div>
                 </div>
             </UiCardContent>

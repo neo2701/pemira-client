@@ -26,7 +26,7 @@ const emit = defineEmits<{
         </UiCardHeader>
         <UiCardHeader class="grid gap-4 md:border-t">
             <Alert />
-            <UiButton size="lg" class="w-full gap-2" @click="emit('signIn')">
+            <UiButton class="w-full gap-2" @click="emit('signIn')">
                 <Icon name="bxl:google" size="16"></Icon>
                 Masuk dengan Google
             </UiButton>
