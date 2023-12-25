@@ -42,6 +42,20 @@ interface Candidate {
     mission: string;
     picture: string;
     order: number;
+    votes_count?: number;
+}
+
+interface Ballot {
+    id: number;
+    event_id: number;
+    npm: string;
+    ktm_picture: string;
+    verification_picture: string;
+    accepted: boolean;
+    accepted_at: string;
+    accepted_by: number;
+    created_at: string;
+    user?: User;
 }
 
 interface BallotDetail {

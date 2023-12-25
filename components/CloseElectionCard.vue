@@ -3,14 +3,14 @@ const eventStore = useEventStore();
 
 const loading = ref(false);
 
-const open = async () => {
+const close = async () => {
     if (loading.value) {
         return;
     }
 
     loading.value = true;
 
-    await eventStore.openElection();
+    await eventStore.closeElection();
 
     loading.value = false;
 };
@@ -31,13 +31,12 @@ const open = async () => {
             <ConfirmationDialog
                 title="Tutup Pemilihan"
                 description="Apakah anda yakin ingin menutup pemilihan?"
-                @confirm="open"
+                @confirm="close"
             >
                 <UiButton
                     :loading="loading"
                     variant="destructive"
                     class="w-full"
-                    @click="open"
                 >
                     Tutup Pemilihan
                 </UiButton>

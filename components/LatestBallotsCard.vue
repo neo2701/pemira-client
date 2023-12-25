@@ -1,3 +1,36 @@
+<script lang="ts" setup>
+import dayjs from 'dayjs';
+
+const route = useRoute();
+
+const ballots = ref<Ballot[]>([]);
+const loading = ref(false);
+
+const getBallots = async () => {
+    loading.value = true;
+
+    const { data, error } = await useApiFetch(
+        `/events/${route.params.event}/ballots/latest`,
+    );
+
+    loading.value = false;
+
+    if (error.value) {
+        return;
+    }
+
+    ballots.value = data.value ?? [];
+};
+
+const formatDate = (date: string) => {
+    return dayjs(date).format('DD/MM/YYYY HH:mm');
+};
+
+onMounted(() => {
+    getBallots();
+});
+</script>
+
 <template>
     <UiCard>
         <UiCardHeader>
@@ -14,15 +47,19 @@
                 <UiTableHeader>
                     <UiTableRow>
                         <UiTableHead>NPM</UiTableHead>
+                        <UiTableHead>Nama</UiTableHead>
                         <UiTableHead>Waktu</UiTableHead>
                     </UiTableRow>
                 </UiTableHeader>
                 <UiTableBody>
-                    <UiTableRow>
-                        <UiTableCell class="font-medium">
-                            22081010158
+                    <UiTableRow v-for="ballot in ballots">
+                        <UiTableCell>
+                            {{ ballot.user?.npm }}
                         </UiTableCell>
-                        <UiTableCell>2023-12-28 08:00:00</UiTableCell>
+                        <UiTableCell>{{ ballot.user?.name }}</UiTableCell>
+                        <UiTableCell>
+                            {{ formatDate(ballot.created_at) }}
+                        </UiTableCell>
                     </UiTableRow>
                 </UiTableBody>
             </UiTable>

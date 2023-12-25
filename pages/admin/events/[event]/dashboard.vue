@@ -58,12 +58,22 @@ onMounted(() => {
                 </UiCardHeader>
             </UiCard>
         </div>
-        <template v-if="eventStore.status === 1">
+        <template v-if="[1, 2].includes(eventStore.status)">
             <hr class="border-dashed" />
             <ElectionStatus />
         </template>
         <hr class="border-dashed" />
         <OpenElectionCard v-if="eventStore.status === 0" />
         <CloseElectionCard v-else-if="eventStore.status === 1" />
+        <template v-else-if="eventStore.status === 2">
+            <div class="flex justify-center gap-4">
+                <div>
+                    <OpenElectionCard reopen />
+                </div>
+                <div>
+                    <StartValidationCard />
+                </div>
+            </div>
+        </template>
     </div>
 </template>

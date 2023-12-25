@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+defineProps<{
+    reopen?: boolean;
+}>();
+
 const eventStore = useEventStore();
 
 const loading = ref(false);
@@ -23,18 +27,32 @@ const open = async () => {
         </UiCardHeader>
         <UiCardContent>
             <UiCardDescription>
-                Pastikan kandidat dan whitelist sudah terisi sebelum memulai
-                pemilihan.
+                <template v-if="reopen">
+                    Pemilihan akan dibuka kembali dan website pemilihan dapat
+                    diakses oleh mahasiswa.
+                </template>
+                <template v-else>
+                    Pastikan kandidat dan whitelist sudah terisi sebelum memulai
+                    pemilihan.
+                </template>
             </UiCardDescription>
         </UiCardContent>
         <UiCardFooter>
             <ConfirmationDialog
-                title="Mulai Pemilihan"
-                description="Apakah anda yakin ingin memulai pemilihan?"
+                title="Buka Kembali Pemilihan"
+                description="Apakah anda yakin ingin membuka kembali pemilihan?"
                 @confirm="open"
             >
-                <UiButton :loading="loading" color="primary" class="w-full">
-                    Mulai Pemilihan
+                <UiButton
+                    :loading="loading"
+                    :variant="$props.reopen ? 'outline' : undefined"
+                    class="w-full"
+                >
+                    {{
+                        $props.reopen
+                            ? 'Buka Kembali Pemilihan'
+                            : 'Mulai Pemilihan'
+                    }}
                 </UiButton>
             </ConfirmationDialog>
         </UiCardFooter>

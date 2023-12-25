@@ -27,7 +27,10 @@ const baseURL = useRuntimeConfig().public.apiBase + '/../storage/';
         class="overflow-hidden transition"
         @click="$emit('click', candidate)"
     >
-        <div :class="{ 'grid-cols-2': active }" class="grid">
+        <div
+            :class="{ 'grid-cols-2': active && candidate.first !== '-' }"
+            class="grid"
+        >
             <div :class="{ outline: active }">
                 <UiAspectRatio :ratio="1" class="relative">
                     <img
@@ -41,6 +44,29 @@ const baseURL = useRuntimeConfig().public.apiBase + '/../storage/';
                         >
                             {{ candidate.order }}
                         </div>
+                    </div>
+                    <div
+                        v-if="candidate.first === '-'"
+                        class="absolute top-0 right-0 p-2"
+                    >
+                        <UiTooltipProvider>
+                            <UiTooltip>
+                                <UiTooltipTrigger>
+                                    <div
+                                        class="w-10 h-10 flex items-center justify-center text-gray-400"
+                                    >
+                                        <Icon
+                                            name="fluent:info-16-filled"
+                                            size="24"
+                                        />
+                                    </div>
+                                </UiTooltipTrigger>
+                                <UiTooltipContent>
+                                    Opsi untuk memilih pilihan selain paslon no
+                                    1
+                                </UiTooltipContent>
+                            </UiTooltip>
+                        </UiTooltipProvider>
                     </div>
                 </UiAspectRatio>
                 <UiCardHeader>
@@ -59,7 +85,10 @@ const baseURL = useRuntimeConfig().public.apiBase + '/../storage/';
                     </UiCardTitle>
                 </UiCardHeader>
             </div>
-            <div v-if="active" class="flex flex-col gap-4 p-4 text-xs">
+            <div
+                v-if="active && candidate.first !== '-'"
+                class="flex flex-col gap-4 p-4 text-xs"
+            >
                 <div>
                     <div class="font-bold">Visi:</div>
                     <div>{{ candidate.vision }}</div>
