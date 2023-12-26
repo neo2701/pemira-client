@@ -111,24 +111,70 @@ const exit = () => {
     <vue-particles id="confetti" :options="options" />
     <NuxtLayout>
         <div class="grow flex items-center justify-center">
-            <UiCard class="max-w-sm">
-                <UiCardHeader>
-                    <UiCardTitle>Selamat!</UiCardTitle>
-                    <UiCardDescription>
-                        {{ user?.name }}
-                    </UiCardDescription>
-                </UiCardHeader>
-                <UiCardContent>
-                    <UiCardDescription>
-                        Terima kasih telah menggunakan hak suaramu dan
-                        berpartisipasi di PEMIRA 2024.
-                    </UiCardDescription>
-                </UiCardContent>
-                <UiCardFooter>
-                    <UiButton class="w-full" size="lg" @click="exit">
-                        Keluar
-                    </UiButton>
-                </UiCardFooter>
+            <UiCard class="max-w-sm sm:max-w-xl sm:grid grid-cols-2">
+                <div class="border-b sm:border-b sm:border-r border-dashed">
+                    <UiCardHeader>
+                        <UiCardTitle>Selamat!</UiCardTitle>
+                        <UiCardDescription>
+                            {{ user?.name }}
+                        </UiCardDescription>
+                    </UiCardHeader>
+                    <UiCardContent>
+                        <UiCardDescription>
+                            Terima kasih telah menggunakan hak suaramu dan
+                            berpartisipasi di PEMIRA 2024.
+                        </UiCardDescription>
+                    </UiCardContent>
+                    <UiCardFooter>
+                        <UiButton class="w-full" size="lg" @click="exit">
+                            Keluar
+                        </UiButton>
+                    </UiCardFooter>
+                </div>
+                <div>
+                    <UiCardHeader>
+                        <UiCardTitle class="flex items-center gap-2">
+                            <Icon name="fluent:megaphone-24-regular" />
+                            Rekapitulasi Suara!
+                        </UiCardTitle>
+                        <UiCardDescription>
+                            Jangan lupa untuk datang di Hari Rekapitulasi Suara
+                            yang akan diadakan pada:
+                        </UiCardDescription>
+                        <UiCardDescription>
+                            <ul class="list-disc list-inside">
+                                <li class="flex items-center gap-2">
+                                    <Icon
+                                        name="fluent:calendar-24-regular"
+                                        class="shrink-0"
+                                    />
+                                    Jumat, 29 Desember 2023
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <Icon
+                                        name="fluent:clock-24-regular"
+                                        class="shrink-0"
+                                    />
+                                    15:30 WIB
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <Icon
+                                        name="fluent:location-24-regular"
+                                        class="shrink-0"
+                                    />
+                                    Ruang Seminar FIK 2
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <Icon
+                                        name="fluent:person-24-regular"
+                                        class="shrink-0"
+                                    />
+                                    Pakaian: Bebas rapi berkerah
+                                </li>
+                            </ul>
+                        </UiCardDescription>
+                    </UiCardHeader>
+                </div>
             </UiCard>
         </div>
     </NuxtLayout>
