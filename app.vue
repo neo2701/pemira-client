@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 useSeoMeta({
     title: 'PEMIRA 2024',
+    ogType: 'website',
     ogTitle: 'PEMIRA 2024',
     ogUrl: 'https://pemira.himatifa.com',
     ogImage: 'https://pemira.himatifa.com/logo.png',
