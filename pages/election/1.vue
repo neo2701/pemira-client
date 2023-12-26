@@ -13,6 +13,7 @@ const videoStream = ref<MediaStream>();
 const sources = ref<MediaDeviceInfo[]>([]);
 const canvas = ref<HTMLCanvasElement>();
 const picture = ref();
+const portrait = ref(false);
 
 const back = () => {
     navigateTo('/');
@@ -49,6 +50,7 @@ const startCamera = (id?: string) => {
             video: {
                 deviceId: id,
                 aspectRatio: 16 / 9,
+                facingMode: 'user',
             },
             audio: false,
         })
@@ -58,6 +60,11 @@ const startCamera = (id?: string) => {
             videoStream.value = stream;
             video.value!.srcObject = stream;
             video.value!.play();
+
+            video.value!.addEventListener('loadedmetadata', () => {
+                portrait.value =
+                    video.value!.videoWidth < video.value!.videoHeight;
+            });
         })
         .catch((err) => {
             console.error(err);
@@ -119,27 +126,29 @@ watch(
                 <template v-if="picture">
                     <UiButton
                         :disabled="!electionStore.deviceId"
+                        size="lg"
                         variant="outline"
                         @click="() => (picture = undefined)"
                     >
-                        Ulangi Pengambilan Foto
+                        Ulangi
                     </UiButton>
                     <ConfirmationDialog
                         title="Apakah kamu yakin?"
                         description="Pastikan foto wajah & ktm terlihat jelas dan tidak blur karena akan digunakan untuk verifikasi pemilihanmu."
                         @confirm="next"
                     >
-                        <UiButton :disabled="!electionStore.deviceId">
+                        <UiButton size="lg" :disabled="!electionStore.deviceId">
                             Selanjutnya
                         </UiButton>
                     </ConfirmationDialog>
                 </template>
                 <template v-else>
-                    <UiButton variant="outline" @click="back">
+                    <UiButton size="lg" variant="outline" @click="back">
                         Kembali
                     </UiButton>
                     <UiButton
                         :disabled="!electionStore.deviceId"
+                        size="lg"
                         @click="capture"
                     >
                         Ambil Foto
@@ -194,16 +203,36 @@ watch(
                             class="w-4 h-4 bg-red-400 border border-white rounded-full"
                         ></span>
                     </div>
-                    <div
-                        class="absolute bottom-[10%] left-[5%] w-1/2 border-4 border-dashed rounded-lg opacity-50"
-                    >
-                        <UiAspectRatio :ratio="17 / 10"></UiAspectRatio>
-                    </div>
-                    <div
-                        class="absolute top-[10%] right-[5%] w-1/3 border-4 border-dashed rounded-full opacity-50"
-                    >
-                        <UiAspectRatio :ratio="3 / 4"></UiAspectRatio>
-                    </div>
+                    <template v-if="portrait">
+                        <div class="absolute bottom-[10%] left-0 w-full p-4">
+                            <div
+                                class="border-4 border-dashed rounded-lg opacity-50"
+                            >
+                                <UiAspectRatio :ratio="17 / 10"></UiAspectRatio>
+                            </div>
+                        </div>
+                        <div
+                            class="absolute top-[10%] left-0 w-full flex items-center justify-center"
+                        >
+                            <div
+                                class="w-1/2 border-4 border-dashed rounded-full opacity-50"
+                            >
+                                <UiAspectRatio :ratio="3 / 4"></UiAspectRatio>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-else>
+                        <div
+                            class="absolute bottom-[10%] left-[5%] w-1/2 border-4 border-dashed rounded-lg opacity-50"
+                        >
+                            <UiAspectRatio :ratio="17 / 10"></UiAspectRatio>
+                        </div>
+                        <div
+                            class="absolute top-[10%] right-[5%] w-1/3 border-4 border-dashed rounded-full opacity-50"
+                        >
+                            <UiAspectRatio :ratio="3 / 4"></UiAspectRatio>
+                        </div>
+                    </template>
                 </div>
             </UiCardContent>
         </UiCard>

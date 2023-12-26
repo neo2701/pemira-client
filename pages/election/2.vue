@@ -13,6 +13,7 @@ const videoStream = ref<MediaStream>();
 const sources = ref<MediaDeviceInfo[]>([]);
 const canvas = ref<HTMLCanvasElement>();
 const picture = ref();
+const portrait = ref(false);
 
 const back = () => {
     navigateTo('/election/1');
@@ -49,6 +50,7 @@ const startCamera = (id?: string) => {
             video: {
                 deviceId: id,
                 aspectRatio: 16 / 9,
+                facingMode: 'user',
             },
             audio: false,
         })
@@ -58,6 +60,11 @@ const startCamera = (id?: string) => {
             videoStream.value = stream;
             video.value!.srcObject = stream;
             video.value!.play();
+
+            video.value!.addEventListener('loadedmetadata', () => {
+                portrait.value =
+                    video.value!.videoWidth < video.value!.videoHeight;
+            });
         })
         .catch((err) => {
             console.error(err);
@@ -118,28 +125,30 @@ watch(
             <UiCardFooter class="flex justify-center gap-4">
                 <template v-if="picture">
                     <UiButton
+                        size="lg"
                         :disabled="!electionStore.deviceId"
                         variant="outline"
                         @click="() => (picture = undefined)"
                     >
-                        Ulangi Pengambilan Foto
+                        Ulangi
                     </UiButton>
                     <ConfirmationDialog
                         title="Apakah kamu yakin?"
                         description="Pastikan ktm terlihat jelas dan tidak blur karena akan digunakan untuk verifikasi pemilihanmu."
                         @confirm="next"
                     >
-                        <UiButton :disabled="!electionStore.deviceId">
+                        <UiButton size="lg" :disabled="!electionStore.deviceId">
                             Selanjutnya
                         </UiButton>
                     </ConfirmationDialog>
                 </template>
                 <template v-else>
-                    <UiButton variant="outline" @click="back">
+                    <UiButton size="lg" variant="outline" @click="back">
                         Kembali
                     </UiButton>
                     <UiButton
                         :disabled="!electionStore.deviceId"
+                        size="lg"
                         @click="capture"
                     >
                         Ambil Foto
@@ -195,6 +204,13 @@ watch(
                         ></span>
                     </div>
                     <div
+                        v-if="portrait"
+                        class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3/4 border-4 border-dashed rounded-lg opacity-50"
+                    >
+                        <UiAspectRatio :ratio="10 / 17"></UiAspectRatio>
+                    </div>
+                    <div
+                        v-else
                         class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3/4 border-4 border-dashed rounded-lg opacity-50"
                     >
                         <UiAspectRatio :ratio="17 / 10"></UiAspectRatio>

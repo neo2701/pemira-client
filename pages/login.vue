@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+definePageMeta({
+    layout: 'main',
+});
+
 const route = useRoute();
 const runtimeConfig = useRuntimeConfig();
 const alert = useAlertStore();
@@ -35,7 +39,7 @@ const signIn = () => {
 
 <template>
     <NuxtLayout>
-        <div class="h-[calc(100dvh)] flex items-center justify-center">
+        <div class="grow flex items-center justify-center">
             <LoginCard @signIn="signIn" />
         </div>
     </NuxtLayout>

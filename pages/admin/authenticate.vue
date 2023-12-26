@@ -21,7 +21,7 @@ onMounted(async () => {
 
 <template>
     <div class="h-[calc(100dvh)] flex items-center justify-center">
-        <UiCard class="w-96">
+        <UiCard class="max-w-sm w-full">
             <UiCardHeader class="text-center">
                 <h2 class="text-3xl">PEMIRA</h2>
                 <UiCardDescription class="text-sm mt-0">

@@ -5,7 +5,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-    <UiCard class="max-w-sm">
+    <UiCard class="max-w-sm w-full">
         <UiCardHeader class="pt-10 text-center">
             <img
                 src="/logo.png"
@@ -26,7 +26,7 @@ const emit = defineEmits<{
         </UiCardHeader>
         <UiCardHeader class="grid gap-4 md:border-t">
             <Alert />
-            <UiButton class="w-full gap-2" @click="emit('signIn')">
+            <UiButton size="lg" class="w-full gap-2" @click="emit('signIn')">
                 <Icon name="bxl:google" size="16"></Icon>
                 Masuk dengan Google
             </UiButton>

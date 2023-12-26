@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+definePageMeta({
+    layout: 'main',
+});
+
 const user = useAuth().user();
 
 const options = {
@@ -105,25 +109,27 @@ const exit = () => {
 
 <template>
     <vue-particles id="confetti" :options="options" />
-    <div
-        class="h-[calc(100dvh)] flex flex-col gap-8 items-center justify-center"
-    >
-        <UiCard class="max-w-sm">
-            <UiCardHeader>
-                <UiCardTitle>Selamat!</UiCardTitle>
-                <UiCardDescription>
-                    {{ user?.name }}
-                </UiCardDescription>
-            </UiCardHeader>
-            <UiCardContent>
-                <UiCardDescription>
-                    Terima kasih telah menggunakan hak suaramu dan
-                    berpartisipasi di PEMIRA 2024.
-                </UiCardDescription>
-            </UiCardContent>
-            <UiCardFooter>
-                <UiButton @click="exit">Keluar</UiButton>
-            </UiCardFooter>
-        </UiCard>
-    </div>
+    <NuxtLayout>
+        <div class="grow flex items-center justify-center">
+            <UiCard class="max-w-sm">
+                <UiCardHeader>
+                    <UiCardTitle>Selamat!</UiCardTitle>
+                    <UiCardDescription>
+                        {{ user?.name }}
+                    </UiCardDescription>
+                </UiCardHeader>
+                <UiCardContent>
+                    <UiCardDescription>
+                        Terima kasih telah menggunakan hak suaramu dan
+                        berpartisipasi di PEMIRA 2024.
+                    </UiCardDescription>
+                </UiCardContent>
+                <UiCardFooter>
+                    <UiButton class="w-full" size="lg" @click="exit">
+                        Keluar
+                    </UiButton>
+                </UiCardFooter>
+            </UiCard>
+        </div>
+    </NuxtLayout>
 </template>

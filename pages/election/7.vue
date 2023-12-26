@@ -62,6 +62,7 @@ const confirm = async () => {
             <UiCardFooter class="flex justify-center gap-4">
                 <UiButton
                     :disabled="loading"
+                    size="lg"
                     variant="outline"
                     @click="navigateTo('/election/6')"
                 >
@@ -73,12 +74,16 @@ const confirm = async () => {
                     description="Apakah kamu yakin dengan hasil pemilihan ini? Kamu tidak dapat mengubah hasil pemilihan setelah diproses."
                     @confirm="confirm"
                 >
-                    <UiButton>Selanjutnya</UiButton>
+                    <UiButton size="lg">Selanjutnya</UiButton>
                 </ConfirmationDialog>
-                <UiButton v-else :loading="loading">Selanjutnya</UiButton>
+                <UiButton v-else :loading="loading" size="lg">
+                    Selanjutnya
+                </UiButton>
             </UiCardFooter>
             <UiCardContent>
-                <div class="max-w-screen-lg mx-auto grid grid-cols-4 gap-4">
+                <div
+                    class="max-w-screen-lg mx-auto grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-8"
+                >
                     <div
                         v-for="ballot in electionStore.ballots"
                         class="flex flex-col gap-2"

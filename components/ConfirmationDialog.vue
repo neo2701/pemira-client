@@ -26,10 +26,10 @@ defineEmits<{
                 </UiAlertDialogDescription>
             </UiAlertDialogHeader>
             <UiAlertDialogFooter class="flex-col-reverse">
-                <UiAlertDialogCancel>
+                <UiAlertDialogCancel class="h-10">
                     {{ $props.cancelText ?? 'Cancel' }}
                 </UiAlertDialogCancel>
-                <UiAlertDialogAction @click="$emit('confirm')">
+                <UiAlertDialogAction class="h-10" @click="$emit('confirm')">
                     {{ $props.confirmText ?? 'Continue' }}
                 </UiAlertDialogAction>
             </UiAlertDialogFooter>

@@ -22,8 +22,6 @@ const getResult = async () => {
     }
 
     result.value = data.value;
-
-    console.log(data.value, error.value);
 };
 
 onMounted(getResult);

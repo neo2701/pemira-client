@@ -85,6 +85,7 @@ onMounted(async () => {
         <template v-if="!loading">
             <UiCardFooter class="flex justify-center gap-4">
                 <UiButton
+                    size="lg"
                     variant="outline"
                     @click="navigateTo(`/election/${$props.previous}`)"
                 >
@@ -96,10 +97,11 @@ onMounted(async () => {
                     :description="`Pilih ${selected?.first_name} sebagai ${division?.name}`"
                     @confirm="confirm"
                 >
-                    <UiButton>Selanjutnya</UiButton>
+                    <UiButton size="lg">Selanjutnya</UiButton>
                 </ConfirmationDialog>
                 <UiButton
                     v-else
+                    size="lg"
                     variant="secondary"
                     class="border cursor-not-allowed"
                 >
@@ -107,11 +109,13 @@ onMounted(async () => {
                 </UiButton>
             </UiCardFooter>
             <UiCardContent>
-                <div class="max-w-screen-lg mx-auto grid grid-cols-4 gap-4">
+                <div
+                    class="max-w-screen-lg mx-auto grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+                >
                     <div
                         v-for="candidate in candidates"
                         :class="{
-                            'col-span-2':
+                            'sm:col-span-2':
                                 selected?.id === candidate.id &&
                                 selected?.first !== '-',
                         }"

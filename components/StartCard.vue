@@ -48,7 +48,7 @@ const buttonText = computed(() => {
 </script>
 
 <template>
-    <UiCard class="w-96">
+    <UiCard class="max-w-sm w-full">
         <UiCardHeader class="text-center">
             <h2 class="text-3xl">PEMIRA</h2>
             <UiCardDescription class="text-sm mt-0">
@@ -68,6 +68,7 @@ const buttonText = computed(() => {
             <UiButton
                 :loading="$props.loading"
                 :disabled="disabled"
+                size="lg"
                 class="w-full"
                 @click="emit('start')"
             >
@@ -76,6 +77,7 @@ const buttonText = computed(() => {
             <UiCardDescription>Atau</UiCardDescription>
             <UiButton
                 :disabled="$props.loading"
+                size="lg"
                 variant="outline"
                 class="w-full"
                 @click="emit('cancel')"
