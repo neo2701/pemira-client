@@ -192,6 +192,9 @@ watch(
                     <video
                         v-show="!picture"
                         ref="video"
+                        autoplay="true"
+                        muted="true"
+                        playsinline="true"
                         class="w-full h-auto object-cover"
                     ></video>
                     <div
