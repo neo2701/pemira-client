@@ -43,6 +43,7 @@ interface Candidate {
     picture: string;
     order: number;
     votes_count?: number;
+    ballots_count?: number;
 }
 
 interface Ballot {
@@ -63,4 +64,8 @@ interface BallotDetail {
     candidate_id: number;
     division: Division;
     candidate: Candidate;
+}
+
+interface ValidationResult extends Division {
+    candidates: Candidate[];
 }

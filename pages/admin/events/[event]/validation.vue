@@ -75,10 +75,12 @@ onMounted(getNext);
         class="relative grow flex flex-col justify-center border-0 text-center"
     >
         <UiCardHeader>
-            <UiCardTitle class="text-2xl">Pengesahan Surat Suara</UiCardTitle>
+            <UiCardTitle class="text-2xl">Validasi Surat Suara</UiCardTitle>
             <UiCardDescription>
                 <template v-if="done">Selesai</template>
-                <template v-else>NPM: {{ ballot?.npm }}</template>
+                <template v-else>
+                    {{ ballot?.npm }} - {{ ballot?.user?.name }}
+                </template>
             </UiCardDescription>
         </UiCardHeader>
         <UiCardFooter v-if="done" class="gap-2 justify-center">
@@ -86,7 +88,7 @@ onMounted(getNext);
                 <UiButton variant="outline">Kembali ke Dashboard</UiButton>
             </NuxtLink>
             <NuxtLink :to="`/admin/events/${route.params.event}/result`">
-                <UiButton>Tampilkan Hasil Pengesahan</UiButton>
+                <UiButton>Tampilkan Hasil Validasi</UiButton>
             </NuxtLink>
         </UiCardFooter>
         <UiCardContent v-else>

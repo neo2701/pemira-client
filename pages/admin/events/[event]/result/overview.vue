@@ -1,30 +1,18 @@
 <script lang="ts" setup>
-interface Result extends Division {
-    candidates: Candidate[];
-}
+definePageMeta({
+    middleware: 'result',
+});
 
 const route = useRoute();
+const validationStore = useValidationStore();
 
-const result = ref<Result[]>();
-const loading = ref(false);
-
-const getResult = async () => {
-    loading.value = true;
-
-    const { data, error } = await useApiFetch(
-        `/events/${route.params.event}/result`,
-    );
-
-    loading.value = false;
-
-    if (error.value) {
-        return;
-    }
-
-    result.value = data.value;
+const previous = () => {
+    navigateTo(`/admin/events/${route.params.event}/result/overall`);
 };
 
-onMounted(getResult);
+const next = () => {
+    navigateTo(`/admin/events/${route.params.event}/dashboard`);
+};
 </script>
 
 <template>
@@ -32,14 +20,11 @@ onMounted(getResult);
         class="relative grow flex flex-col justify-center border-0 text-center"
     >
         <UiCardHeader>
-            <UiCardTitle class="text-2xl"> Hasil Pengesahan </UiCardTitle>
+            <UiCardTitle class="text-2xl">Hasil Validasi</UiCardTitle>
             <UiCardDescription>PEMIRA 2024</UiCardDescription>
         </UiCardHeader>
-        <UiCardContent v-if="loading">
-            <Icon name="svg-spinners:ring-resize" size="24" class="mx-auto" />
-        </UiCardContent>
         <UiCardContent class="grid grid-flow-col auto-cols-fr gap-4">
-            <UiCard v-for="division in result">
+            <UiCard v-for="division in validationStore.result">
                 <UiCardHeader>
                     <UiCardTitle>{{ division.name }} </UiCardTitle>
                 </UiCardHeader>
@@ -67,13 +52,9 @@ onMounted(getResult);
                 </UiTable>
             </UiCard>
         </UiCardContent>
-        <UiCardFooter v-if="!loading">
-            <NuxtLink
-                :to="`/admin/events/${route.params.event}/dashboard`"
-                class="mx-auto"
-            >
-                <UiButton>Selesai</UiButton>
-            </NuxtLink>
+        <UiCardFooter class="justify-center gap-2">
+            <UiButton variant="outline" @click="previous">Kembali</UiButton>
+            <UiButton @click="next">Selesai</UiButton>
         </UiCardFooter>
     </UiCard>
 </template>

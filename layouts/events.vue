@@ -5,7 +5,9 @@ const eventStore = useEventStore();
 const isValidation = computed(() => {
     return (
         route.name === 'admin-events-event-validation' ||
-        route.name === 'admin-events-event-result'
+        route.name === 'admin-events-event-result' ||
+        route.name === 'admin-events-event-result-overall' ||
+        route.name === 'admin-events-event-result-overview'
     );
 });
 </script>
