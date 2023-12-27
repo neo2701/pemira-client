@@ -46,6 +46,10 @@ const stopCamera = () => {
 };
 
 const startCamera = (id?: string) => {
+    if (videoStream.value) {
+        videoStream.value.getTracks().forEach((track) => track.stop());
+    }
+
     navigator.mediaDevices
         .getUserMedia({
             video: {
