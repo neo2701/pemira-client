@@ -57,10 +57,8 @@ const startCamera = (id?: string, forceUser = false) => {
             video: {
                 deviceId: id,
                 aspectRatio: 16 / 9,
-                facingMode: {
-                    exact:
-                        isMobile.value && !forceUser ? 'environment' : 'user',
-                },
+                facingMode:
+                    isMobile.value && !forceUser ? 'environment' : undefined,
             },
             audio: false,
         })
@@ -159,12 +157,13 @@ watch(
                     Pastikan foto ktm terlihat jelas dan tidak blur
                 </UiCardDescription>
             </UiCardHeader>
-            <UiCardFooter class="flex justify-center gap-4">
+            <UiCardFooter class="sticky z-10 top-2 flex justify-center gap-4">
                 <template v-if="picture">
                     <UiButton
                         size="lg"
                         :disabled="!videoStream || !picture"
                         variant="outline"
+                        class="bg-white"
                         @click="() => (picture = undefined)"
                     >
                         Ulangi
@@ -183,12 +182,18 @@ watch(
                     </ConfirmationDialog>
                 </template>
                 <template v-else>
-                    <UiButton size="lg" variant="outline" @click="back">
+                    <UiButton
+                        size="lg"
+                        variant="outline"
+                        class="bg-white"
+                        @click="back"
+                    >
                         Kembali
                     </UiButton>
                     <UiButton
                         :disabled="!videoStream"
                         size="lg"
+                        class="sticky top-0"
                         @click="capture"
                     >
                         Ambil Foto
