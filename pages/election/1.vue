@@ -165,7 +165,10 @@ watch(
                         description="Pastikan foto wajah & ktm terlihat jelas dan tidak blur karena akan digunakan untuk verifikasi pemilihanmu."
                         @confirm="next"
                     >
-                        <UiButton size="lg" :disabled="!electionStore.deviceId">
+                        <UiButton
+                            size="lg"
+                            :disabled="!videoStream || !picture"
+                        >
                             Selanjutnya
                         </UiButton>
                     </ConfirmationDialog>
@@ -175,7 +178,7 @@ watch(
                         Kembali
                     </UiButton>
                     <UiButton
-                        :disabled="!electionStore.deviceId"
+                        :disabled="!videoStream"
                         size="lg"
                         @click="capture"
                     >
