@@ -50,7 +50,7 @@ const startCamera = (id?: string) => {
         .getUserMedia({
             video: {
                 deviceId: id,
-                aspectRatio: portrait.value ? 9 / 16 : 16 / 9,
+                aspectRatio: 16 / 9,
                 facingMode: 'user',
             },
             audio: false,
