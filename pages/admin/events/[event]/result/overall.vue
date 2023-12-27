@@ -112,8 +112,8 @@ onMounted(getOverallResult);
                             <UiCardTitle>Perbandingan Surat Suara</UiCardTitle>
                             <UiCardDescription>
                                 <EventResultPieChart
-                                    :accepted="3"
-                                    :declined="5"
+                                    :accepted="counts.accepted"
+                                    :declined="counts.declined"
                                 />
                             </UiCardDescription>
                         </UiCardHeader>

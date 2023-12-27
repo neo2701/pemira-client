@@ -13,7 +13,7 @@ const percentage = (candidate: Candidate) => {
         return 0;
     }
 
-    return Math.round((candidate.ballots_count / candidate.votes_count) * 100);
+    return Math.round((candidate.votes_count / candidate.ballots_count) * 100);
 };
 </script>
 
