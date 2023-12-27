@@ -50,20 +50,14 @@ const startCamera = (id?: string) => {
             video: {
                 deviceId: id,
                 aspectRatio: 16 / 9,
+                facingMode: 'user',
             },
             audio: false,
         })
         .then((stream) => {
-            getDevices();
-
             videoStream.value = stream;
             video.value!.srcObject = stream;
             video.value!.play();
-
-            video.value!.addEventListener('loadedmetadata', () => {
-                portrait.value =
-                    video.value!.videoWidth < video.value!.videoHeight;
-            });
         })
         .catch((err) => {
             console.error(err);
@@ -93,12 +87,23 @@ const capture = () => {
 };
 
 const next = () => {
-    stopCamera();
     electionStore.setVerificationPicture(picture.value);
     navigateTo('/election/2');
 };
 
-onMounted(() => startCamera(electionStore.deviceId));
+onMounted(() => {
+    video.value!.addEventListener('loadedmetadata', () => {
+        console.log(video.value!.videoWidth, video.value!.videoHeight);
+        portrait.value = video.value!.videoWidth < video.value!.videoHeight;
+    });
+
+    startCamera(electionStore.deviceId);
+    getDevices();
+});
+
+onUnmounted(() => {
+    stopCamera();
+});
 
 watch(
     () => electionStore.deviceId,
