@@ -45,7 +45,9 @@ const stopCamera = () => {
     }
 };
 
-const startCamera = (id?: string) => {
+const afterError = ref(false);
+
+const startCamera = (id?: string, forceUser = false) => {
     if (videoStream.value) {
         videoStream.value.getTracks().forEach((track) => track.stop());
     }
@@ -55,7 +57,10 @@ const startCamera = (id?: string) => {
             video: {
                 deviceId: id,
                 aspectRatio: 16 / 9,
-                facingMode: { exact: isMobile.value ? 'environment' : 'user' },
+                facingMode: {
+                    exact:
+                        isMobile.value && !forceUser ? 'environment' : 'user',
+                },
             },
             audio: false,
         })
@@ -66,6 +71,11 @@ const startCamera = (id?: string) => {
         })
         .catch((err) => {
             console.error(err);
+            if (afterError.value) {
+                return;
+            }
+            afterError.value = true;
+            startCamera(undefined, true);
         });
 };
 
