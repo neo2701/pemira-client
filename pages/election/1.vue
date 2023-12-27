@@ -113,10 +113,6 @@ onMounted(() => {
 
     if (!isMobile.value) {
         getDevices();
-        video.value!.addEventListener('loadedmetadata', () => {
-            console.log(video.value!.videoWidth, video.value!.videoHeight);
-            portrait.value = video.value!.videoWidth < video.value!.videoHeight;
-        });
     } else {
         portrait.value = true;
     }
@@ -152,7 +148,7 @@ watch(
             <UiCardFooter class="flex justify-center gap-4">
                 <template v-if="picture">
                     <UiButton
-                        :disabled="!electionStore.deviceId"
+                        :disabled="!videoStream || !picture"
                         size="lg"
                         variant="outline"
                         @click="() => (picture = undefined)"

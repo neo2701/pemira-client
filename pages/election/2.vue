@@ -113,10 +113,6 @@ onMounted(() => {
 
     if (!isMobile.value) {
         getDevices();
-        video.value!.addEventListener('loadedmetadata', () => {
-            console.log(video.value!.videoWidth, video.value!.videoHeight);
-            portrait.value = video.value!.videoWidth < video.value!.videoHeight;
-        });
     } else {
         portrait.value = true;
     }
@@ -153,7 +149,7 @@ watch(
                 <template v-if="picture">
                     <UiButton
                         size="lg"
-                        :disabled="!electionStore.deviceId"
+                        :disabled="!videoStream || !picture"
                         variant="outline"
                         @click="() => (picture = undefined)"
                     >
@@ -236,12 +232,17 @@ watch(
                             class="w-4 h-4 bg-red-400 border border-white rounded-full"
                         ></span>
                     </div>
-                    <div
-                        v-if="portrait"
-                        class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3/4 border-4 border-dashed rounded-lg opacity-50"
-                    >
-                        <UiAspectRatio :ratio="10 / 17"></UiAspectRatio>
-                    </div>
+                    <template v-if="portrait">
+                        <div
+                            class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3/4 border-4 border-dashed rounded-lg opacity-50"
+                        >
+                            <UiAspectRatio :ratio="10 / 17" class="relative">
+                                <div
+                                    class="absolute h-[17%] w-[37%] bottom-[3%] left-1/2 transform -translate-x-1/2 border-4 border-dashed rounded-lg opacity-50"
+                                ></div>
+                            </UiAspectRatio>
+                        </div>
+                    </template>
                     <div
                         v-else
                         class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3/4 border-4 border-dashed rounded-lg opacity-50"
