@@ -50,7 +50,7 @@ const startCamera = (id?: string) => {
         .getUserMedia({
             video: {
                 deviceId: id,
-                aspectRatio: isMobile.value ? 9 / 16 : 16 / 9,
+                aspectRatio: 16 / 9,
                 facingMode: 'user',
             },
             audio: false,
@@ -164,7 +164,10 @@ watch(
                         description="Pastikan ktm terlihat jelas dan tidak blur karena akan digunakan untuk verifikasi pemilihanmu."
                         @confirm="next"
                     >
-                        <UiButton size="lg" :disabled="!electionStore.deviceId">
+                        <UiButton
+                            size="lg"
+                            :disabled="!videoStream || !picture"
+                        >
                             Selanjutnya
                         </UiButton>
                     </ConfirmationDialog>
@@ -174,7 +177,7 @@ watch(
                         Kembali
                     </UiButton>
                     <UiButton
-                        :disabled="!electionStore.deviceId"
+                        :disabled="!videoStream"
                         size="lg"
                         @click="capture"
                     >
