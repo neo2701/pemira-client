@@ -50,7 +50,6 @@ const startCamera = (id?: string) => {
             video: {
                 deviceId: id,
                 aspectRatio: 16 / 9,
-                facingMode: 'user',
             },
             audio: false,
         })
