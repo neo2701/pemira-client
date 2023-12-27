@@ -32,7 +32,10 @@ const baseURL = useRuntimeConfig().public.apiBase + '/../storage/';
             class="grid"
         >
             <div :class="{ outline: active }">
-                <UiAspectRatio :ratio="1" class="relative">
+                <UiAspectRatio
+                    :ratio="1"
+                    class="relative border-b border-dashed"
+                >
                     <img
                         :src="baseURL + candidate.picture"
                         :alt="candidate.first_name"
