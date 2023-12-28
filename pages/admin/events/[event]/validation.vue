@@ -8,6 +8,27 @@ const storageUrl = config.public.apiBase + '/../storage/';
 const done = ref(false);
 const ktm = ref<HTMLImageElement>();
 const verification = ref<HTMLImageElement>();
+const result = reactive({
+    accepted: 0,
+    rejected: 0,
+});
+
+const getCurrentResult = async () => {
+    loading.value = true;
+
+    const { data, error } = await useApiFetch(
+        `/events/${route.params.event}/result/overall`,
+    );
+
+    loading.value = false;
+
+    if (error.value) {
+        return;
+    }
+
+    result.accepted = data.value.accepted_ballots_count;
+    result.rejected = data.value.rejected_ballots_count;
+};
 
 const getNext = async () => {
     loading.value = true;
@@ -21,6 +42,8 @@ const getNext = async () => {
     if (error.value && statusCode.value !== 404) {
         return;
     }
+
+    await getCurrentResult();
 
     if (statusCode.value === 404) {
         ballot.value = undefined;
@@ -125,7 +148,7 @@ onMounted(() => {
         </UiCardFooter>
         <UiCardContent v-else>
             <Icon v-if="loading" name="svg-spinners:ring-resize" size="24" />
-            <template v-if="ballot && !loading">
+            <div v-if="ballot && !loading" class="grid gap-4">
                 <div class="grid grid-cols-2 gap-4">
                     <UiAspectRatio :ratio="16 / 9">
                         <img
@@ -142,7 +165,31 @@ onMounted(() => {
                         />
                     </UiAspectRatio>
                 </div>
-            </template>
+                <div class="flex justify-center gap-4">
+                    <UiCard class="max-w-xs w-full bg-red-50 text-red-950">
+                        <UiCardHeader>
+                            <UiCardTitle class="text-xl font-bold">
+                                {{ result.rejected }}
+                            </UiCardTitle>
+                            <UiCardDescription class="text-red-950 font-medium">
+                                Tidak Sah
+                            </UiCardDescription>
+                        </UiCardHeader>
+                    </UiCard>
+                    <UiCard class="max-w-xs w-full bg-green-50 text-green-950">
+                        <UiCardHeader>
+                            <UiCardTitle class="text-xl font-bold">
+                                {{ result.accepted }}
+                            </UiCardTitle>
+                            <UiCardDescription
+                                class="text-green-950 font-medium"
+                            >
+                                Sah
+                            </UiCardDescription>
+                        </UiCardHeader>
+                    </UiCard>
+                </div>
+            </div>
         </UiCardContent>
         <template v-if="!done && !loading && ballot">
             <div

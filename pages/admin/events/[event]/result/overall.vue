@@ -13,10 +13,12 @@ const counts = reactive({
     declined: 0,
 });
 
-const countsAsPercentage = computed(() => ({
-    accepted: Math.round((counts.accepted / counts.ballots) * 100),
-    declined: Math.round((counts.declined / counts.ballots) * 100),
-}));
+const countsAsPercentage = computed(() => {
+    const accepted = Math.round((counts.accepted / counts.ballots) * 100);
+    const declined = 100 - accepted;
+
+    return { accepted, declined };
+});
 
 const getOverallResult = async () => {
     loading.value = true;

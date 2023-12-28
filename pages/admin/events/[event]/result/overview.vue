@@ -16,13 +16,15 @@ const next = () => {
 </script>
 
 <template>
-    <UiCard
-        class="relative grow flex flex-col justify-center border-0 text-center"
-    >
+    <UiCard class="relative grow flex flex-col border-0 text-center">
         <UiCardHeader>
             <UiCardTitle class="text-2xl">Hasil Validasi</UiCardTitle>
             <UiCardDescription>PEMIRA 2024</UiCardDescription>
         </UiCardHeader>
+        <UiCardFooter class="justify-center gap-2">
+            <UiButton variant="outline" @click="previous">Kembali</UiButton>
+            <UiButton @click="next">Selesai</UiButton>
+        </UiCardFooter>
         <UiCardContent class="grid grid-flow-col auto-cols-fr gap-4">
             <UiCard v-for="division in validationStore.result">
                 <UiCardHeader>
@@ -52,9 +54,5 @@ const next = () => {
                 </UiTable>
             </UiCard>
         </UiCardContent>
-        <UiCardFooter class="justify-center gap-2">
-            <UiButton variant="outline" @click="previous">Kembali</UiButton>
-            <UiButton @click="next">Selesai</UiButton>
-        </UiCardFooter>
     </UiCard>
 </template>
