@@ -31,15 +31,14 @@ const getCurrentResult = async () => {
 };
 
 const getPrevious = async () => {
-    if (!ballot.value) {
-        return;
-    }
-
     loading.value = true;
 
-    const { data, error, statusCode } = await useApiFetch(
-        `/events/${route.params.event}/ballots/${ballot.value?.id}/previous`,
-    );
+    const endpoint =
+        ballot.value === undefined
+            ? `/events/${route.params.event}/ballots/latest-ballot`
+            : `/events/${route.params.event}/ballots/${ballot.value?.id}/previous`;
+
+    const { data, error, statusCode } = await useApiFetch(endpoint);
 
     loading.value = false;
 
@@ -56,6 +55,7 @@ const getPrevious = async () => {
     }
 
     ballot.value = data.value;
+    done.value = false;
 };
 
 const getNext = async () => {
