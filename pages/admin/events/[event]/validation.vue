@@ -124,7 +124,7 @@ const setLandscape = (e: any) => {
     const scale =
         naturalWidth > naturalHeight ? naturalHeight / naturalWidth : 1;
     const yshift = -100 * scale;
-    const style = `transform:rotate(90deg) translateY(${yshift}%) scale(${scale}); transform-origin: top left;`;
+    const style = `transform:rotate(-90deg) translateY(${yshift}%) scale(${scale}); transform-origin: top right;`;
 
     target.setAttribute('style', style);
 };
@@ -192,7 +192,7 @@ onMounted(() => {
                     <UiAspectRatio :ratio="16 / 9">
                         <img
                             :src="storageUrl + ballot?.ktm_picture"
-                            class="w-full rounded-lg -rotate-90"
+                            class="w-full rounded-lg"
                             @load="setLandscape"
                         />
                     </UiAspectRatio>
