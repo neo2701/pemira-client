@@ -99,6 +99,19 @@ const isPortrait = (e: HTMLImageElement) => {
     return naturalWidth < naturalHeight;
 };
 
+const setHeight = (e: any) => {
+    if (!isPortrait(e.target)) {
+        return;
+    }
+
+    const target = e.currentTarget;
+    const naturalHeight = target.parentNode.clientHeight;
+
+    const style = `width: auto; height: ${naturalHeight}px`;
+
+    target.setAttribute('style', style);
+};
+
 const setLandscape = (e: any) => {
     if (!isPortrait(e.target)) {
         return;
@@ -126,18 +139,38 @@ onMounted(() => {
 </script>
 
 <template>
-    <UiCard
-        class="relative grow flex flex-col justify-center border-0 text-center"
-    >
-        <UiCardHeader>
-            <UiCardTitle class="text-2xl">Validasi Surat Suara</UiCardTitle>
-            <UiCardDescription>
-                <template v-if="done">Selesai</template>
-                <template v-else>
-                    {{ ballot?.npm }} - {{ ballot?.user?.name }}
-                </template>
-            </UiCardDescription>
-        </UiCardHeader>
+    <UiCard class="relative grow flex flex-col border-0 text-center">
+        <div class="flex justify-center gap-4 p-4">
+            <UiCard class="max-w-xs w-full bg-red-50 text-red-950">
+                <UiCardHeader>
+                    <UiCardTitle class="text-4xl font-bold">
+                        {{ result.rejected }}
+                    </UiCardTitle>
+                    <UiCardDescription class="text-red-950 font-medium">
+                        Tidak Sah
+                    </UiCardDescription>
+                </UiCardHeader>
+            </UiCard>
+            <UiCardHeader>
+                <UiCardTitle class="text-2xl">Validasi Surat Suara</UiCardTitle>
+                <UiCardDescription>
+                    <template v-if="done">Selesai</template>
+                    <template v-else>
+                        {{ ballot?.npm }} - {{ ballot?.user?.name }}
+                    </template>
+                </UiCardDescription>
+            </UiCardHeader>
+            <UiCard class="max-w-xs w-full bg-green-50 text-green-950">
+                <UiCardHeader>
+                    <UiCardTitle class="text-4xl font-bold">
+                        {{ result.accepted }}
+                    </UiCardTitle>
+                    <UiCardDescription class="text-green-950 font-medium">
+                        Sah
+                    </UiCardDescription>
+                </UiCardHeader>
+            </UiCard>
+        </div>
         <UiCardFooter v-if="done" class="gap-2 justify-center">
             <NuxtLink :to="`/admin/events/${route.params.event}/dashboard`">
                 <UiButton variant="outline">Kembali ke Dashboard</UiButton>
@@ -154,7 +187,6 @@ onMounted(() => {
                         <img
                             :src="storageUrl + ballot?.verification_picture"
                             class="w-full rounded-lg"
-                            @load="setLandscape"
                         />
                     </UiAspectRatio>
                     <UiAspectRatio :ratio="16 / 9">
@@ -164,30 +196,6 @@ onMounted(() => {
                             @load="setLandscape"
                         />
                     </UiAspectRatio>
-                </div>
-                <div class="flex justify-center gap-4">
-                    <UiCard class="max-w-xs w-full bg-red-50 text-red-950">
-                        <UiCardHeader>
-                            <UiCardTitle class="text-xl font-bold">
-                                {{ result.rejected }}
-                            </UiCardTitle>
-                            <UiCardDescription class="text-red-950 font-medium">
-                                Tidak Sah
-                            </UiCardDescription>
-                        </UiCardHeader>
-                    </UiCard>
-                    <UiCard class="max-w-xs w-full bg-green-50 text-green-950">
-                        <UiCardHeader>
-                            <UiCardTitle class="text-xl font-bold">
-                                {{ result.accepted }}
-                            </UiCardTitle>
-                            <UiCardDescription
-                                class="text-green-950 font-medium"
-                            >
-                                Sah
-                            </UiCardDescription>
-                        </UiCardHeader>
-                    </UiCard>
                 </div>
             </div>
         </UiCardContent>
