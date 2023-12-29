@@ -30,6 +30,34 @@ const getCurrentResult = async () => {
     result.rejected = data.value.rejected_ballots_count;
 };
 
+const getPrevious = async () => {
+    if (!ballot.value) {
+        return;
+    }
+
+    loading.value = true;
+
+    const { data, error, statusCode } = await useApiFetch(
+        `/events/${route.params.event}/ballots/${ballot.value?.id}/previous`,
+    );
+
+    loading.value = false;
+
+    if (error.value && statusCode.value !== 404) {
+        return;
+    }
+
+    await getCurrentResult();
+
+    if (statusCode.value === 404) {
+        ballot.value = undefined;
+        done.value = true;
+        return;
+    }
+
+    ballot.value = data.value;
+};
+
 const getNext = async () => {
     loading.value = true;
 
@@ -141,16 +169,18 @@ onMounted(() => {
 <template>
     <UiCard class="relative grow flex flex-col border-0 text-center">
         <div class="flex justify-center gap-4 p-4">
-            <UiCard class="max-w-xs w-full bg-red-50 text-red-950">
-                <UiCardHeader>
-                    <UiCardTitle class="text-4xl font-bold">
-                        {{ result.rejected }}
-                    </UiCardTitle>
-                    <UiCardDescription class="text-red-950 font-medium">
-                        Tidak Sah
-                    </UiCardDescription>
-                </UiCardHeader>
-            </UiCard>
+            <div class="max-w-xs w-full">
+                <UiCard class="bg-red-50 text-red-950">
+                    <UiCardHeader>
+                        <UiCardTitle class="text-4xl font-bold">
+                            {{ result.rejected }}
+                        </UiCardTitle>
+                        <UiCardDescription class="text-red-950 font-medium">
+                            Tidak Sah
+                        </UiCardDescription>
+                    </UiCardHeader>
+                </UiCard>
+            </div>
             <UiCardHeader>
                 <UiCardTitle class="text-2xl">Validasi Surat Suara</UiCardTitle>
                 <UiCardDescription>
@@ -159,17 +189,29 @@ onMounted(() => {
                         {{ ballot?.npm }} - {{ ballot?.user?.name }}
                     </template>
                 </UiCardDescription>
+                <UiCardFooter class="pb-0">
+                    <UiButton
+                        class="mx-auto"
+                        variant="outline"
+                        @click="getPrevious"
+                    >
+                        Kembali
+                    </UiButton>
+                </UiCardFooter>
             </UiCardHeader>
-            <UiCard class="max-w-xs w-full bg-green-50 text-green-950">
-                <UiCardHeader>
-                    <UiCardTitle class="text-4xl font-bold">
-                        {{ result.accepted }}
-                    </UiCardTitle>
-                    <UiCardDescription class="text-green-950 font-medium">
-                        Sah
-                    </UiCardDescription>
-                </UiCardHeader>
-            </UiCard>
+
+            <div class="max-w-xs w-full">
+                <UiCard class="bg-green-50 text-green-950">
+                    <UiCardHeader>
+                        <UiCardTitle class="text-4xl font-bold">
+                            {{ result.accepted }}
+                        </UiCardTitle>
+                        <UiCardDescription class="text-green-950 font-medium">
+                            Sah
+                        </UiCardDescription>
+                    </UiCardHeader>
+                </UiCard>
+            </div>
         </div>
         <UiCardFooter v-if="done" class="gap-2 justify-center">
             <NuxtLink :to="`/admin/events/${route.params.event}/dashboard`">
