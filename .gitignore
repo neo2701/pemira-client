@@ -5,6 +5,9 @@
 .nitro
 .cache
 dist
+static/sw.js
+static/manifest.js
+static/*.hot-update.*
 
 # Node dependencies
 node_modules
@@ -12,13 +15,32 @@ node_modules
 # Logs
 logs
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Misc
+# Miscellaneous
 .DS_Store
 .fleet
 .idea
+.vscode/
+Thumbs.db
 
 # Local env files
 .env
 .env.*
 !.env.example
+
+# Nuxt specific cache and runtime files
+*.local
+.nuxtignore
+
+# Additional IDE/editor configurations
+*.sublime-workspace
+*.code-workspace
+*.swp
+*.swo
+*.swn
+*.bak
+*.tmp
+
