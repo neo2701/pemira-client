@@ -8,7 +8,7 @@ const emit = defineEmits<{
     <UiCard class="max-w-sm w-full">
         <UiCardHeader class="pt-10 text-center">
             <img
-                src="/logo.png"
+                src="/logo_pemira24.png"
                 alt="Logo"
                 class="w-32 h-32 aspect-square mx-auto"
             />
