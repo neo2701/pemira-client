@@ -3,7 +3,8 @@ export default defineNuxtRouteMiddleware((to, from) => {
         ? '/admin/login'
         : '/login';
 
-    const allowedPaths = ['/login', '/authenticate', '/admin/login'];
+    // Tambahkan '/' ke daftar allowedPaths agar landing page dapat diakses tanpa login
+    const allowedPaths = ['/', '/login', '/authenticate', '/admin/login'];
 
     if (allowedPaths.includes(to.path)) {
         return;

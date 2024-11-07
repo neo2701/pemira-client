@@ -6,6 +6,9 @@ export default defineNuxtConfig({
     },
     css: ['~/assets/css/main.css'],
     devtools: { enabled: false },
+    // routeRules: {
+    //     '/api/**': { proxy: { to: 'https://sandboxdevlab.com/api/**' } },
+    // },
     ssr: false,
     runtimeConfig: {
         public: {
