@@ -79,6 +79,11 @@ const capture = () => {
     canvas.value!.width = video.value.videoWidth;
     canvas.value!.height = video.value.videoHeight;
 
+    context.save(); 
+    context.scale(-1, 1); 
+    context.translate(-video.value.videoWidth, 0); 
+
+    
     context.drawImage(
         video.value,
         0,
@@ -225,7 +230,7 @@ watch(
                         autoplay="true"
                         muted="true"
                         playsinline="true"
-                        class="w-full h-auto object-cover"
+                        class="w-full h-auto object-cover transform scale-x-[-1]"
                     ></video>
                     <div
                         v-if="!picture"
@@ -256,12 +261,12 @@ watch(
                     </template>
                     <template v-else>
                         <div
-                            class="absolute bottom-[10%] left-[5%] w-1/2 border-4 border-dashed rounded-lg opacity-50"
+                            class="absolute bottom-[10%] right-[5%] w-1/2 border-4 border-dashed rounded-lg opacity-50"
                         >
                             <UiAspectRatio :ratio="17 / 10"></UiAspectRatio>
                         </div>
                         <div
-                            class="absolute top-[10%] right-[5%] w-1/3 border-4 border-dashed rounded-full opacity-50"
+                            class="absolute top-[10%] left-[5%] w-1/3 border-4 border-dashed rounded-full opacity-50"
                         >
                             <UiAspectRatio :ratio="3 / 4"></UiAspectRatio>
                         </div>
