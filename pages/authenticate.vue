@@ -27,9 +27,17 @@ onMounted(async () => {
 <template>
     <NuxtLayout>
         <div class="grow flex items-center justify-center">
-            <UiCard class="max-w-sm w-full">
+            <UiCard class="max-w-sm w-full bg-transparent border-none">
                 <UiCardHeader class="text-center">
+                    <img
+                        src="/logo_pemira24.png"
+                        alt="Logo"
+                        class="w-32 h-32 aspect-square mx-auto"
+                    />
                     <h2 class="text-3xl">PEMIRA</h2>
+                    <div class="text-sm font-bold">
+                        HIMA KM Informatika 2025
+                    </div>
                     <UiCardDescription class="text-sm mt-0">
                         E-Vote HIMATIFA
                     </UiCardDescription>

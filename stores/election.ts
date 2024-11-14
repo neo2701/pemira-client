@@ -25,9 +25,18 @@ export const useElectionStore = defineStore('election', () => {
     const getEvent = async (id: number) => {
         const { data, error } = await useApiFetch(`/events/${id}`);
         if (error.value) {
+            console.error('Error fetching event data:', error.value);
             return;
         }
         event.value = data.value;
+
+        if (event.value) {
+            console.log('Current event:', event.value);
+        } else {
+            console.error('Event data not available');
+        }
+
+        console.error('Error fetching event data:', error.value);
     };
 
     const setProgress = (page: number) => {

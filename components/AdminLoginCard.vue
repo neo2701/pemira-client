@@ -15,43 +15,54 @@ const form = reactive({
 </script>
 
 <template>
-    <UiCard class="max-w-sm w-full">
+    <UiCard
+        class="flex min-h-full min-w-full flex-col justify-center px-6 py-12 lg:px-8 rounded-none bg-background"
+    >
         <UiCardHeader class="text-center">
-            <h2 class="text-3xl">PEMIRA</h2>
-            <UiCardDescription class="text-sm mt-0">
-                E-Vote HIMATIFA
-            </UiCardDescription>
+            <img
+                class="w-32 h-32 aspect-square mx-auto"
+                src="/logo_pemira24.png"
+                alt="Logo"
+            />
+            <h2 class="mt-10 text-center text-3xl">PEMIRA 2024</h2>
+            <UiCardDescription> Admin Login Section</UiCardDescription>
         </UiCardHeader>
-        <UiCardContent class="grid gap-4">
-            <div class="grid gap-2">
-                <Alert />
-                <UiLabel>Email</UiLabel>
-                <UiInput
-                    v-model="form.email"
-                    :disabled="$props.loading"
-                    type="email"
-                    placeholder="Email"
-                />
-            </div>
-            <div class="grid gap-2">
-                <UiLabel>Password</UiLabel>
-                <UiInput
-                    v-model="form.password"
-                    :disabled="$props.loading"
-                    type="password"
-                    placeholder="Masukkan password"
-                    @keydown.enter="emit('signIn', form.email, form.password)"
-                />
-            </div>
-        </UiCardContent>
-        <UiCardFooter>
-            <UiButton
-                :loading="$props.loading"
-                class="w-full"
-                @click="emit('signIn', form.email, form.password)"
-            >
-                Masuk
-            </UiButton>
-        </UiCardFooter>
+        <div class="mt-1 sm:mx-auto sm:w-full sm:max-w-sm">
+            <UiCardContent class="space-y-6">
+                <div class="grid gap-2">
+                    <Alert />
+                    <UiLabel>Email address</UiLabel>
+                    <UiInput
+                        v-model="form.email"
+                        :disabled="$props.loading"
+                        type="email"
+                        placeholder="Email"
+                        class="bg-input"
+                    />
+                </div>
+                <div class="grid gap-2">
+                    <UiLabel>Password</UiLabel>
+                    <UiInput
+                        class="bg-input"
+                        v-model="form.password"
+                        :disabled="$props.loading"
+                        type="password"
+                        placeholder="Masukkan password"
+                        @keydown.enter="
+                            emit('signIn', form.email, form.password)
+                        "
+                    />
+                </div>
+            </UiCardContent>
+            <UiCardFooter>
+                <UiButton
+                    :loading="$props.loading"
+                    class="w-full"
+                    @click="emit('signIn', form.email, form.password)"
+                >
+                    Masuk
+                </UiButton>
+            </UiCardFooter>
+        </div>
     </UiCard>
 </template>

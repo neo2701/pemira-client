@@ -7,7 +7,7 @@ const user = useAuth().user();
 const electionStore = useElectionStore();
 
 const loading = ref(false);
-const electionDone = ref(false); // State untuk status pemilihan selesai
+const electionDone = ref(false);
 
 const cancel = () => {
     useAuth().signOut();
@@ -15,9 +15,8 @@ const cancel = () => {
 };
 
 const start = async () => {
-    // Pengecekan autentikasi dan status pemilihan saat tombol diklik, bukan saat onMounted
     if (!user) {
-        navigateTo('/login'); // Arahkan ke login jika pengguna belum login
+        navigateTo('/login');
         return;
     }
 
@@ -36,68 +35,170 @@ const start = async () => {
 
 <template>
     <NuxtLayout>
+        <!-- Login Page -->
         <div
             v-if="user"
-            class="grow flex flex-col items-center justify-center text-center p-6"
+            class="h-screen flex flex-col items-center justify-center text-center"
         >
-            <!-- Header dan Deskripsi Landing Page -->
-            <div class="mb-8">
-                <h1 class="text-3xl font-bold text-gray-800 mb-4">
-                    Selamat Datang di Sistem Pemilihan
-                </h1>
-                <p class="text-gray-600">
-                    Ini adalah halaman awal untuk memulai proses pemilihan.
-                    Silakan lanjutkan untuk memilih atau melihat hasilnya.
-                </p>
-            </div>
-
-            <!-- Komponen StartCard -->
             <StartCard :user="user" :loading="loading" @cancel="cancel" />
-
-            <!-- Tombol untuk melanjutkan ke pemilihan -->
-            <button
-                v-if="!loading"
-                @click="start"
-                class="mt-6 px-8 py-3 bg-blue-500 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-blue-600 transition-all duration-200"
-            >
-                {{ electionDone ? 'Lihat Hasil Pemilihan' : 'Mulai Pemilihan' }}
-            </button>
         </div>
 
-        <!-- Pesan jika pengguna belum login -->
-        <div
-            v-else
-            class="grow flex items-center justify-center text-center p-6"
-        >
-            <p class="text-gray-600">
-                Anda harus login terlebih dahulu untuk melanjutkan ke pemilihan.
-            </p>
-            <button
-                @click="navigateTo('/login')"
-                class="mt-4 px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-all duration-200"
+        <!-- Landing Page -->
+        <div v-else class="flex flex-col h-screen">
+            <!-- Header -->
+            <header
+                class="sticky top-0 w-full bg-primary-foreground shadow-sm z-50"
             >
-                Login
-            </button>
+                <nav
+                    class="flex items-center justify-between h-16 px-4 md:px-8"
+                >
+                    <div class="text-2xl font-bold text-primary">
+                        <span>PEMIRA</span>
+                    </div>
+                    <div
+                        class="hidden md:flex space-x-8 text-secondary-foreground"
+                    >
+                        <a href="#home" class="hover:text-primary font-medium"
+                            >Home</a
+                        >
+                        <a href="#about" class="hover:text-primary font-medium"
+                            >About</a
+                        >
+                        <a
+                            href="#contribute"
+                            class="hover:text-primary font-medium"
+                            >Contribute</a
+                        >
+                        <a href="#events" class="hover:text-primary font-medium"
+                            >Events</a
+                        >
+                        <a href="#news" class="hover:text-primary font-medium"
+                            >News</a
+                        >
+                        <a
+                            href="#contact"
+                            class="hover:text-primary font-medium"
+                            >Contact</a
+                        >
+                    </div>
+                    <button
+                        @click="navigateTo('/login')"
+                        class="bg-destructive text-destructive-foreground px-6 py-2 rounded-full hover:bg-accent transition-all duration-200 font-medium"
+                    >
+                        Vote Now
+                    </button>
+                </nav>
+            </header>
+
+            <!-- Main Content -->
+            <main class="flex-1">
+                <!-- Hero Section -->
+                <section
+                    id="home"
+                    class="flex items-center justify-center bg-background h-[calc(100vh-4rem)] w-full"
+                >
+                    <div class="w-full max-w-6xl text-center px-4">
+                        <img
+                            src="/logo_pemira24.png"
+                            alt="logo"
+                            class="w-32 h-32 aspect-square mx-auto"
+                        />
+                        <h1
+                            class="text-5xl md:text-7xl font-bold text-primary mb-6"
+                        >
+                            Crowning Valor<br />A Legacy of Leadership
+                        </h1>
+                        <p
+                            class="text-xl md:text-2xl text-secondary mb-10 max-w-3xl mx-auto"
+                        >
+                            Vote for the best candidate to build a brighter
+                            future for everyone.
+                        </p>
+                        <div
+                            class="flex flex-col md:flex-row gap-4 justify-center"
+                        >
+                            <button
+                                @click="start"
+                                class="px-10 py-3 bg-destructive text-destructive-foreground text-lg font-semibold rounded-full hover:bg-accent transition-all duration-200 shadow-lg hover:shadow-xl"
+                            >
+                                Vote Now
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- About Section -->
+                <section
+                    id="about"
+                    class="min-h-screen flex items-center justify-center bg-foreground w-full"
+                >
+                    <div class="w-full max-w-4xl text-center px-4">
+                        <h2
+                            class="text-4xl md:text-5xl font-bold text-primary mb-8"
+                        >
+                            About the Candidate
+                        </h2>
+                        <p
+                            class="text-xl md:text-2xl leading-relaxed text-secondary"
+                        >
+                            Our candidate has represented Delaware for 36 years
+                            in the U.S. Senate, committed to making impactful
+                            changes and building a better future.
+                        </p>
+                    </div>
+                </section>
+            </main>
+
+            <!-- Footer -->
+            <footer class="bg-secondary text-secondary-foreground py-6 w-full">
+                <div class="text-center px-4">
+                    <p class="text-lg">
+                        &copy; 2025 PEMIRA INFORMATIKA. All rights reserved.
+                    </p>
+                    <nav class="flex justify-center space-x-6 mt-4 text-lg">
+                        <a href="#home" class="hover:text-primary">Home</a>
+                        <a href="#about" class="hover:text-primary">About</a>
+                        <a href="#contribute" class="hover:text-primary"
+                            >Contribute</a
+                        >
+                        <a href="#events" class="hover:text-primary">Events</a>
+                        <a href="#news" class="hover:text-primary">News</a>
+                        <a href="#contact" class="hover:text-primary"
+                            >Contact</a
+                        >
+                    </nav>
+                </div>
+            </footer>
         </div>
     </NuxtLayout>
 </template>
 
 <style scoped>
-/* Styling tambahan untuk landing page */
-.grow {
-    min-height: 100vh;
-    background-color: #f9fafb;
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
 }
 
-h1 {
-    color: #1f2937; /* Warna teks utama */
+html {
+    scroll-behavior: smooth;
 }
 
-p {
-    max-width: 600px;
-    margin: 0 auto;
-    font-size: 1.1rem;
-    line-height: 1.6;
-    color: #4b5563; /* Warna teks deskripsi */
+button {
+    transform: translateY(0);
+    transition: all 0.2s ease;
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+section {
+    transition: all 0.3s ease-in-out;
+}
+
+#home {
+    background: linear-gradient(to bottom right, #f8fafc, #f1f5f9);
 }
 </style>

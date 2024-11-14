@@ -13,11 +13,11 @@ const baseURL = runtimeConfig.public.apiBase + '/../storage/';
 
 <template>
     <UiCard
-        class="relative cursor-pointer transition select-none overflow-hidden group hover:ring-2 hover:ring-black active:scale-95"
+        class="bg-[#8494B4] relative cursor-pointer transition select-none overflow-hidden group hover:ring-2 hover:ring-[#647CA0] active:scale-95"
         @click="$emit('click', $props.event)"
     >
         <UiCardHeader
-            class="w-full h-full absolute flex items-center justify-center bg-black bg-opacity-0 transition group-hover:bg-opacity-50"
+            class="bg-[#2c323e] w-full h-full absolute flex items-center justify-center bg-opacity-0 transition group-hover:bg-opacity-50"
         >
             <UiButton class="opacity-0 transition group-hover:opacity-100">
                 Buka
@@ -31,8 +31,10 @@ const baseURL = runtimeConfig.public.apiBase + '/../storage/';
             />
         </UiCardHeader>
         <UiCardHeader>
-            <UiCardTitle>{{ $props.event.title }}</UiCardTitle>
-            <UiCardDescription>
+            <UiCardTitle class="text-white font-extrabold">{{
+                $props.event.title
+            }}</UiCardTitle>
+            <UiCardDescription class="text-white">
                 {{ $props.event.description }}
             </UiCardDescription>
         </UiCardHeader>

@@ -10,7 +10,7 @@
         /* Hoki (#647CA0) : hsl(216, 25%, 50%) */
         /* Bali Hai (#8494B4) HSL: hsl(218, 20%, 61%)*/
 
-        --background: 218, 20%, 61%;
+        --background: 220 30% 20%;
         --foreground: 220 15% 85%;
 
         --muted: 220 25% 25%;
@@ -19,7 +19,7 @@
         --popover: 220 30% 20%;
         --popover-foreground: 220 15% 85%;
 
-        --card: 220 30% 20%;
+        --card: 218, 20%, 61%;
         --card-foreground: 220 15% 85%;
 
         --border: 220 25% 25%;
@@ -34,7 +34,7 @@
         --accent: 220 25% 25%;
         --accent-foreground: 220 15% 85%;
 
-        --destructive: 0 63% 31%;
+        --destructive: 216, 25%, 50%
         --destructive-foreground: 220 15% 85%;
 
         --ring: 220 15% 65%;
