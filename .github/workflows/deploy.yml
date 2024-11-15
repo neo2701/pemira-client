@@ -42,10 +42,11 @@ jobs:
             # Step 2: Set up SSH to the shared hosting server
             - name: Set up SSH
               run: |
-                  mkdir ~/.ssh
+                  mkdir -p ~/.ssh
                   echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-                  chmod 600 ~/.ssh/id_rsa
+                  chmod 600 ~/.ssh/id_rsa  # Set the correct permissions for the private key
                   ssh-keyscan -p 65002 153.92.11.126 >> ~/.ssh/known_hosts
+                  chmod 644 ~/.ssh/known_hosts  # Set the correct permissions for the known_hosts file
 
             # Step 3: Deploy Nuxt.js to Shared Hosting
             - name: Deploy Nuxt.js to Shared Hosting
