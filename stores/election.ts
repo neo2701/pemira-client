@@ -1,25 +1,21 @@
+import { defineStore } from 'pinia';
+import { ref } from 'vue';
+
 export const useElectionStore = defineStore('election', () => {
-    const event = ref<Event>();
+    const event = ref<Event | null>(null);
     const progress = ref(0);
-    const deviceId = ref();
-    const verificationPicture = ref();
-    const ktmPicture = ref();
+    const deviceId = ref<string | undefined>();
+    const verificationPicture = ref<Blob | null>(null);
+    const ktmPicture = ref<Blob | null>(null);
     const ballots = ref<Record<string, BallotDetail>>({});
 
     const checkUserStatus = async () => {
-        if (!event.value) {
-            return false;
-        }
+        if (!event.value) return false;
 
         const { error } = await useApiFetch(
             `/events/${event.value.id}/ballots/user`,
         );
-
-        if (error.value) {
-            return false;
-        }
-
-        return true;
+        return !error.value;
     };
 
     const getEvent = async (id: number) => {
@@ -35,25 +31,20 @@ export const useElectionStore = defineStore('election', () => {
         } else {
             console.error('Event data not available');
         }
-
-        console.error('Error fetching event data:', error.value);
     };
 
     const setProgress = (page: number) => {
-        progress.value = page * 14.285714285714285714285714285714;
+        progress.value = page * (100 / 7); // Mengasumsikan total 7 halaman
     };
 
-    const dataUrlToBlob = (dataUrl: string) => {
+    const dataUrlToBlob = (dataUrl: string): Blob => {
         const arr = dataUrl.split(',');
-        const mime = arr[0].match(/:(.*?);/)?.[1];
+        const mime = arr[0].match(/:(.*?);/)?.[1] || '';
         const bstr = atob(arr[1]);
-        let n = bstr.length;
-        const u8arr = new Uint8Array(n);
-
-        while (n--) {
-            u8arr[n] = bstr.charCodeAt(n);
+        const u8arr = new Uint8Array(bstr.length);
+        for (let i = 0; i < bstr.length; i++) {
+            u8arr[i] = bstr.charCodeAt(i);
         }
-
         return new Blob([u8arr], { type: mime });
     };
 

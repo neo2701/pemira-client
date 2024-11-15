@@ -1,4 +1,7 @@
 <script lang="ts" setup>
+import { computed } from 'vue';
+import { useElectionStore } from '@/stores/election';
+
 const emit = defineEmits<{
     (e: 'start'): void;
     (e: 'cancel'): void;
@@ -10,40 +13,20 @@ const props = defineProps<{
 }>();
 
 const electionStore = useElectionStore();
+
+// Computed properties
 const disabled = computed(() => {
-    if (!electionStore.event) {
-        return true; // Tombol akan dinonaktifkan jika event tidak ada
-    } else if (
-        electionStore.event?.open_election_at !== null &&
-        electionStore.event?.close_election_at !== null
-    ) {
-        return true; // Jika pemilihan sudah ditutup
-    } else if (
-        electionStore.event?.open_election_at !== null &&
-        electionStore.event?.close_election_at === null
-    ) {
-        return false; // Jika pemilihan sudah dibuka, tombol bisa ditekan
-    } else {
-        return true; // Jika event ada, tapi kondisi lainnya tidak terpenuhi, tombol dinonaktifkan
-    }
+    if (!electionStore.event) return true;
+    if (electionStore.event.open_election_at && electionStore.event.close_election_at) return true;
+    if (electionStore.event.open_election_at && !electionStore.event.close_election_at) return false;
+    return true;
 });
 
 const buttonText = computed(() => {
-    if (!electionStore.event) {
-        return 'Pemilihan belum dimulai'; // Tampilkan jika event belum ada
-    } else if (
-        electionStore.event?.open_election_at !== null &&
-        electionStore.event?.close_election_at !== null
-    ) {
-        return 'Pemilihan sudah ditutup'; // Tampilkan jika pemilihan sudah ditutup
-    } else if (
-        electionStore.event?.open_election_at !== null &&
-        electionStore.event?.close_election_at === null
-    ) {
-        return 'Mulai Pemilihan'; // Tampilkan jika pemilihan sudah dibuka tapi belum ditutup
-    } else {
-        return 'Pemilihan belum dimulai'; // Tampilkan jika tidak ada kondisi lain
-    }
+    if (!electionStore.event) return 'Pemilihan belum dimulai';
+    if (electionStore.event.open_election_at && electionStore.event.close_election_at) return 'Pemilihan sudah ditutup';
+    if (electionStore.event.open_election_at) return 'Mulai Pemilihan';
+    return 'Pemilihan belum dimulai';
 });
 </script>
 
@@ -57,7 +40,7 @@ const buttonText = computed(() => {
         </UiCardHeader>
         <UiCardContent class="flex flex-col gap-6 items-center">
             <UiAvatar size="lg">
-                <UiAvatarImage :src="props.user.picture" />
+                <UiAvatarImage :src="props.user.picture || '/default-avatar.png'" />
             </UiAvatar>
             <UiCardDescription class="text-center">
                 Sebagai:
@@ -68,7 +51,7 @@ const buttonText = computed(() => {
         </UiCardContent>
         <UiCardFooter class="w-full grid gap-2 text-center text-black">
             <UiButton
-                :loading="$props.loading"
+                :loading="props.loading"
                 :disabled="disabled"
                 size="lg"
                 class="w-full"
@@ -78,7 +61,7 @@ const buttonText = computed(() => {
             </UiButton>
             <UiCardDescription>Atau</UiCardDescription>
             <UiButton
-                :disabled="$props.loading"
+                :disabled="props.loading"
                 size="lg"
                 variant="outline"
                 class="w-full hover:bg-[#8e94a0] bg-[#d3d7de]"
@@ -89,3 +72,9 @@ const buttonText = computed(() => {
         </UiCardFooter>
     </UiCard>
 </template>
+
+<style scoped>
+.text-slate-100 {
+    color: #e5e7eb;
+}
+</style>
