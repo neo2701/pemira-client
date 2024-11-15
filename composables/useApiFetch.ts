@@ -4,15 +4,22 @@ export const fetchCookie = async () => {
     const config = useRuntimeConfig();
 
     try {
-        await useFetchCore(config.public.apiBase + '/../sanctum/csrf-cookie', {
-            credentials: 'include',
-        });
+        const { data, error } = await useFetchCore(
+            config.public.apiBase + '/../sanctum/csrf-cookie',
+            {
+                credentials: 'include',
+            },
+        );
+
+        if (error.value) {
+            throw new Error('Failed to fetch CSRF cookie');
+        }
+
+        return useCookie('XSRF-TOKEN')?.value;
     } catch (error) {
         console.error('Error fetching CSRF cookie:', error);
-        throw error; // Optional: rethrow error if you want to handle it elsewhere
+        throw error;
     }
-
-    return useCookie('XSRF-TOKEN')?.value;
 };
 
 export const useApiFetch = async (url: string, options: RequestInit = {}) => {
@@ -26,30 +33,22 @@ export const useApiFetch = async (url: string, options: RequestInit = {}) => {
         'X-XSRF-TOKEN': token ?? '',
     } as Record<string, string>;
 
-    if (!isMultipart) defaultHeaders['Content-Type'] = 'application/json';
+    if (!isMultipart) {
+        defaultHeaders['Content-Type'] = 'application/json';
+    }
 
     let errorCtx = null;
     let response;
 
     try {
-        response = await useFetchCore(
-            config.public.apiBase + url,
-            {
-                credentials: 'include',
-                ...options,
-                headers: {
-                    ...defaultHeaders,
-                    ...options.headers,
-                },
+        response = await useFetchCore(config.public.apiBase + url, {
+            credentials: 'include',
+            ...options,
+            headers: {
+                ...defaultHeaders,
+                ...options.headers,
             },
-            {
-                onFetchError(ctx) {
-                    errorCtx = ctx;
-                    console.error('Fetch error context:', ctx);
-                    return ctx;
-                },
-            },
-        ).json();
+        }).json();
     } catch (error) {
         console.error('Error during API fetch:', error);
         throw error; // Rethrow to handle it outside if needed
@@ -70,6 +69,9 @@ export const useApiFetch = async (url: string, options: RequestInit = {}) => {
             ? '/admin/login'
             : '/login';
         navigateTo(loginPath);
+    } else if (response?.statusCode?.value === 500) {
+        console.error('Server error: 500');
+        useAlertStore().show('Server error. Please try again later.', 'error');
     }
 
     return response;

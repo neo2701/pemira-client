@@ -12,6 +12,15 @@ const form = reactive({
     email: '',
     password: '',
 });
+
+// Menambahkan validasi sebelum emit
+const handleSignIn = () => {
+    if (!form.email || !form.password) {
+        useAlertStore().show('Email dan password harus diisi', 'error');
+        return;
+    }
+    emit('signIn', form.email, form.password);
+};
 </script>
 
 <template>
@@ -48,9 +57,7 @@ const form = reactive({
                         :disabled="$props.loading"
                         type="password"
                         placeholder="Masukkan password"
-                        @keydown.enter="
-                            emit('signIn', form.email, form.password)
-                        "
+                        @keydown.enter="handleSignIn"
                     />
                 </div>
             </UiCardContent>
@@ -58,7 +65,7 @@ const form = reactive({
                 <UiButton
                     :loading="$props.loading"
                     class="w-full hover:bg-[#8e94a0] hover:text-white"
-                    @click="emit('signIn', form.email, form.password)"
+                    @click="handleSignIn"
                 >
                     <Icon
                         v-if="!$props.loading"
