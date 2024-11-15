@@ -22,6 +22,7 @@ const form = useForm({
 const show = ref();
 
 const submit = form.handleSubmit(async (values) => {
+    
     const { error } = await useApiFetch(`/events/${props.event.id}/divisions`, {
         method: 'POST',
         body: JSON.stringify(values),
@@ -62,7 +63,7 @@ const submit = form.handleSubmit(async (values) => {
                     </Field>
                 </div>
                 <UiDialogFooter>
-                    <UiButton :loading="form.isSubmitting.value"
+                    <UiButton :loading="form.isSubmitting.value" type="submit"
                         >Simpan</UiButton
                     >
                 </UiDialogFooter>

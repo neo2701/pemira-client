@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 const eventStore = useEventStore();
+const route = useRoute();
 
 const divisions = ref<Division[]>([]);
 
@@ -13,6 +14,24 @@ const getDivisions = async () => {
     if (error.value) return;
 
     divisions.value = data.value;
+};
+
+
+const deleteDivision = async (id: string | number) => {
+    const { error } = await useApiFetch(
+        `/events/${route.params.event}/divisions/${id}`,
+        {
+            method: 'DELETE',
+        },
+    );
+
+    if (error.value) {
+        return;
+    }
+    
+    getDivisions()
+
+   
 };
 
 onMounted(getDivisions);
@@ -30,20 +49,33 @@ onMounted(getDivisions);
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
             <UiCard
                 v-for="division in divisions"
-                class="h-[90px] transition cursor-pointer hover:bg-muted"
-                @click="
+                class="h-[129px] transition cursor-pointer hover:bg-muted"
+                
+            >
+                <UiCardHeader @click="
                     navigateTo(
                         `/admin/events/${eventStore.event?.id}/divisions/${division.id}/candidates`,
                     )
-                "
-            >
-                <UiCardHeader>
+                ">
                     <UiCardTitle>{{ division.name }}</UiCardTitle>
                     <UiCardDescription>
                         {{ division.candidates_count }}
                         Kandidat
                     </UiCardDescription>
                 </UiCardHeader>
+                <div class="flex justify-center w-full flex-col mt-0.5 " >
+                <ConfirmationDialog 
+                        title="Apakah kamu yakin menghapus divisi?"
+                        description="Divisi akan terhapus jika tidak ada kandidat"
+                        @confirm="deleteDivision(division?.id)" 
+                    >
+                    <UiButton  
+                            variant="destructive" class="w-full rounded-md" size="default">
+                             Hapus
+                </UiButton>
+
+                    </ConfirmationDialog>
+                </div>
             </UiCard>
             <DivisionFormDialog
                 v-if="eventStore.event"
