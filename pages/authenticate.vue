@@ -5,22 +5,39 @@ definePageMeta({
 
 onMounted(async () => {
     const route = useRoute();
-    const accessToken = route.hash.split('&')[0].split('=')[1];
 
-    if (!accessToken) navigateTo('/login');
+    let accessToken: string | undefined;
+    if (route.hash) {
+        accessToken = route.hash.split('&')[0].split('=')[1];
+    } else if (route.query.access_token) {
+        accessToken = route.query.access_token as string;
+    }
 
-    const { data, error, response } = await useApiFetch('/auth/login', {
-        method: 'POST',
-        body: JSON.stringify({ accessToken }),
-    });
-
-    if (error.value || !data.value) {
-        navigateTo(`/login?error=${data.value.message || error.value}`);
+    if (!accessToken) {
+        navigateTo('/login');
         return;
     }
 
-    useAuth().signIn(data.value);
-    navigateTo('/');
+    try {
+        const { data, error } = await useApiFetch('/auth/login', {
+            method: 'POST',
+            body: JSON.stringify({ accessToken }),
+        });
+
+        if (error.value || !data.value) {
+            const errorMessage = data.value?.message || error.value;
+            navigateTo(`/login?error=${encodeURIComponent(errorMessage)}`);
+            return;
+        }
+
+        useAuth().signIn(data.value);
+        navigateTo('/');
+    } catch (err) {
+        console.error('Login error:', err);
+        navigateTo(
+            '/login?error=Login%20failed%20due%20to%20a%20server%20error',
+        );
+    }
 });
 </script>
 

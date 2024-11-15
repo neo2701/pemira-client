@@ -3,51 +3,37 @@ name: Nuxt.js CI/CD with GitHub Actions to Shared Hosting
 on:
     push:
         branches:
-            - main # Trigger the pipeline when pushing to the main branch
+            - main
 
 jobs:
     build:
         runs-on: ubuntu-latest
 
         steps:
-            # Step 1: Checkout code
             - name: Checkout code
               uses: actions/checkout@v3
 
-            # Step 2: Set up Node.js environment
             - name: Set up Node.js
               uses: actions/setup-node@v3
               with:
-                  node-version: '20' # Specify the Node.js version you want to use
+                  node-version: '20'
 
-            # Step 3: Install dependencies
-            - name: Install dependencies
+            - name: Install dependencies and build Nuxt.js
               run: |
                   npm install
-
-            # Step 4: Build Nuxt.js (but no `generate` here, it's done on the server)
-            - name: Build Nuxt.js
-              run: |
-                  npm run build  # Build your Nuxt app in production mode (for server-side rendering or assets)
+                  npm run build  # Build your Nuxt app in production mode
 
     deploy:
         runs-on: ubuntu-latest
-        needs: build # This job depends on the successful completion of the build job
 
         steps:
-            # Step 1: Checkout code again
-            - name: Checkout code
-              uses: actions/checkout@v3
-
-            # Step 2: Set up SSH to the shared hosting server
             - name: Set up SSH
               run: |
-                  mkdir ~/.ssh
+                  mkdir -p ~/.ssh
                   echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
                   chmod 600 ~/.ssh/id_rsa
                   ssh-keyscan -p 65002 153.92.11.126 >> ~/.ssh/known_hosts
 
-            # Step 3: Deploy to Shared Hosting and run `npm run generate`
             - name: Deploy Nuxt.js to Shared Hosting
               run: |
                   ssh -p 65002 -o StrictHostKeyChecking=no u531289105@153.92.11.126 "
@@ -55,7 +41,6 @@ jobs:
                     source ~/.bashrc &&
                     cd /home/u531289105/public_html/pemira-client &&
                     git pull origin main &&
-                    npm install &&  # Install dependencies on the server
                     npm run generate  # Generate the static files on the server
                   "
               env:

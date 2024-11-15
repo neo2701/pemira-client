@@ -27,7 +27,7 @@ const start = async () => {
     }
 
     loading.value = true;
-    
+
     try {
         await electionStore.getEvent(1);
         const done = await electionStore.checkUserStatus();
@@ -44,12 +44,6 @@ const start = async () => {
         alert('Terjadi kesalahan, silakan coba lagi.');
     }
 };
-
-watchEffect(() => {
-    if (!user.value) {
-        navigateTo('/login');
-    }
-});
 </script>
 
 <template>
