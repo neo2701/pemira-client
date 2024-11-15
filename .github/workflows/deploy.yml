@@ -51,6 +51,7 @@ jobs:
             - name: Deploy Nuxt.js to Shared Hosting
               run: |
                   ssh -p 65002 -o StrictHostKeyChecking=no u531289105@153.92.11.126 "
+                    source ~/.profile &&
                     cd /home/u531289105/public_html/pemira-client &&
                     rm -rf * &&  # Remove old files
                     git pull origin main &&
