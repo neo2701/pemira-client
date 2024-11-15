@@ -25,10 +25,10 @@ jobs:
               run: |
                   npm install
 
-            # Step 4: Build the Nuxt.js app (only build, no export)
+            # Step 4: Build Nuxt.js (but no `generate` here, it's done on the server)
             - name: Build Nuxt.js
               run: |
-                  npm run build  # Build your Nuxt app in production mode
+                  npm run build  # Build your Nuxt app in production mode (for server-side rendering or assets)
 
     deploy:
         runs-on: ubuntu-latest
@@ -42,21 +42,21 @@ jobs:
             # Step 2: Set up SSH to the shared hosting server
             - name: Set up SSH
               run: |
-                  mkdir -p ~/.ssh
+                  mkdir ~/.ssh
                   echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-                  chmod 600 ~/.ssh/id_rsa  # Set the correct permissions for the private key
+                  chmod 600 ~/.ssh/id_rsa
                   ssh-keyscan -p 65002 153.92.11.126 >> ~/.ssh/known_hosts
-                  chmod 644 ~/.ssh/known_hosts  # Set the correct permissions for the known_hosts file
 
-            # Step 3: Deploy Nuxt.js to Shared Hosting
+            # Step 3: Deploy to Shared Hosting and run `npm run generate`
             - name: Deploy Nuxt.js to Shared Hosting
               run: |
                   ssh -p 65002 -o StrictHostKeyChecking=no u531289105@153.92.11.126 "
+                    source ~/.profile &&
+                    source ~/.bashrc &&
                     cd /home/u531289105/public_html/pemira-client &&
-                    rm -rf * &&  # Remove old files
                     git pull origin main &&
                     npm install &&  # Install dependencies on the server
-                    npm run build  # Build the application on the server
+                    npm run generate  # Generate the static files on the server
                   "
               env:
                   SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
