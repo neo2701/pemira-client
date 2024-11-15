@@ -54,7 +54,6 @@ jobs:
                     source ~/.profile &&
                     source ~/.bashrc &&
                     cd /home/u531289105/public_html/pemira-client &&
-                    rm -rf * &&  # Remove old files
                     git pull origin main &&
                     npm install &&  # Install dependencies on the server
                     npm run build  # Build the application on the server
