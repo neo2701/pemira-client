@@ -33,21 +33,18 @@ const goBack = () => {
         </UiCardHeader>
         <UiCardHeader class="grid gap-4 md:border-t">
             <Alert />
-            <!-- Button Container -->
             <div class="flex items-center gap-2">
-                <!-- Back Button: Icon only on mobile, label on desktop -->
                 <UiButton
                     size="lg"
-                    class="gap-2 p-2 hover:bg-[#8e94a0]"
+                    class="gap-2 p-2 hover:bg-[#8e94a0] hover:text-white"
                     @click="goBack"
                 >
                     <Icon name="mdi:arrow-left" size="16"></Icon>
                     <span class="hidden md:inline">Kembali</span>
                 </UiButton>
-                <!-- Sign in with Google Button with nowrap text -->
                 <UiButton
                     size="lg"
-                    class="flex-1 gap-2 flex items-center justify-center whitespace-nowrap hover:bg-[#8e94a0]"
+                    class="flex-1 gap-2 flex items-center justify-center whitespace-nowrap hover:bg-[#8e94a0] hover:text-white"
                     @click="emit('signIn')"
                 >
                     <Icon name="bxl:google" size="16"></Icon>

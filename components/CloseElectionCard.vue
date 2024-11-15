@@ -17,12 +17,12 @@ const close = async () => {
 </script>
 
 <template>
-    <UiCard class="max-w-xs mx-auto">
+    <UiCard class="max-w-xs mx-auto bg-[#405980]">
         <UiCardHeader>
-            <UiCardTitle>Pemilihan</UiCardTitle>
+            <UiCardTitle class="text-white">Pemilihan</UiCardTitle>
         </UiCardHeader>
         <UiCardContent>
-            <UiCardDescription>
+            <UiCardDescription class="text-white">
                 Website pemilihan tidak dapat diakses oleh pemilih setelah
                 pemilihan ditutup.
             </UiCardDescription>
@@ -36,7 +36,7 @@ const close = async () => {
                 <UiButton
                     :loading="loading"
                     variant="destructive"
-                    class="w-full"
+                    class="w-full text-white bg-[#60799f] hover:bg-[#7e9fcf]"
                 >
                     Tutup Pemilihan
                 </UiButton>

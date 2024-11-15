@@ -13,7 +13,7 @@ const baseURL = runtimeConfig.public.apiBase + '/../storage/';
 
 <template>
     <UiCard
-        class="bg-[#8494B4] relative cursor-pointer transition select-none overflow-hidden group hover:ring-2 hover:ring-[#647CA0] active:scale-95"
+        class="relative cursor-pointer transition select-none overflow-hidden group hover:ring-2 hover:ring-[#4e617c] active:scale-95"
         @click="$emit('click', $props.event)"
     >
         <UiCardHeader

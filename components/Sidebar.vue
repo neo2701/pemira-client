@@ -1,5 +1,7 @@
 <template>
-    <aside class="sticky top-0 h-screen border-r bg-[#242e42] border-[#4a5e87]">
+    <aside
+        class="md:sticky top-0 md:h-screen h-full border-r bg-[#242e42] border-[#4a5e87]"
+    >
         <ResponsiveSpace />
         <div class="h-20 px-4 border-b border-dashed border-[#4a5e87]">
             <h2 class="text-3xl text-[#647CA0]">PEMIRA</h2>

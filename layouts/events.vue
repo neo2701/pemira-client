@@ -10,6 +10,11 @@ const isValidation = computed(() => {
         route.name === 'admin-events-event-result-overview'
     );
 });
+
+const showSidebar = ref(false);
+const toggleSidebar = () => {
+    showSidebar.value = !showSidebar.value;
+};
 </script>
 
 <template>
@@ -18,9 +23,21 @@ const isValidation = computed(() => {
     </main>
     <main
         v-else
-        class="max-w-screen-xl mx-auto md:grid md:grid-cols-[240px_minmax(0,1fr)]"
+        class="md:max-w-screen-xl mx-auto md:grid md:grid-cols-[240px_minmax(0,1fr)]"
     >
-        <Sidebar>
+        <div
+            v-if="showSidebar"
+            @click="toggleSidebar"
+            class="fixed inset-0 bg-black opacity-50 z-40 md:hidden"
+        ></div>
+
+        <Sidebar
+            :class="{
+                'fixed inset-y-0 left-0 z-50 transform transition-transform md:relative md:translate-x-0  shadow-lg md:shadow-none': true,
+                '-translate-x-full': !showSidebar,
+                'translate-x-0 w-64 p-4': showSidebar,
+            }"
+        >
             <template v-if="eventStore.event?.id">
                 <template v-if="isValidation">
                     <SidebarMenu
@@ -61,15 +78,6 @@ const isValidation = computed(() => {
                         />
                         <span>Whitelist</span>
                     </SidebarMenu>
-                    <SidebarMenu
-                        :to="`/admin/events/${eventStore.event?.id}/organizers`"
-                    >
-                        <Icon
-                            name="fluent:briefcase-person-24-regular"
-                            size="20"
-                        />
-                        <span>Panitia</span>
-                    </SidebarMenu>
                     <SidebarMenu :to="`/admin/login`">
                         <Icon name="fluent:sign-out-24-regular" size="20" />
                         <span>Keluar</span>
@@ -79,36 +87,49 @@ const isValidation = computed(() => {
         </Sidebar>
         <section>
             <ResponsiveSpace />
-            <div class="px-4 h-20 border-b border-dashed">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <div class="text-lg font-bold">
-                            {{ eventStore.event?.title }}
+            <div class="px-4 h-20 border-b border-dashed border-[#4a5e87]">
+                <div class="flex md:block">
+                    <button
+                        @click="toggleSidebar"
+                        class="md:hidden p-2 text-white bg-transparent mr-2"
+                    >
+                        <Icon name="ri:menu-2-fill" size="24" />
+                    </button>
+
+                    <div
+                        class="flex items-center justify-between md:gap-0 gap-[2rem]"
+                    >
+                        <div>
+                            <div class="text-lg font-bold">
+                                {{ eventStore.event?.title }}
+                            </div>
+                            <div
+                                class="text-muted-foreground text-sm md:whitespace-normal whitespace-nowrap"
+                            >
+                                {{ eventStore.event?.description }}
+                            </div>
                         </div>
-                        <div class="text-muted-foreground text-sm">
-                            {{ eventStore.event?.description }}
+                        <div>
+                            Status:
+                            <span
+                                v-if="eventStore.status === 0"
+                                class="text-red-600 font-medium"
+                            >
+                                Belum dimulai
+                            </span>
+                            <span
+                                v-else-if="eventStore.status === 1"
+                                class="text-yellow-600 font-medium"
+                            >
+                                Sedang berlangsung
+                            </span>
+                            <span
+                                v-else-if="eventStore.status === 2"
+                                class="text-green-600 font-meidum"
+                            >
+                                Selesai
+                            </span>
                         </div>
-                    </div>
-                    <div>
-                        Status:
-                        <span
-                            v-if="eventStore.status === 0"
-                            class="text-red-600 font-medium"
-                        >
-                            Belum dimulai
-                        </span>
-                        <span
-                            v-else-if="eventStore.status === 1"
-                            class="text-yellow-600 font-medium"
-                        >
-                            Sedang berlangsung
-                        </span>
-                        <span
-                            v-else-if="eventStore.status === 2"
-                            class="text-green-600 font-meidum"
-                        >
-                            Selesai
-                        </span>
                     </div>
                 </div>
             </div>

@@ -19,7 +19,7 @@
         --popover: 220 30% 20%;
         --popover-foreground: 220 15% 85%;
 
-        --card: 218, 20%, 61%;
+        --card: 217, 33%, 38%;
         --card-foreground: 220 15% 85%;
 
         --border: 220 25% 25%;
@@ -34,7 +34,7 @@
         --accent: 220 25% 25%;
         --accent-foreground: 220 15% 85%;
 
-        --destructive: 216, 25%, 50%
+        --destructive: 216, 25%, 50%;
         --destructive-foreground: 220 15% 85%;
 
         --ring: 220 15% 65%;
