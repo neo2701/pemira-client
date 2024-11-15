@@ -45,11 +45,6 @@ const start = async () => {
     }
 };
 
-watchEffect(() => {
-    if (!user.value) {
-        navigateTo('/login');
-    }
-});
 </script>
 
 <template>
