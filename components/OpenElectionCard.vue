@@ -21,7 +21,7 @@ const open = async () => {
 </script>
 
 <template>
-    <UiCard class="max-w-xs mx-auto">
+    <UiCard class="max-w-xs mx-auto text-white">
         <UiCardHeader>
             <UiCardTitle>Pemilihan</UiCardTitle>
         </UiCardHeader>

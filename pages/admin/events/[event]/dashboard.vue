@@ -31,38 +31,38 @@ onMounted(() => {
         <div class="grid grid-cols-2 gap-4">
             <UiCard>
                 <UiCardHeader>
-                    <UiCardTitle class="flex justify-between">
+                    <UiCardTitle class="flex justify-between text-white">
                         Total Kandidat
                         <Icon
                             name="fluent:people-16-regular"
-                            class="text-muted-foreground"
+                            class="text-white"
                         />
                     </UiCardTitle>
-                    <UiCardDescription class="text-2xl">
+                    <UiCardDescription class="text-2xl text-white">
                         {{ counts.candidates }}
                     </UiCardDescription>
                 </UiCardHeader>
             </UiCard>
             <UiCard>
                 <UiCardHeader>
-                    <UiCardTitle class="flex justify-between">
+                    <UiCardTitle class="flex justify-between text-white">
                         Total Whitelist
                         <Icon
                             name="fluent:checkbox-person-16-regular"
-                            class="text-muted-foreground"
+                            class="text-white"
                         />
                     </UiCardTitle>
-                    <UiCardDescription class="text-2xl">
+                    <UiCardDescription class="text-2xl text-white">
                         {{ counts.whitelists }}
                     </UiCardDescription>
                 </UiCardHeader>
             </UiCard>
         </div>
         <template v-if="[1, 2].includes(eventStore.status)">
-            <hr class="border-dashed" />
+            <hr class="border-dashed border-[#4a5e87]" />
             <ElectionStatus />
         </template>
-        <hr class="border-dashed" />
+        <hr class="border-dashed border-[#4a5e87]" />
         <OpenElectionCard v-if="eventStore.status === 0" />
         <CloseElectionCard v-else-if="eventStore.status === 1" />
         <template v-else-if="eventStore.status === 2">

@@ -34,31 +34,34 @@ onMounted(() => {
 <template>
     <UiCard>
         <UiCardHeader>
-            <UiCardTitle class="flex justify-between">
+            <UiCardTitle class="flex justify-between text-white">
                 10 Surat Suara Terakhir
-                <Icon
-                    name="fluent:people-16-regular"
-                    class="text-muted-foreground"
-                />
+                <Icon name="fluent:people-16-regular" class="text-white" />
             </UiCardTitle>
         </UiCardHeader>
         <UiCardContent>
             <UiTable>
                 <UiTableHeader>
                     <UiTableRow>
-                        <UiTableHead>NPM</UiTableHead>
-                        <UiTableHead>Nama</UiTableHead>
-                        <UiTableHead>Waktu</UiTableHead>
+                        <UiTableHead class="text-white">NPM</UiTableHead>
+                        <UiTableHead class="text-white">Nama</UiTableHead>
+                        <UiTableHead class="text-white">Waktu</UiTableHead>
                     </UiTableRow>
                 </UiTableHeader>
                 <UiTableBody>
-                    <UiTableRow v-for="ballot in ballots">
+                    <UiTableRow v-for="ballot in ballots" :key="ballot.id">
                         <UiTableCell>
                             {{ ballot.user?.npm }}
                         </UiTableCell>
                         <UiTableCell>{{ ballot.user?.name }}</UiTableCell>
                         <UiTableCell>
                             {{ formatDate(ballot.created_at) }}
+                        </UiTableCell>
+                    </UiTableRow>
+
+                    <UiTableRow v-if="ballots.length === 0">
+                        <UiTableCell colspan="3" class="text-center text-white">
+                            Belum ada pemilih
                         </UiTableCell>
                     </UiTableRow>
                 </UiTableBody>

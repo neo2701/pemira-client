@@ -36,7 +36,7 @@ const form = reactive({
                         v-model="form.email"
                         :disabled="$props.loading"
                         type="email"
-                        placeholder="Email"
+                        placeholder="Email address"
                         class="bg-input"
                     />
                 </div>
@@ -57,9 +57,15 @@ const form = reactive({
             <UiCardFooter>
                 <UiButton
                     :loading="$props.loading"
-                    class="w-full"
+                    class="w-full hover:bg-[#8e94a0] hover:text-white"
                     @click="emit('signIn', form.email, form.password)"
                 >
+                    <Icon
+                        v-if="!$props.loading"
+                        name="material-symbols:login"
+                        size="20"
+                    ></Icon>
+
                     Masuk
                 </UiButton>
             </UiCardFooter>

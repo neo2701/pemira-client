@@ -27,14 +27,14 @@ onMounted(() => {
 <template>
     <UiCard>
         <UiCardHeader>
-            <UiCardTitle class="flex justify-between">
+            <UiCardTitle class="flex justify-between text-white">
                 Total Surat Suara
                 <Icon
                     name="fluent:people-16-regular"
-                    class="text-muted-foreground"
+                    class="text-white md:w-fit w-10"
                 />
             </UiCardTitle>
-            <UiCardDescription class="text-2xl">
+            <UiCardDescription class="text-2xl text-white">
                 <Icon v-if="loading" name="svg-spinners:ring-resize" />
                 <span v-else>{{ count }}</span>
             </UiCardDescription>
