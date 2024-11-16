@@ -1,39 +1,57 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
-import { useEventStore } from '@/stores/event';
+import { ref, watchEffect, watch } from 'vue';
+import { useElectionStore } from '@/stores/election';
 import { useRouter } from 'vue-router';
 
-const eventStore = useEventStore();
+const electionStore = useElectionStore();
 const router = useRouter();
 const loading = ref(false);
+const auth = useAuth();
 
-const isOpen = computed(() => {
-    return eventStore.status;
+// Make user reactive
+const user = ref(auth.user());
+watch(
+    () => auth.user(),
+    (newUser) => {
+        user.value = newUser;
+    },
+);
+
+const isOpen = ref(false);
+
+watchEffect(async () => {
+    try {
+        await electionStore.getEvent(1);
+        isOpen.value = electionStore.event?.is_open ?? false;
+    } catch (error) {
+        console.error('Failed to get event:', error);
+        isOpen.value = false;
+        alert('Terjadi kesalahan, silakan coba lagi.');
+    }
 });
 
 const start = async () => {
-    if (loading.value) return;
+    if (!user.value) {
+        router.push('/login');
+        return;
+    }
 
     loading.value = true;
 
-    console.log('Memeriksa status pemilihan...');
-    console.log('Status pemilihan:', isOpen.value);
+    try {
+        const done = await electionStore.checkUserStatus();
+        loading.value = false;
 
-    if (isOpen.value) {
-        console.log('Pemilihan terbuka, lanjutkan ke halaman pemilihan.');
-        const eventId = eventStore.event?.id;
-        if (eventId) {
-            router.push(`/election/${eventId}`);
+        if (done) {
+            router.push('/election/done');
         } else {
-            console.error('Event ID not found!');
-            alert('Error: Event ID is missing.');
+            router.push('/election/1');
         }
-    } else {
-        console.log('Pemilihan belum dimulai.');
-        alert('Pemilihan belum dimulai.');
+    } catch (error) {
+        console.error('Error during election process:', error);
+        loading.value = false;
+        alert('Terjadi kesalahan, silakan coba lagi.');
     }
-
-    loading.value = false;
 };
 </script>
 

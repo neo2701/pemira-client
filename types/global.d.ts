@@ -17,7 +17,7 @@ interface Event {
     logo: string;
     open_election_at: string;
     close_election_at: string;
-    is_open: boolean;
+    is_open: number;
 }
 
 interface Whitelist {

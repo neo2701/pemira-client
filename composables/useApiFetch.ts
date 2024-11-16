@@ -17,8 +17,8 @@ export const fetchCookie = async () => {
             throw new Error('Failed to fetch CSRF cookie');
         }
 
-        // Return the CSRF token stored in cookies
         const token = useCookie('XSRF-TOKEN')?.value;
+        console.log('CSRF token:', token);
         if (!token) {
             throw new Error('CSRF token not found in cookies');
         }
@@ -40,7 +40,7 @@ export const useApiFetch = async (url: string, options: RequestInit = {}) => {
     const defaultHeaders: Record<string, string> = {
         Accept: 'application/json',
         'Cache-Control': 'no-cache',
-        'X-XSRF-TOKEN': token ?? '',
+        'X-XSRF-TOKEN': token,
     };
 
     if (!isMultipart) {
@@ -93,5 +93,6 @@ export const useApiFetch = async (url: string, options: RequestInit = {}) => {
         useAlertStore().show('Requested resource not found.', 'error');
     }
 
+    console.log('API fetch response:', response);
     return response;
 };

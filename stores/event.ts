@@ -6,14 +6,21 @@ export const useEventStore = defineStore('event', () => {
     const division = ref<Division | null>(null);
     const errorMessage = ref<string>('');
 
-    const status = computed(() => event.value?.is_open ?? false);
+    const status = computed(() => {
+        if (event.value?.is_open === 0) {
+            return false;
+        } else if (event.value?.is_open === 1) {
+            return true;
+        }
+        return undefined; // In case is_open is neither 0 nor 1
+    });
 
     const get = async (id: string | string[] | number) => {
         try {
             const { data, statusCode } = await useApiFetch(`/events/${id}`);
             if (statusCode.value === 404) {
                 errorMessage.value = 'Event not found.';
-                return; // Do not navigate here in the store
+                return;
             }
             if (statusCode.value !== 200) {
                 errorMessage.value = `Unexpected error: ${statusCode.value}`;

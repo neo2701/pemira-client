@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-import { ref, watchEffect } from 'vue';
-import { useElectionStore } from '@/stores/election';
+import { ref, watch } from 'vue';
 import { useAuth } from '@/composables/useAuth';
 import StartCard from '@/components/StartCard.vue';
 
@@ -10,45 +9,27 @@ definePageMeta({
 
 const auth = useAuth();
 const user = ref(auth.user());
-const electionStore = useElectionStore();
-
 const loading = ref(false);
 const electionDone = ref(false);
 
-const cancel = () => {
-    auth.signOut();
-    navigateTo('/login');
-};
+watch(
+    () => auth.user(),
+    (newUser) => {
+        user.value = newUser;
+    },
+);
 
-const start = async () => {
-    if (!user.value) {
-        navigateTo('/login');
-        return;
-    }
-
+const cancel = async () => {
     loading.value = true;
-
-    try {
-        await electionStore.getEvent(1);
-        const done = await electionStore.checkUserStatus();
-        loading.value = false;
-
-        if (done) {
-            navigateTo('/election/done');
-        } else {
-            navigateTo('/election/1');
-        }
-    } catch (error) {
-        console.error('Error during election process:', error);
-        loading.value = false;
-        alert('Terjadi kesalahan, silakan coba lagi.');
-    }
+    await auth.signOut();
+    loading.value = false;
+    navigateTo('/login');
 };
 </script>
 
 <template>
     <NuxtLayout>
-        <!-- Jika user sudah login, tampilkan StartCard -->
+        <!-- If the user is logged in, show the StartCard -->
         <div
             v-if="user"
             class="h-screen flex flex-col items-center justify-center text-center"
@@ -56,7 +37,7 @@ const start = async () => {
             <StartCard :user="user" :loading="loading" @cancel="cancel" />
         </div>
 
-        <!-- Jika user belum login, tampilkan landing page -->
+        <!-- If the user is not logged in, show the landing page -->
         <div v-else class="flex flex-col h-screen">
             <header
                 class="sticky top-0 w-full bg-primary-foreground shadow-sm z-50"
@@ -92,7 +73,7 @@ const start = async () => {
                             future for everyone.
                         </p>
                         <button
-                            @click="start"
+                            @click="navigateTo('/login')"
                             class="px-10 py-3 bg-destructive text-destructive-foreground text-lg font-semibold rounded-full hover:bg-accent transition-all duration-200 shadow-lg hover:shadow-xl"
                         >
                             Vote Now
