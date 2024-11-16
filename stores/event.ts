@@ -1,32 +1,29 @@
+import { defineStore } from 'pinia';
+import { ref, computed } from 'vue';
+
 export const useEventStore = defineStore('event', () => {
-    const event = ref<Event>();
-    const division = ref<Division>();
-    const status = computed(() => {
-        if (!event.value) {
-            return 0;
-        }
+    const event = ref<Event | null>(null);
+    const division = ref<Division | null>(null);
+    const errorMessage = ref<string>('');
 
-        if (
-            event.value?.open_election_at !== null &&
-            event.value?.close_election_at === null
-        ) {
-            return 1;
-        }
-
-        if (
-            event.value?.open_election_at !== null &&
-            event.value?.close_election_at !== null
-        ) {
-            return 2;
-        }
-
-        return 0;
-    });
+    const status = computed(() => event.value?.is_open ?? false);
 
     const get = async (id: string | string[] | number) => {
-        const { data, statusCode } = await useApiFetch(`/events/${id}`);
-        if (statusCode.value === 404) return navigateTo('/admin');
-        event.value = data.value;
+        try {
+            const { data, statusCode } = await useApiFetch(`/events/${id}`);
+            if (statusCode.value === 404) {
+                errorMessage.value = 'Event not found.';
+                return; // Do not navigate here in the store
+            }
+            if (statusCode.value !== 200) {
+                errorMessage.value = `Unexpected error: ${statusCode.value}`;
+                return;
+            }
+            event.value = data.value;
+        } catch (err) {
+            console.error('Error fetching event:', err);
+            errorMessage.value = 'Failed to fetch event data.';
+        }
     };
 
     const set = (newEvent: Event) => {
@@ -34,47 +31,98 @@ export const useEventStore = defineStore('event', () => {
     };
 
     const getDivision = async (id: string | number) => {
-        const { data, error } = await useApiFetch(
-            `/events/${event.value?.id}/divisions/${id}`,
-        );
-        division.value = data.value;
+        if (!event.value?.id) {
+            errorMessage.value = 'No event selected.';
+            return;
+        }
+        try {
+            const { data, error } = await useApiFetch(
+                `/events/${event.value.id}/divisions/${id}`,
+            );
+            if (error.value) {
+                errorMessage.value = `Failed to fetch division: ${error.value.message}`;
+                return;
+            }
+            division.value = data.value;
+        } catch (err) {
+            console.error('Error fetching division:', err);
+            errorMessage.value = 'Failed to fetch division data.';
+        }
     };
 
     const openElection = async () => {
-        if (!event.value) return false;
+        if (!event.value?.id) {
+            errorMessage.value = 'No event selected.';
+            return false;
+        }
 
-        const { error } = await useApiFetch(`/events/${event.value?.id}/open`, {
-            method: 'POST',
-        });
+        if (event.value?.is_open) {
+            errorMessage.value = 'Election is already open.';
+            return false;
+        }
 
-        if (error.value) return false;
+        try {
+            const { error } = await useApiFetch(
+                `/events/${event.value.id}/open`,
+                {
+                    method: 'POST',
+                },
+            );
 
-        await get(event.value?.id);
+            if (error.value) {
+                errorMessage.value = `Failed to open election: ${error.value.message}`;
+                return false;
+            }
 
-        return true;
+            errorMessage.value = '';
+            await get(event.value.id);
+            return true;
+        } catch (err) {
+            console.error('Error opening election:', err);
+            errorMessage.value = 'Failed to open election.';
+            return false;
+        }
     };
 
     const closeElection = async () => {
-        if (!event.value) return false;
+        if (!event.value?.id) {
+            errorMessage.value = 'No event selected.';
+            return false;
+        }
 
-        const { error } = await useApiFetch(
-            `/events/${event.value?.id}/close`,
-            {
-                method: 'POST',
-            },
-        );
+        if (!event.value?.is_open) {
+            errorMessage.value = 'Election is already closed.';
+            return false;
+        }
 
-        if (error.value) return false;
+        try {
+            const { error } = await useApiFetch(
+                `/events/${event.value.id}/close`,
+                {
+                    method: 'POST',
+                },
+            );
 
-        await get(event.value?.id);
+            if (error.value) {
+                errorMessage.value = `Failed to close election: ${error.value.message}`;
+                return false;
+            }
 
-        return true;
+            errorMessage.value = '';
+            await get(event.value.id);
+            return true;
+        } catch (err) {
+            console.error('Error closing election:', err);
+            errorMessage.value = 'Failed to close election.';
+            return false;
+        }
     };
 
     return {
         event,
-        status,
         division,
+        status, // status is now a boolean (true = open, false = closed)
+        errorMessage,
         get,
         set,
         getDivision,

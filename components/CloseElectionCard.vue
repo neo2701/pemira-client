@@ -1,8 +1,13 @@
 <script lang="ts" setup>
+import { ref } from 'vue';
+import { useEventStore } from '@/stores/event';
+
 const eventStore = useEventStore();
 
 const loading = ref(false);
+const errorMessage = ref('');
 
+// Function to close the election
 const close = async () => {
     if (loading.value) {
         return;
@@ -10,9 +15,15 @@ const close = async () => {
 
     loading.value = true;
 
-    await eventStore.closeElection();
-
-    loading.value = false;
+    try {
+        await eventStore.closeElection();
+    } catch (error) {
+        // Handle the error if the API call fails
+        errorMessage.value =
+            'Failed to close the election. Please try again later.';
+    } finally {
+        loading.value = false;
+    }
 };
 </script>
 
@@ -26,6 +37,11 @@ const close = async () => {
                 Website pemilihan tidak dapat diakses oleh pemilih setelah
                 pemilihan ditutup.
             </UiCardDescription>
+
+            <!-- Display error message if there's an issue -->
+            <p v-if="errorMessage" class="text-red-500 mt-2">
+                {{ errorMessage }}
+            </p>
         </UiCardContent>
         <UiCardFooter>
             <ConfirmationDialog
@@ -35,6 +51,7 @@ const close = async () => {
             >
                 <UiButton
                     :loading="loading"
+                    :disabled="loading"
                     variant="destructive"
                     class="w-full text-white bg-[#60799f] hover:bg-[#7e9fcf]"
                 >

@@ -1,80 +1,66 @@
 <script lang="ts" setup>
-import { computed } from 'vue';
-import { useElectionStore } from '@/stores/election';
+import { computed, ref } from 'vue';
+import { useEventStore } from '@/stores/event';
+import { useRouter } from 'vue-router';
 
-const emit = defineEmits<{
-    (e: 'start'): void;
-    (e: 'cancel'): void;
-}>();
+const eventStore = useEventStore();
+const router = useRouter();
+const loading = ref(false);
 
-const props = defineProps<{
-    user: User;
-    loading?: boolean;
-}>();
-
-const electionStore = useElectionStore();
-
-// Computed properties
-const disabled = computed(() => {
-    if (!electionStore.event) return true;
-    if (electionStore.event.open_election_at && electionStore.event.close_election_at) return true;
-    if (electionStore.event.open_election_at && !electionStore.event.close_election_at) return false;
-    return true;
+const isOpen = computed(() => {
+    return eventStore.status;
 });
 
-const buttonText = computed(() => {
-    if (!electionStore.event) return 'Pemilihan belum dimulai';
-    if (electionStore.event.open_election_at && electionStore.event.close_election_at) return 'Pemilihan sudah ditutup';
-    if (electionStore.event.open_election_at) return 'Mulai Pemilihan';
-    return 'Pemilihan belum dimulai';
-});
+const start = async () => {
+    if (loading.value) return;
+
+    loading.value = true;
+
+    console.log('Memeriksa status pemilihan...');
+    console.log('Status pemilihan:', isOpen.value);
+
+    if (isOpen.value) {
+        console.log('Pemilihan terbuka, lanjutkan ke halaman pemilihan.');
+        const eventId = eventStore.event?.id;
+        if (eventId) {
+            router.push(`/election/${eventId}`);
+        } else {
+            console.error('Event ID not found!');
+            alert('Error: Event ID is missing.');
+        }
+    } else {
+        console.log('Pemilihan belum dimulai.');
+        alert('Pemilihan belum dimulai.');
+    }
+
+    loading.value = false;
+};
 </script>
 
 <template>
-    <UiCard class="max-w-sm w-full bg-transparent border-none">
-        <UiCardHeader class="text-center">
-            <h2 class="text-3xl">PEMIRA 2025</h2>
-            <UiCardDescription class="text-sm mt-0">
-                Selamat datang!
-            </UiCardDescription>
+    <UiCard class="max-w-xs mx-auto text-white">
+        <UiCardHeader>
+            <UiCardTitle>Pemilihan</UiCardTitle>
         </UiCardHeader>
-        <UiCardContent class="flex flex-col gap-6 items-center">
-            <UiAvatar size="lg">
-                <UiAvatarImage :src="props.user.picture || '/default-avatar.png'" />
-            </UiAvatar>
-            <UiCardDescription class="text-center">
-                Sebagai:
-                <div class="text-slate-100 font-bold mt-1">
-                    {{ props.user.name }}
-                </div>
-            </UiCardDescription>
-        </UiCardContent>
-        <UiCardFooter class="w-full grid gap-2 text-center text-black">
-            <UiButton
-                :loading="props.loading"
-                :disabled="disabled"
-                size="lg"
-                class="w-full"
-                @click="emit('start')"
+
+        <UiCardFooter>
+            <ConfirmationDialog
+                :title="isOpen ? 'Mulai Pemilihan' : 'Pemilihan Belum Dimulai'"
+                :description="
+                    isOpen
+                        ? 'Apakah kamu yakin ingin memulai pemilihan?'
+                        : 'Pemilihan belum dimulai, Anda tidak bisa melanjutkan pemilihan.'
+                "
+                @confirm="start"
             >
-                {{ buttonText }}
-            </UiButton>
-            <UiCardDescription>Atau</UiCardDescription>
-            <UiButton
-                :disabled="props.loading"
-                size="lg"
-                variant="outline"
-                class="w-full hover:bg-[#8e94a0] bg-[#d3d7de]"
-                @click="emit('cancel')"
-            >
-                Kembali
-            </UiButton>
+                <UiButton
+                    :loading="loading"
+                    :disabled="loading || !isOpen"
+                    class="w-full"
+                >
+                    {{ isOpen ? 'Mulai Pemilihan' : 'Pemilihan Belum Dimulai' }}
+                </UiButton>
+            </ConfirmationDialog>
         </UiCardFooter>
     </UiCard>
 </template>
-
-<style scoped>
-.text-slate-100 {
-    color: #e5e7eb;
-}
-</style>
