@@ -19,6 +19,8 @@ const options = ref({
                 font: {
                     family: 'Inter',
                 },
+
+                color: '#ffffff',
             },
         },
     },

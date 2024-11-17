@@ -7,12 +7,25 @@ export const useEventStore = defineStore('event', () => {
     const errorMessage = ref<string>('');
 
     const status = computed(() => {
-        if (event.value?.is_open === 0) {
-            return false;
-        } else if (event.value?.is_open === 1) {
-            return true;
+        if (!event.value) {
+            return 0;
         }
-        return undefined; // In case is_open is neither 0 nor 1
+
+        if (
+            event.value?.open_election_at !== null &&
+            event.value?.close_election_at === null
+        ) {
+            return 1;
+        }
+
+        if (
+            event.value?.open_election_at !== null &&
+            event.value?.close_election_at !== null
+        ) {
+            return 2;
+        }
+
+        return 0;
     });
 
     const get = async (id: string | string[] | number) => {

@@ -55,7 +55,9 @@ onMounted(getResult);
 </script>
 
 <template>
-    <UiCard class="relative grow flex flex-col border-0 text-center">
+    <UiCard
+        class="relative grow flex flex-col border-0 text-center bg-transparent"
+    >
         <UiCardHeader>
             <UiCardTitle class="text-2xl">Hasil Validasi</UiCardTitle>
             <UiCardDescription>
@@ -70,7 +72,7 @@ onMounted(getResult);
             <Icon name="svg-spinners:ring-resize" size="24" class="mx-auto" />
         </UiCardContent>
         <UiCardFooter v-else class="justify-center gap-2">
-            <UiButton variant="outline" @click="previous">Kembali</UiButton>
+            <UiButton variant="secondary" @click="previous">Kembali</UiButton>
             <UiButton @click="next">Selanjutnya</UiButton>
         </UiCardFooter>
         <UiCardContent

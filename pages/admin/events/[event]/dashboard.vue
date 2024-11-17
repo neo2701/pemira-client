@@ -47,7 +47,6 @@ console.log('Current election status:', isOpen.value);
 <template>
     <h2 class="text-xl font-bold mb-4">Dashboard</h2>
     <div class="grid gap-6">
-        <!-- Candidate and Whitelist Cards -->
         <div class="grid grid-cols-2 gap-4">
             <UiCard>
                 <UiCardHeader>
@@ -55,7 +54,7 @@ console.log('Current election status:', isOpen.value);
                         Total Kandidat
                         <Icon
                             name="fluent:people-16-regular"
-                            class="text-white"
+                            class="text-muted-foreground text-white"
                         />
                     </UiCardTitle>
                     <UiCardDescription class="text-2xl text-white">
@@ -69,7 +68,7 @@ console.log('Current election status:', isOpen.value);
                         Total Whitelist
                         <Icon
                             name="fluent:checkbox-person-16-regular"
-                            class="text-white"
+                            class="text-muted-foreground text-white"
                         />
                     </UiCardTitle>
                     <UiCardDescription class="text-2xl text-white">
@@ -78,25 +77,23 @@ console.log('Current election status:', isOpen.value);
                 </UiCardHeader>
             </UiCard>
         </div>
-
-        <!-- Conditional Rendering Based on Status -->
-        <template v-if="eventStore.status">
-            <!-- Status is true, meaning election is open -->
-            <CloseElectionCard />
+        <template v-if="[1, 2].includes(eventStore.status)">
+            <hr class="border-dashed" />
+            <ElectionStatus />
         </template>
+        <hr class="border-dashed" />
 
-        <template v-else>
-            <OpenElectionCard />
-            <!-- Status is false, meaning election is closed -->
-        </template>
-
-        <!-- Additional Condition for Error and Loading -->
-        <template v-if="loading">
-            <p>Loading...</p>
-        </template>
-
-        <template v-if="errorMessage">
-            <p class="text-red-500">{{ errorMessage }}</p>
+        <OpenElectionCard v-if="eventStore.status === 0" />
+        <CloseElectionCard v-else-if="eventStore.status === 1" />
+        <template v-else-if="eventStore.status === 2">
+            <div class="flex justify-center gap-4">
+                <div>
+                    <OpenElectionCard reopen />
+                </div>
+                <div>
+                    <StartValidationCard />
+                </div>
+            </div>
         </template>
     </div>
 </template>

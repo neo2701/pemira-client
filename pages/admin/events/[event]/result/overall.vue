@@ -48,13 +48,15 @@ onMounted(getOverallResult);
 </script>
 
 <template>
-    <UiCard class="relative grow flex flex-col border-0 text-center">
+    <UiCard
+        class="relative grow flex flex-col border-0 text-center bg-transparent"
+    >
         <UiCardHeader>
             <UiCardTitle class="text-2xl">Hasil Validasi</UiCardTitle>
-            <UiCardDescription>PEMIRA 2024</UiCardDescription>
+            <UiCardDescription>PEMIRA 2025</UiCardDescription>
         </UiCardHeader>
         <UiCardFooter class="justify-center gap-2">
-            <UiButton variant="outline" @click="previous">Kembali</UiButton>
+            <UiButton variant="secondary" @click="previous">Kembali</UiButton>
             <UiButton @click="next">Selanjutnya</UiButton>
         </UiCardFooter>
         <UiCardContent>
@@ -77,7 +79,9 @@ onMounted(getOverallResult);
                             <UiCardTitle class="text-2xl">
                                 {{ counts.ballots }}
                             </UiCardTitle>
-                            <UiCardDescription>Surat Suara</UiCardDescription>
+                            <UiCardDescription class="text-white"
+                                >Surat Suara</UiCardDescription
+                            >
                         </UiCardHeader>
                     </UiCard>
                     <UiCard>
@@ -89,7 +93,7 @@ onMounted(getOverallResult);
                                         : counts.accepted
                                 }}
                             </UiCardTitle>
-                            <UiCardDescription>
+                            <UiCardDescription class="text-white">
                                 Surat Suara Sah
                             </UiCardDescription>
                         </UiCardHeader>
@@ -103,14 +107,14 @@ onMounted(getOverallResult);
                                         : counts.declined
                                 }}
                             </UiCardTitle>
-                            <UiCardDescription>
+                            <UiCardDescription class="text-white">
                                 Surat Suara Tidak Sah
                             </UiCardDescription>
                         </UiCardHeader>
                     </UiCard>
                     <div></div>
                     <UiCard>
-                        <UiCardHeader>
+                        <UiCardHeader class="text-white">
                             <UiCardTitle>Perbandingan Surat Suara</UiCardTitle>
                             <UiCardDescription>
                                 <EventResultPieChart

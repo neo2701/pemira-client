@@ -34,7 +34,7 @@ const baseURL = useRuntimeConfig().public.apiBase + '/../storage/';
             <div :class="{ outline: active }">
                 <UiAspectRatio
                     :ratio="1"
-                    class="relative border-b border-dashed"
+                    class="relative border-b border-dashed border-white"
                 >
                     <img
                         :src="baseURL + candidate.picture"
@@ -45,7 +45,7 @@ const baseURL = useRuntimeConfig().public.apiBase + '/../storage/';
                         <div
                             class="w-10 h-10 flex items-center justify-center font-bold bg-white rounded-full"
                         >
-                            {{ candidate.order }}
+                            <p class="text-gray-500">{{ candidate.order }}</p>
                         </div>
                     </div>
                     <div

@@ -67,3 +67,8 @@ h5,
 h6 {
     @apply font-black;
 }
+
+button:disabled {
+    pointer-events: auto !important;
+    cursor: not-allowed !important;
+}

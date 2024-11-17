@@ -16,21 +16,23 @@ const next = () => {
 </script>
 
 <template>
-    <UiCard class="relative grow flex flex-col border-0 text-center">
+    <UiCard
+        class="relative grow flex flex-col border-0 text-center bg-transparent"
+    >
         <UiCardHeader>
             <UiCardTitle class="text-2xl">Hasil Validasi</UiCardTitle>
             <UiCardDescription>PEMIRA 2024</UiCardDescription>
         </UiCardHeader>
         <UiCardFooter class="justify-center gap-2">
-            <UiButton variant="outline" @click="previous">Kembali</UiButton>
+            <UiButton variant="secondary" @click="previous">Kembali</UiButton>
             <UiButton @click="next">Selesai</UiButton>
         </UiCardFooter>
         <UiCardContent class="grid grid-flow-col auto-cols-fr gap-4">
             <UiCard v-for="division in validationStore.result">
-                <UiCardHeader>
+                <UiCardHeader class="text-white">
                     <UiCardTitle>{{ division.name }} </UiCardTitle>
                 </UiCardHeader>
-                <hr class="border border-dashed" />
+                <hr class="border border-white" />
                 <UiTable class="text-start">
                     <UiTableHeader>
                         <UiTableRow>

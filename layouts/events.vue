@@ -112,13 +112,13 @@ const toggleSidebar = () => {
                         <div>
                             Status:
                             <span
-                                v-if="eventStore.status === false"
+                                v-if="eventStore.status === 0"
                                 class="text-red-600 font-medium"
                             >
                                 Belum dimulai
                             </span>
                             <span
-                                v-else-if="eventStore.status === true"
+                                v-else-if="eventStore.status === 1"
                                 class="text-yellow-600 font-medium"
                             >
                                 Sedang berlangsung

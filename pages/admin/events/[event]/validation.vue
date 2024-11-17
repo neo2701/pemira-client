@@ -167,10 +167,12 @@ onMounted(() => {
 </script>
 
 <template>
-    <UiCard class="relative grow flex flex-col border-0 text-center">
+    <UiCard
+        class="relative grow flex flex-col border-0 text-center bg-transparent"
+    >
         <div class="flex justify-center gap-4 p-4">
             <div class="max-w-xs w-full">
-                <UiCard class="bg-red-50 text-red-950">
+                <UiCard class="bg-red-200 text-red-950">
                     <UiCardHeader>
                         <UiCardTitle class="text-4xl font-bold">
                             {{ result.rejected }}
@@ -182,17 +184,21 @@ onMounted(() => {
                 </UiCard>
             </div>
             <UiCardHeader>
-                <UiCardTitle class="text-2xl">Validasi Surat Suara</UiCardTitle>
+                <UiCardTitle class="text-2xl text-white"
+                    >Validasi Surat Suara</UiCardTitle
+                >
                 <UiCardDescription>
                     <template v-if="done">Selesai</template>
                     <template v-else>
-                        {{ ballot?.npm }} - {{ ballot?.user?.name }}
+                        <p class="text-white mt-2">
+                            {{ ballot?.npm }} - {{ ballot?.user?.name }}
+                        </p>
                     </template>
                 </UiCardDescription>
                 <UiCardFooter class="pb-0">
                     <UiButton
                         class="mx-auto"
-                        variant="outline"
+                        variant="secondary"
                         @click="getPrevious"
                     >
                         Kembali
@@ -201,7 +207,7 @@ onMounted(() => {
             </UiCardHeader>
 
             <div class="max-w-xs w-full">
-                <UiCard class="bg-green-50 text-green-950">
+                <UiCard class="bg-green-200 text-green-950">
                     <UiCardHeader>
                         <UiCardTitle class="text-4xl font-bold">
                             {{ result.accepted }}
@@ -215,7 +221,7 @@ onMounted(() => {
         </div>
         <UiCardFooter v-if="done" class="gap-2 justify-center">
             <NuxtLink :to="`/admin/events/${route.params.event}/dashboard`">
-                <UiButton variant="outline">Kembali ke Dashboard</UiButton>
+                <UiButton variant="secondary">Kembali ke Dashboard</UiButton>
             </NuxtLink>
             <NuxtLink :to="`/admin/events/${route.params.event}/result`">
                 <UiButton>Tampilkan Hasil Validasi</UiButton>
@@ -243,13 +249,13 @@ onMounted(() => {
         </UiCardContent>
         <template v-if="!done && !loading && ballot">
             <div
-                class="absolute top-0 left-0 w-2/5 h-full flex items-center justify-center text-xl text-white font-bold opacity-0 cursor-pointer select-none transition hover:opacity-100 hover:bg-gradient-to-r from-red-600 via-red-500 to-transparent"
+                class="absolute top-0 left-0 w-[30%] h-full flex items-center justify-center text-xl text-white font-bold opacity-0 cursor-pointer select-none transition hover:opacity-100 hover:bg-gradient-to-r from-red-600 to-transparent"
                 @click="reject"
             >
                 Tidak Sah
             </div>
             <div
-                class="absolute top-0 right-0 w-2/5 h-full flex items-center justify-center text-xl text-white font-bold opacity-0 cursor-pointer select-none transition hover:opacity-100 hover:bg-gradient-to-r from-transparent via-green-500 to-green-600"
+                class="absolute top-0 right-0 w-[30%] h-full flex items-center justify-center text-xl text-white font-bold opacity-0 cursor-pointer select-none transition hover:opacity-100 hover:bg-gradient-to-r from-transparent to-green-600"
                 @click="accept"
             >
                 Sah

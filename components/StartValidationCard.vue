@@ -8,12 +8,12 @@ const open = () =>
 </script>
 
 <template>
-    <UiCard class="max-w-xs mx-auto">
+    <UiCard class="max-w-xs mx-auto text-white">
         <UiCardHeader>
             <UiCardTitle>Validasi Suara</UiCardTitle>
         </UiCardHeader>
         <UiCardContent>
-            <UiCardDescription>
+            <UiCardDescription class="text-white">
                 Mulai validasi semua surat suara yang telah masuk.
             </UiCardDescription>
         </UiCardContent>
@@ -23,7 +23,10 @@ const open = () =>
                 description="Apakah kamu yakin ingin mulai validasi surat suara?"
                 @confirm="open"
             >
-                <UiButton :loading="loading" color="primary" class="w-full">
+                <UiButton
+                    :loading="loading"
+                    class="w-full bg-green-500 hover:bg-green-600 hover:text-white"
+                >
                     Mulai Validasi
                 </UiButton>
             </ConfirmationDialog>
