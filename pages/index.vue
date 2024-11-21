@@ -111,7 +111,6 @@ onBeforeUnmount(() => {
                 <section
                     id="home"
                     class="flex items-center justify-center bg-background h-[calc(100vh-4rem)] w-full border-b-2"
-                    class="flex items-center justify-center bg-background h-[calc(100vh-4rem)] w-full border-b-2"
                 >
                     <div class="w-full max-w-6xl text-center px-4">
                         <h1
