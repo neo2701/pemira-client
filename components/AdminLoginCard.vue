@@ -5,7 +5,6 @@ defineProps<{
 
 const emit = defineEmits<{
     (e: 'signIn', email: string, password: string): void;
-    (e: 'signInGoogle'): void;
 }>();
 
 const form = reactive({
@@ -13,10 +12,20 @@ const form = reactive({
     password: '',
 });
 
-// Menambahkan validasi sebelum emit
+// Validasi format email
+const isValidEmail = (email: string) => {
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailPattern.test(email);
+};
+
+// Menangani klik atau penekanan tombol Enter untuk login
 const handleSignIn = () => {
     if (!form.email || !form.password) {
         useAlertStore().show('Email dan password harus diisi', 'error');
+        return;
+    }
+    if (!isValidEmail(form.email)) {
+        useAlertStore().show('Email tidak valid', 'error');
         return;
     }
     emit('signIn', form.email, form.password);
@@ -72,7 +81,6 @@ const handleSignIn = () => {
                         name="material-symbols:login"
                         size="20"
                     ></Icon>
-
                     Masuk
                 </UiButton>
             </UiCardFooter>

@@ -46,26 +46,37 @@ const stopCamera = () => {
 };
 
 const startCamera = (id?: string) => {
+    // Hentikan aliran kamera sebelumnya
     if (videoStream.value) {
         videoStream.value.getTracks().forEach((track) => track.stop());
     }
 
+    // Konfigurasi kamera berdasarkan perangkat
+    const videoConstraints = mobileCheck()
+        ? {
+              deviceId: id,
+              aspectRatio: 16 / 9,
+              facingMode: 'user', // Kamera depan untuk mobile
+          }
+        : {
+              deviceId: id,
+              aspectRatio: 16 / 9,
+              facingMode: 'environment', // Kamera belakang untuk desktop
+          };
+
+    // Mulai kamera dengan konfigurasi
     navigator.mediaDevices
         .getUserMedia({
-            video: {
-                deviceId: id,
-                aspectRatio: 16 / 9,
-                facingMode: 'user',
-            },
+            video: videoConstraints,
             audio: false,
         })
         .then((stream) => {
-            videoStream.value = stream;
-            video.value!.srcObject = stream;
-            video.value!.play();
+            videoStream.value = stream; // Simpan aliran video
+            video.value!.srcObject = stream; // Sambungkan ke elemen video
+            video.value!.play(); // Putar video
         })
         .catch((err) => {
-            console.error(err);
+            console.error('Gagal memulai kamera:', err);
         });
 };
 
@@ -79,11 +90,10 @@ const capture = () => {
     canvas.value!.width = video.value.videoWidth;
     canvas.value!.height = video.value.videoHeight;
 
-    context.save(); 
-    context.scale(-1, 1); 
-    context.translate(-video.value.videoWidth, 0); 
+    context.save();
+    context.scale(-1, 1);
+    context.translate(-video.value.videoWidth, 0);
 
-    
     context.drawImage(
         video.value,
         0,
@@ -113,7 +123,7 @@ const mobileCheck = () => {
             )
         )
             check = true;
-    })(navigator.userAgent || navigator.vendor || window.opera);
+    })(navigator.userAgent || navigator.vendor);
     return check;
 };
 
@@ -216,7 +226,7 @@ watch(
                 >
                     <UiAspectRatio
                         v-show="picture"
-                        :ratio="portrait ? 9 / 16 : 16 / 9"
+                        :ratio="portrait ? 16 / 9 : 9 / 16"
                         class="flex"
                     >
                         <canvas
@@ -242,7 +252,18 @@ watch(
                         ></span>
                     </div>
                     <template v-if="portrait">
-                        <div class="absolute bottom-[10%] left-0 w-full p-4">
+                        <div
+                            class="absolute bottom-[10%] left-[5%] w-1/2 border-4 border-dashed rounded-lg opacity-50"
+                        >
+                            <UiAspectRatio :ratio="17 / 10"></UiAspectRatio>
+                        </div>
+                        <div
+                            class="absolute top-[10%] right-[5%] w-1/3 border-4 border-dashed rounded-full opacity-50"
+                        >
+                            <UiAspectRatio :ratio="3 / 4"></UiAspectRatio>
+                        </div>
+
+                        <!-- <div class="absolute bottom-[10%] left-0 w-full p-4">
                             <div
                                 class="border-4 border-dashed rounded-lg opacity-50"
                             >
@@ -257,16 +278,16 @@ watch(
                             >
                                 <UiAspectRatio :ratio="3 / 4"></UiAspectRatio>
                             </div>
-                        </div>
+                        </div> -->
                     </template>
                     <template v-else>
                         <div
-                            class="absolute bottom-[10%] right-[5%] w-1/2 border-4 border-dashed rounded-lg opacity-50"
+                            class="absolute bottom-[10%] left-[5%] w-1/2 border-4 border-dashed rounded-lg opacity-50"
                         >
                             <UiAspectRatio :ratio="17 / 10"></UiAspectRatio>
                         </div>
                         <div
-                            class="absolute top-[10%] left-[5%] w-1/3 border-4 border-dashed rounded-full opacity-50"
+                            class="absolute top-[10%] right-[5%] w-1/3 border-4 border-dashed rounded-full opacity-50"
                         >
                             <UiAspectRatio :ratio="3 / 4"></UiAspectRatio>
                         </div>

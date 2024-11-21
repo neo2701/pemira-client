@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 const route = useRoute();
 const eventStore = useEventStore();
+const auth = useAuth();
+const router = useRouter();
 
 const isValidation = computed(() => {
     return (
@@ -14,6 +16,17 @@ const isValidation = computed(() => {
 const showSidebar = ref(false);
 const toggleSidebar = () => {
     showSidebar.value = !showSidebar.value;
+};
+
+const logout = async () => {
+    try {
+        await auth.signOut();
+        router.push('/admin/login');
+    } catch (error) {
+        console.error('Failed to sign out:', error);
+    }
+    await auth.signOut();
+    router.push('/admin/login');
 };
 </script>
 

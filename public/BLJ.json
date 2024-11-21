@@ -1,0 +1,22 @@
+[
+    {
+        "image": "/dummy_candidate.png",
+        "name": "Pier Goodman",
+        "angkatan": "2023"
+    },
+    {
+        "image": "/dummy_candidate1.jpg",
+        "name": "Prabowo Subianto",
+        "angkatan": "2024"
+    },
+    {
+        "image": "/dummy_candidate2.jpg",
+        "name": "Mulyono",
+        "angkatan": "2022"
+    },
+    {
+        "image": "/dummy_candidate3.jpg",
+        "name": "Gibran Rakabuming",
+        "angkatan": "2020"
+    }
+]

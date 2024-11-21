@@ -116,7 +116,7 @@ const mobileCheck = () => {
             )
         )
             check = true;
-    })(navigator.userAgent || navigator.vendor || window.opera);
+    })(navigator.userAgent || navigator.vendor);
     return check;
 };
 
@@ -226,7 +226,7 @@ watch(
                 >
                     <UiAspectRatio
                         v-show="picture"
-                        :ratio="portrait ? 9 / 16 : 16 / 9"
+                        :ratio="portrait ? 16 / 9 : 16 / 9"
                         class="flex"
                     >
                         <canvas
@@ -253,7 +253,7 @@ watch(
                     </div>
                     <template v-if="portrait">
                         <div
-                            class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3/4 border-4 border-dashed rounded-lg opacity-50"
+                            class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rotate-90 w-3/4 border-4 border-dashed rounded-lg opacity-50"
                         >
                             <UiAspectRatio :ratio="10 / 17" class="relative">
                                 <div
@@ -262,6 +262,7 @@ watch(
                             </UiAspectRatio>
                         </div>
                     </template>
+
                     <div
                         v-else
                         class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3/4 border-4 border-dashed rounded-lg opacity-50"

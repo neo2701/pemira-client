@@ -1,17 +1,13 @@
 <script lang="ts" setup>
-const loading = ref(false);
+import { ref } from 'vue';
 
-// Pastikan signOut hanya dipanggil ketika diperlukan (misalnya logout user)
+const loading = ref(false);
 const auth = useAuth();
-auth.signOut();
 
 const signIn = async (email: string, password: string) => {
     loading.value = true;
 
     try {
-        // Pastikan fetchCookie hanya dipanggil jika diperlukan
-        await fetchCookie();
-
         const { data, error } = await useApiFetch('/auth/login', {
             method: 'POST',
             body: JSON.stringify({
@@ -21,26 +17,43 @@ const signIn = async (email: string, password: string) => {
         });
 
         if (error?.value) {
+            // Log error dengan format lebih informatif
+            console.group('Sign-In Error');
+            console.error('Endpoint:', '/auth/login');
+            console.error('Status:', error.value?.status || 'Unknown');
+            console.error(
+                'Message:',
+                error.value?.message || 'No message provided',
+            );
+            console.error('Details:', error.value);
+            console.groupEnd();
+
             useAlertStore().show('Email atau password tidak sesuai!', 'error');
             loading.value = false;
             return;
         }
 
-        // Simpan data login user setelah berhasil login
         auth.signIn(data.value);
 
-        // Navigasi ke halaman admin setelah login berhasil
         navigateTo('/admin');
-    } catch (e) {
-        // Tangani error jaringan atau kesalahan lainnya
+    } catch (e: any) {
+        // Log unexpected errors
+        console.group('Unexpected Error During Sign-In');
+        console.error('Message:', e.message || 'No message available');
+        console.error('Stack:', e.stack || 'No stack trace available');
+        console.error('Details:', e);
+        console.groupEnd();
+
         useAlertStore().show('Terjadi kesalahan. Silakan coba lagi.', 'error');
-        loading.value = false;
+    } finally {
+        loading.value = false; // Pastikan loading dihentikan dalam semua kasus
     }
 };
 </script>
 
 <template>
     <div class="h-[calc(100dvh)] flex items-center justify-center">
+        <!-- Menampilkan AdminLoginCard dengan state loading -->
         <AdminLoginCard :loading="loading" @sign-in="signIn" />
     </div>
 </template>
