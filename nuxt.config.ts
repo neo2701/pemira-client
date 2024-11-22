@@ -1,11 +1,11 @@
 export default defineNuxtConfig({
     app: {
         head: {
-            title: 'PEMIRA 2024',
+            title: 'PEMIRA 2025',
         },
     },
     css: ['~/assets/css/main.css'],
-    devtools: { enabled: false },
+    devtools: { enabled: true },
 
     ssr: false,
     runtimeConfig: {

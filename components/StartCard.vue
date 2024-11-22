@@ -139,7 +139,7 @@ const cancel = async () => {
                     :loading="loading"
                     :disabled="disabled"
                     size="lg"
-                    class="w-full hover:bg-[#8e94a0] bg-[#d3d7de] hover:text-white"
+                    class="w-full bg-[#d3d7de] hover:text-white transition-all disabled:bg-[#d3d7de] disabled:text-gray-500 disabled:cursor-not-allowed not-disabled:hover:bg-[#8e94a0] not-disabled:hover:text-white"
                 >
                     {{ buttonText }}
                 </UiButton>
