@@ -112,7 +112,7 @@ const exit = () => {
     <NuxtLayout>
         <div class="grow flex items-center justify-center">
             <UiCard class="max-w-sm sm:max-w-xl sm:grid grid-cols-2">
-                <div class="border-b sm:border-b sm:border-r border-dashed">
+                <div class="border-b border-white sm:border-b sm:border-r border-dashed">
                     <UiCardHeader>
                         <UiCardTitle>Selamat!</UiCardTitle>
                         <UiCardDescription>

@@ -150,7 +150,7 @@ watch(
 
 <template>
     <NuxtLayout>
-        <UiCard class="grow flex flex-col">
+        <UiCard class="grow flex flex-col bg-transparent rounded-none">
             <UiCardHeader class="flex items-center">
                 <UiCardTitle>Foto KTM</UiCardTitle>
                 <UiCardDescription>
@@ -162,8 +162,7 @@ watch(
                     <UiButton
                         size="lg"
                         :disabled="!videoStream || !picture"
-                        variant="outline"
-                        class="bg-white"
+                        variant="secondary"
                         @click="() => (picture = undefined)"
                     >
                         Ulangi
@@ -182,12 +181,7 @@ watch(
                     </ConfirmationDialog>
                 </template>
                 <template v-else>
-                    <UiButton
-                        size="lg"
-                        variant="outline"
-                        class="bg-white"
-                        @click="back"
-                    >
+                    <UiButton size="lg" variant="secondary" @click="back">
                         Kembali
                     </UiButton>
                     <UiButton

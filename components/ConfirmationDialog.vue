@@ -29,6 +29,9 @@ defineEmits<{
                 <UiAlertDialogCancel class="h-10">
                     {{ $props.cancelText ?? 'Cancel' }}
                 </UiAlertDialogCancel>
+                <UiCardDescription class="md:[display:none] text-center"
+                    >Atau</UiCardDescription
+                >
                 <UiAlertDialogAction class="h-10" @click="$emit('confirm')">
                     {{ $props.confirmText ?? 'Continue' }}
                 </UiAlertDialogAction>

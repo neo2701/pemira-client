@@ -79,11 +79,10 @@ const capture = () => {
     canvas.value!.width = video.value.videoWidth;
     canvas.value!.height = video.value.videoHeight;
 
-    context.save(); 
-    context.scale(-1, 1); 
-    context.translate(-video.value.videoWidth, 0); 
+    context.save();
+    context.scale(-1, 1);
+    context.translate(-video.value.videoWidth, 0);
 
-    
     context.drawImage(
         video.value,
         0,
@@ -147,7 +146,7 @@ watch(
 
 <template>
     <NuxtLayout>
-        <UiCard class="grow flex flex-col">
+        <UiCard class="grow flex flex-col bg-transparent rounded-none">
             <UiCardHeader class="flex items-center">
                 <UiCardTitle>Foto Wajah & KTM</UiCardTitle>
                 <UiCardDescription>
@@ -159,7 +158,7 @@ watch(
                     <UiButton
                         :disabled="!videoStream || !picture"
                         size="lg"
-                        variant="outline"
+                        variant="secondary"
                         @click="() => (picture = undefined)"
                     >
                         Ulangi
@@ -178,7 +177,7 @@ watch(
                     </ConfirmationDialog>
                 </template>
                 <template v-else>
-                    <UiButton size="lg" variant="outline" @click="back">
+                    <UiButton size="lg" variant="secondary" @click="back">
                         Kembali
                     </UiButton>
                     <UiButton
