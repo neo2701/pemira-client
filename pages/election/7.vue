@@ -52,7 +52,7 @@ const confirm = async () => {
 
 <template>
     <NuxtLayout>
-        <UiCard class="grow flex flex-col">
+        <UiCard class="grow flex flex-col bg-transparent border-none">
             <UiCardHeader class="text-center">
                 <UiCardTitle>Ringkasan Pemilihan</UiCardTitle>
                 <UiCardDescription>
@@ -63,7 +63,7 @@ const confirm = async () => {
                 <UiButton
                     :disabled="loading"
                     size="lg"
-                    variant="outline"
+                    variant="secondary"
                     @click="navigateTo('/election/6')"
                 >
                     Kembali
@@ -88,7 +88,14 @@ const confirm = async () => {
                         v-for="ballot in electionStore.ballots"
                         class="flex flex-col gap-2"
                     >
-                        <div class="text-center text-sm font-semibold">
+                        <div
+                            :class="
+                                ballot.division.name === 'KAHIMA & WAKAHIMA'
+                                    ? 'mb-4'
+                                    : ''
+                            "
+                            class="text-center md:text-sm text-md font-semibold"
+                        >
                             {{ ballot.division.name }}
                         </div>
                         <ElectionCandidateCard

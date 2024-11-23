@@ -14,6 +14,14 @@ interface Slide {
 
 const slides = ref<Slide[]>([]);
 const electionDone = ref(false);
+
+const slides = ref<
+    Array<{
+        image: string;
+        name: string;
+        angkatan: string | number;
+    }>
+>([]);
 const currentIndex = ref(0);
 let autoSlideInterval: ReturnType<typeof setInterval> | null = null;
 
@@ -68,39 +76,52 @@ const stopAutoSlide = () => {
     }
 };
 
+const isScrolled = ref(false);
+const handleScroll = () => {
+    isScrolled.value = window.scrollY > 50;
+};
+
 // Lifecycle hooks
 onMounted(async () => {
     await fetchSlides();
     startAutoSlide();
+
+    window.addEventListener('scroll', handleScroll);
 });
 
 onBeforeUnmount(() => {
     stopAutoSlide();
+    window.removeEventListener('scroll', handleScroll);
 });
 </script>
 
 <template>
     <NuxtLayout>
-        <!-- If the user is logged in, show the StartCard -->
+        <!-- User Logged In State -->
         <div
             v-if="user"
-            class="h-screen flex flex-col items-center justify-center text-center"
+            class="min-h-screen flex flex-col items-center justify-center text-center p-4"
         >
             <StartCard :user="user" :loading="loading" @cancel="cancel" />
         </div>
 
-        <!-- If the user is not logged in, show the landing page -->
-        <div v-else class="flex flex-col h-screen">
+        <!-- Landing Page for Non-Logged In Users -->
+        <div v-else class="flex flex-col bg-[#282d35]">
+            <!-- Responsive Header -->
             <header
-                class="sticky top-0 w-full bg-primary-foreground shadow-sm z-50"
+                :class="{
+                    'bg-transparent': !isScrolled,
+                    'bg-primary-foreground shadow-sm': isScrolled,
+                }"
+                class="sticky top-0 w-full transition-all duration-300 z-[60]"
             >
                 <nav
-                    class="flex items-center justify-between h-16 px-4 md:px-8"
+                    class="flex items-center justify-between h-16 px-4 md:px-8 md:py-10 py-14 max-w-7xl mx-2"
                 >
-                    <div class="text-2xl font-bold text-primary">PEMIRA</div>
+                    <div class="text-3xl font-bold text-primary">PEMIRA</div>
                     <button
                         @click="navigateTo('/login')"
-                        class="bg-destructive text-destructive-foreground px-6 py-2 rounded-full hover:bg-accent transition-all duration-200 font-medium"
+                        class="font-bold bg-destructive text-destructive-foreground px-4 md:px-6 py-4 md:py-2 rounded-full hover:bg-accent transition-all duration-200 text-lg md:text-base"
                     >
                         Vote Now
                     </button>
@@ -108,118 +129,177 @@ onBeforeUnmount(() => {
             </header>
 
             <main class="flex-1">
+                <!-- Hero Section -->
                 <section
                     id="home"
-                    class="flex items-center justify-center bg-background h-[calc(100vh-4rem)] w-full border-b-2"
+                    class="flex items-center justify-center bg-[#282d35] md:min-h-[calc(100vh-8rem)] min-h-[calc(100vh-0rem)] w-full"
                 >
                     <div class="w-full max-w-6xl text-center px-4">
+                        <img
+                            src="/logo_pemira24.png"
+                            alt="Logo"
+                            class="w-44 md:w-32 md:h-32 aspect-square mx-auto mb-6"
+                        />
                         <h1
-                            class="text-5xl md:text-7xl font-bold text-primary mb-6"
+                            class="text-6xl md:text-6xl lg:text-7xl font-bold text-primary mb-4 md:mb-6"
                         >
                             Crowning Valor<br />A Legacy of Leadership
                         </h1>
                         <p
-                            class="text-xl md:text-2xl text-secondary mb-10 max-w-3xl mx-auto"
+                            class="text-xl lg:text-2xl text-muted-foreground mb-8 md:mb-10 max-w-3xl mx-auto px-4"
                         >
                             Vote for the best candidate to build a brighter
                             future for everyone.
                         </p>
-                        <button
-                            @click="navigateTo('/login')"
-                            class="px-10 py-3 bg-destructive text-destructive-foreground text-lg font-semibold rounded-full hover:bg-accent transition-all duration-200 shadow-lg hover:shadow-xl"
-                        >
-                            Vote Now
-                        </button>
-                    </div>
-                </section>
-                <section
-                    class="flex flex-col items-center justify-center bg-background w-full py-12 border-b-2"
-                >
-                    <h2 class="text-4xl font-bold text-primary">
-                        Kandidat BLJ 2025
-                    </h2>
-                    <p class="text-lg text-gray-600 mb-8 text-center">
-                        Daftar kandidat yang mencalonkan diri sebagai BLJ
-                        Angkatan 2025.
-                    </p>
-
-                    <div
-                        class="relative flex items-center justify-center w-full max-w-4xl overflow-hidden"
-                    >
-                        <!-- Slides -->
-                        <div
-                            class="flex w-full transition-transform duration-500"
-                            :style="{
-                                transform: `translateX(-${
-                                    currentIndex * 100
-                                }%)`,
-                            }"
-                        >
+                        <div class="group relative inline-flex">
                             <div
-                                v-for="(slide, index) in slides"
-                                :key="index"
-                                class="flex-shrink-0 w-full flex flex-col items-center p-4"
+                                class="animate-tilt absolute -inset-px rounded-xl bg-gradient-to-r from-[#44BCFF] via-[#6ac8fb] to-[#44BCFF] opacity-70 blur-lg transition-all duration-1000 group-hover:-inset-1 group-hover:opacity-100 group-hover:duration-200"
+                            ></div>
+                            <button
+                                @click="navigateTo('/login')"
+                                class="relative inline-flex px-12 md:px-10 py-5 md:py-3 bg-destructive text-destructive-foreground text-xl md:text-lg font-semibold rounded-full hover:bg-accent transition-all duration-200 shadow-lg hover:shadow-xl"
                             >
-                                <img
-                                    :src="slide.image"
-                                    alt="BLJ Image"
-                                    class="w-40 h-40 rounded-sm mb-4"
-                                />
-                                <h3 class="text-xl font-semibold">
-                                    {{ slide.name }}
-                                </h3>
-                                <p class="text-gray-500">
-                                    Angkatan {{ slide.angkatan }}
-                                </p>
-                            </div>
+                                Vote Now
+                            </button>
                         </div>
-
-                        <!-- Tombol navigasi kiri -->
-                        <button
-                            @click="prevSlide"
-                            class="absolute left-2 bg-primary rounded-full p-3 shadow-md hover:bg-gray-500 transition"
-                        >
-                            <i class="text-background">&lt;</i>
-                        </button>
-
-                        <!-- Tombol navigasi kanan -->
-                        <button
-                            @click="nextSlide"
-                            class="absolute right-2 bg-primary rounded-full p-3 shadow-md hover:bg-gray-500 transition"
-                        >
-                            <i class="text-background">></i>
-                        </button>
                     </div>
                 </section>
 
+                <!-- KAHIMA Section -->
                 <section
-                    class="flex flex-col items-center justify-center bg-background h-auto w-full py-12"
+                    id="kahima1"
+                    class="flex items-center justify-center bg-[#282d35] min-h-[calc(100vh-4rem)] w-full px-4"
+                >
+                    <h2
+                        class="text-3xl md:text-4xl lg:text-5xl font-bold text-primary text-center"
+                    >
+                        Kandidat KAHIMA 2025
+                    </h2>
+                </section>
+
+                <!-- BLJ Kandidat Section -->
+                <section
+                    class="flex flex-col items-center justify-center bg-[#282d35] w-full py-12 px-4 border-b-2"
+                >
+                    <UiCard
+                        class="items-center justify-center flex flex-col py-8 md:py-10 px-6 md:px-10 w-full max-w-4xl"
+                    >
+                        <h2
+                            class="text-4xl font-bold text-primary text-center mb-4"
+                        >
+                            Kandidat BLJ 2025
+                        </h2>
+                        <p
+                            class="text-lg text-gray-400 mb-6 md:mb-8 text-center max-w-xl"
+                        >
+                            Daftar kandidat yang mencalonkan diri sebagai BLJ
+                            Angkatan 2025.
+                        </p>
+
+                        <div
+                            class="relative flex items-center justify-center w-full max-w-4xl overflow-hidden"
+                        >
+                            <!-- Slides -->
+                            <div
+                                class="flex w-full transition-transform duration-500"
+                                :style="{
+                                    transform: `translateX(-${
+                                        currentIndex * 100
+                                    }%)`,
+                                }"
+                            >
+                                <div
+                                    v-for="(slide, index) in slides"
+                                    :key="index"
+                                    class="flex-shrink-0 w-full flex flex-col items-center p-4"
+                                >
+                                    <img
+                                        :src="slide.image"
+                                        alt="BLJ Image"
+                                        class="w-32 h-32 md:w-40 md:h-40 rounded-sm mb-4 object-cover"
+                                    />
+                                    <h3
+                                        class="text-xl md:text-xl font-semibold text-center"
+                                    >
+                                        {{ slide.name }}
+                                    </h3>
+                                    <p
+                                        class="text-xl md:text-base text-gray-400"
+                                    >
+                                        Angkatan {{ slide.angkatan }}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Navigation Buttons -->
+                            <button
+                                @click="prevSlide"
+                                class="absolute left-0 md:left-2 bg-primary rounded-full p-2 md:p-3 shadow-md hover:bg-gray-500 transition"
+                            >
+                                <Icon
+                                    name="oui:arrow-left"
+                                    class="text-background w-4 h-4 md:w-5 md:h-5"
+                                ></Icon>
+                            </button>
+
+                            <button
+                                @click="nextSlide"
+                                class="absolute right-0 md:right-2 bg-primary rounded-full p-2 md:p-3 shadow-md hover:bg-gray-500 transition"
+                            >
+                                <Icon
+                                    name="oui:arrow-right"
+                                    class="text-background w-4 h-4 md:w-5 md:h-5"
+                                ></Icon>
+                            </button>
+                        </div>
+                    </UiCard>
+                </section>
+
+                <!-- Video Tutorial Section -->
+                <section
+                    class="flex flex-col items-center justify-center bg-background w-full py-12 px-4"
                 >
                     <div class="w-full max-w-6xl text-center px-4">
-                        <!-- Judul -->
                         <h6
-                            class="text-4xl md:text-4xl font-semibold text-primary mb-6"
+                            class="text-4xl md:text-4xl font-semibold text-primary mb-8 md:mb-10 [line-height:3rem] md:[line-height:2.5rem]"
                         >
                             Video Tutorial Website PEMIRA 2025
                         </h6>
 
-                        <!-- Pembungkus iframe -->
                         <div
-                            class="relative w-full rounded-lg overflow-hidden shadow-lg mb-6"
+                            class="relative w-full max-w-4xl mx-auto rounded-lg overflow-hidden shadow-lg"
                         >
-                            <iframe
-                                src="https://drive.google.com/file/d/1i7Y2DXZuB51AF5l6LMgfnuonqgg-FnPD/preview"
-                                allow="autoplay"
-                                class="w-full h-[500px] md:h-[600px] rounded-lg"
-                                frameborder="0"
-                                allowfullscreen
-                            ></iframe>
+                            <div class="aspect-w-16 aspect-h-9">
+                                <iframe
+                                    src="https://drive.google.com/file/d/1i7Y2DXZuB51AF5l6LMgfnuonqgg-FnPD/preview"
+                                    allow="autoplay"
+                                    class="absolute inset-0 w-full h-full rounded-lg"
+                                    frameborder="0"
+                                    allowfullscreen
+                                ></iframe>
+                            </div>
                         </div>
-
-                        <!-- Informasi Channel -->
                     </div>
                 </section>
             </main>
         </div>
     </NuxtLayout>
 </template>
+
+<style scoped>
+/* Aspect ratio utility for responsive iframe */
+.aspect-w-16 {
+    position: relative;
+    width: 100%;
+}
+.aspect-w-16 > * {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+.aspect-h-9 {
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+}
+</style>

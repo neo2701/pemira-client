@@ -70,7 +70,7 @@ onMounted(async () => {
 </script>
 
 <template>
-    <UiCard class="grow flex flex-col">
+    <UiCard class="grow flex flex-col bg-transparent rounded-none">
         <UiCardHeader class="flex items-center">
             <div v-if="loading" class="flex justify-center">
                 <Icon name="svg-spinners:ring-resize" size="32" />
@@ -86,7 +86,7 @@ onMounted(async () => {
             <UiCardFooter class="flex justify-center gap-4">
                 <UiButton
                     size="lg"
-                    variant="outline"
+                    variant="secondary"
                     @click="navigateTo(`/election/${$props.previous}`)"
                 >
                     Kembali
@@ -102,8 +102,9 @@ onMounted(async () => {
                 <UiButton
                     v-else
                     size="lg"
-                    variant="secondary"
-                    class="border cursor-not-allowed"
+                    variant="default"
+                    disabled
+                    class="border cursor-not-allowed disabled:hover:bg-primary"
                 >
                     Selanjutnya
                 </UiButton>
@@ -115,7 +116,7 @@ onMounted(async () => {
                     <div
                         v-for="candidate in candidates"
                         :class="{
-                            'sm:col-span-2':
+                            'col-span-1':
                                 selected?.id === candidate.id &&
                                 selected?.first !== '-',
                         }"

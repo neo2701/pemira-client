@@ -10,96 +10,201 @@ const props = withDefaults(
     },
 );
 
-defineEmits<{
+const emit = defineEmits<{
     (e: 'click', candidate: Candidate): void;
 }>();
 
 const baseURL = useRuntimeConfig().public.apiBase + '/../storage/';
+const isFlipped = ref(false);
+const isActive = ref(props.active);
+
+watch(
+    () => props.active,
+    (newVal) => {
+        isActive.value = newVal;
+    },
+);
+
+const handleClick = () => {
+    isActive.value = !isActive.value;
+    emit('click', props.candidate);
+};
+
+const flipToBack = () => {
+    isFlipped.value = true;
+    isActive.value = true;
+    emit('click', props.candidate);
+};
+
+const flipToFront = () => {
+    isFlipped.value = false;
+    if (!props.display) isActive.value = false;
+};
 </script>
 
 <template>
-    <UiCard
-        :class="{
-            'hover:outline hover:scale-105': !active && !display,
-            'border-0 outline': active,
-            'cursor-pointer': !display,
-        }"
-        class="overflow-hidden transition"
-        @click="$emit('click', candidate)"
-    >
+    <div class="perspective-1000">
         <div
-            :class="{ 'grid-cols-2': active && candidate.first !== '-' }"
-            class="grid"
+            :class="[
+                'relative transition-transform duration-700 transform-style-3d h-[450px]',
+                isFlipped ? 'rotate-y-180' : '',
+            ]"
         >
-            <div :class="{ outline: active }">
-                <UiAspectRatio
-                    :ratio="1"
-                    class="relative border-b border-dashed border-white"
+            <!-- Front of the card -->
+            <div class="absolute backface-hidden w-full h-full">
+                <UiCard
+                    :class="{
+                        'hover:outline hover:scale-105':
+                            !isFlipped && !props.active && !props.display,
+                        'border-0 outline': props.active,
+                        'cursor-pointer': !props.display,
+                    }"
+                    class="overflow-hidden transition w-full"
+                    @click="flipToBack"
                 >
-                    <img
-                        :src="baseURL + candidate.picture"
-                        :alt="candidate.first_name"
-                        class="w-full h-full object-cover"
-                    />
-                    <div class="absolute bottom-0 right-0 p-4">
+                    <div class="grid">
                         <div
-                            class="w-10 h-10 flex items-center justify-center font-bold bg-white rounded-full"
+                            :class="{ outline: props.active }"
+                            class="h-full flex flex-col"
                         >
-                            <p class="text-gray-500">{{ candidate.order }}</p>
-                        </div>
-                    </div>
-                    <div
-                        v-if="candidate.first === '-'"
-                        class="absolute top-0 right-0 p-2"
-                    >
-                        <UiTooltipProvider>
-                            <UiTooltip>
-                                <UiTooltipTrigger>
+                            <UiAspectRatio
+                                :ratio="1"
+                                class="relative border-b border-dashed border-white"
+                            >
+                                <img
+                                    :src="baseURL + candidate.picture"
+                                    :alt="candidate.first_name"
+                                    class="w-full h-full object-cover"
+                                />
+                                <div class="absolute bottom-0 right-0 p-4">
                                     <div
-                                        class="w-10 h-10 flex items-center justify-center text-gray-400"
+                                        class="w-10 h-10 flex items-center justify-center font-bold bg-white rounded-full"
                                     >
-                                        <Icon
-                                            name="fluent:info-16-filled"
-                                            size="24"
-                                        />
+                                        <p class="text-gray-500">
+                                            {{ candidate.order }}
+                                        </p>
                                     </div>
-                                </UiTooltipTrigger>
-                                <UiTooltipContent>
-                                    Opsi untuk memilih pilihan selain paslon no
-                                    1
-                                </UiTooltipContent>
-                            </UiTooltip>
-                        </UiTooltipProvider>
-                    </div>
-                </UiAspectRatio>
-                <UiCardHeader>
-                    <UiCardTitle class="text-sm text-center">
-                        <div v-if="!candidate.second" class="text-center">
-                            {{ candidate.first_name }}
+                                </div>
+                            </UiAspectRatio>
+                            <UiCardHeader>
+                                <UiCardTitle class="text-sm text-center">
+                                    <div
+                                        v-if="!candidate.second"
+                                        class="text-center"
+                                    >
+                                        {{ candidate.first_name }}
+                                    </div>
+                                    <ul v-else>
+                                        <li>{{ candidate.first_name }}</li>
+                                        <li class="text-muted-foreground">&</li>
+                                        <li>{{ candidate.second_name }}</li>
+                                    </ul>
+                                </UiCardTitle>
+                            </UiCardHeader>
                         </div>
-                        <ul v-else>
-                            <li>{{ candidate.first_name }}</li>
-                            <li class="text-muted-foreground">&</li>
-                            <li>{{ candidate.second_name }}</li>
-                        </ul>
-                    </UiCardTitle>
-                </UiCardHeader>
-            </div>
-            <div
-                v-if="active && candidate.first !== '-'"
-                class="flex flex-col gap-4 p-4 text-xs"
-            >
-                <div>
-                    <div class="font-bold">Visi:</div>
-                    <div>{{ candidate.vision }}</div>
-                </div>
-                <div>
-                    <div class="font-bold">Misi:</div>
-                    <div class="whitespace-pre-wrap">
-                        {{ candidate.mission }}
                     </div>
-                </div>
+                </UiCard>
+            </div>
+
+            <!-- Back of the card -->
+            <div class="relative backface-hidden rotate-y-180 h-1/2">
+                <UiCard
+                    :class="{
+                        'hover:outline hover:scale-105':
+                            isFlipped && !props.active && !props.display,
+                        'border-0 outline': props.active,
+                        'cursor-pointer': !props.display,
+                    }"
+                    class="overflow-hidden transition"
+                    @click="handleClick"
+                >
+                    <div class="p-6 space-y-4 flex-1">
+                        <div class="relative justify-items-center">
+                            <div
+                                class="w-10 h-10 flex items-center justify-center font-bold bg-white rounded-full"
+                            >
+                                <p class="text-gray-500">
+                                    {{ candidate.order }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="text-md font-bold text-center">
+                            <div v-if="!candidate.second" class="text-center">
+                                {{ candidate.first_name }}
+                            </div>
+                            <ul v-else>
+                                <li>{{ candidate.first_name }}</li>
+                                <li class="text-muted-foreground">&</li>
+                                <li>{{ candidate.second_name }}</li>
+                            </ul>
+
+                            <div
+                                class="mt-4 md:mt-2 border-b border-white"
+                            ></div>
+                        </div>
+                        <div class="overflow-y-auto h-[15rem]">
+                            <div class="mb-2">
+                                <h4 class="font-bold text-lg mb-2">Visi:</h4>
+                                <p class="text-sm">
+                                    {{ candidate.vision }}
+                                </p>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-2">Misi:</h4>
+                                <p class="text-sm whitespace-pre-wrap">
+                                    {{ candidate.mission }}
+                                </p>
+                            </div>
+                        </div>
+
+                        <Icon
+                            name="weui:back-outlined"
+                            class="absolute top-1 md:top-3 left-3 text-gray-400 hover:text-white"
+                            size="30"
+                            @click="flipToFront"
+                        ></Icon>
+                    </div>
+                </UiCard>
             </div>
         </div>
-    </UiCard>
+    </div>
 </template>
+
+<style scoped>
+.perspective-1000 {
+    perspective: 1000px;
+}
+
+.transform-style-3d {
+    transform-style: preserve-3d;
+}
+
+.backface-hidden {
+    backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+    transform: rotateY(180deg);
+}
+
+.overflow-y-auto {
+    scrollbar-width: thin;
+}
+
+@media screen and (max-width: 768px) {
+    .absolute.backface-hidden {
+        width: 100%;
+        height: 100%;
+        display: flex; /* Memusatkan konten di dalam front card */
+        justify-content: center;
+        align-items: center;
+    }
+
+    .relative.backface-hidden.rotate-y-180 {
+        width: 100%;
+        display: flex; /* Memusatkan konten di dalam back card */
+        justify-content: flex-start; /* Sesuaikan posisi konten back card */
+        align-items: flex-start; /* Atur untuk kebutuhan back card */
+    }
+}
+</style>
