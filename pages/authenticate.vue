@@ -1,72 +1,79 @@
 <script lang="ts" setup>
 definePageMeta({
     layout: 'main',
+    // Tandai halaman ini untuk client-side rendering
+    ssr: false,
 });
 
-onMounted(async () => {
-    const route = useRoute();
+const isProcessing = ref(true);
+const auth = useAuth();
 
-    // Log route information untuk debugging
-    console.group('OAuth Login Route Info');
-    console.log('Route Hash:', route.hash);
-    console.log('Route Query:', route.query);
-    console.groupEnd();
+// Pindahkan logika ke composable terpisah
+const handleOAuthLogin = async () => {
+    const route = useRoute();
 
     let accessToken: string | undefined;
 
-    // Ambil token dari hash atau query parameter
-    if (route.hash) {
-        try {
-            accessToken = route.hash.split('&')[0].split('=')[1];
-        } catch (err) {
-            console.error('Error parsing access token from hash:', err);
+    // Gunakan getAccessToken helper
+    const getAccessToken = () => {
+        if (route.hash) {
+            const hashParams = new URLSearchParams(route.hash.substring(1));
+            return hashParams.get('access_token') || undefined;
         }
-    } else if (route.query.access_token) {
-        accessToken = route.query.access_token as string;
-    }
-
-    if (!accessToken) {
-        console.warn('Access token not found. Redirecting to login.');
-        navigateTo('/login');
-        return;
-    }
+        return route.query.access_token as string | undefined;
+    };
 
     try {
-        // Log token sebelum digunakan
-        console.group('Access Token');
-        console.log('Token:', accessToken);
-        console.groupEnd();
+        accessToken = getAccessToken();
 
-        // Kirim request login ke backend
+        if (!accessToken) {
+            console.warn('Access token not found');
+            await navigateTo('/login');
+            return;
+        }
+
+        // Log untuk debugging
+        if (process.dev) {
+            console.group('OAuth Login Info');
+            console.log('Access Token:', accessToken);
+            console.groupEnd();
+        }
+
         const { data, error } = await useApiFetch('/auth/login', {
             method: 'POST',
             body: JSON.stringify({ accessToken }),
         });
 
-        // Tangani error dari API
         if (error.value || !data.value) {
             const errorMessage =
-                data.value?.message || error.value || 'Unknown error';
-            console.error('API Login Error:', errorMessage);
-
-            navigateTo(`/login?error=${encodeURIComponent(errorMessage)}`);
-            return;
+                data.value?.message || error.value?.message || 'Unknown error';
+            throw new Error(errorMessage);
         }
 
-        // Login berhasil
-        console.log('Login successful. User data:', data.value);
-        useAuth().signIn(data.value);
-
-        // Arahkan ke halaman utama
-        navigateTo('/');
+        auth.signIn(data.value);
+        await navigateTo('/');
     } catch (err) {
-        // Tangani error yang tidak terduga
-        console.error('Unexpected login error:', err);
-        navigateTo(
-            '/login?error=Login%20failed%20due%20to%20a%20server%20error',
+        console.error('Login error:', err);
+        const errorMsg = encodeURIComponent(
+            (err as Error).message || 'Login failed',
         );
+        await navigateTo(`/login?error=${errorMsg}`);
+    } finally {
+        isProcessing.value = false;
     }
-});
+};
+
+// Gunakan watch untuk mendeteksi perubahan route
+const route = useRoute();
+watch(
+    () => [route.hash, route.query],
+    () => {
+        if (process.client) {
+            handleOAuthLogin();
+        }
+    },
+    { immediate: true },
+);
 </script>
 
 <template>
