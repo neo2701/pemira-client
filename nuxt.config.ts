@@ -4,10 +4,15 @@ export default defineNuxtConfig({
             title: 'PEMIRA 2025',
         },
     },
+
     css: ['~/assets/css/main.css'],
+
     devtools: { enabled: true },
 
     ssr: false,
+
+    plugins: ['~/plugins/hash-to-query.ts'],
+
     runtimeConfig: {
         public: {
             build: process.env.BUILD,
@@ -17,9 +22,11 @@ export default defineNuxtConfig({
             googleRedirectUrl: process.env.GOOGLE_REDIRECT_URL,
         },
     },
+
     imports: {
         dirs: ['~/types'],
     },
+
     modules: [
         '@nuxtjs/tailwindcss',
         '@nuxtjs/google-fonts',
@@ -29,6 +36,7 @@ export default defineNuxtConfig({
         '@vee-validate/nuxt',
         '@nuxt/image',
     ],
+
     components: [
         {
             path: '~/components',
@@ -39,9 +47,11 @@ export default defineNuxtConfig({
             prefix: 'Ui',
         },
     ],
+
     tailwindcss: {
         exposeConfig: true,
     },
+
     googleFonts: {
         families: {
             Inter: [400, 500, 600, 700, 800, 900],
