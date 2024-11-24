@@ -207,8 +207,12 @@ onBeforeUnmount(() => {
                                 </div>
 
                                 <div class="mt-5">
-                                    <h2 class="text-lg">Visi :</h2>
-                                    <p class="text-gray-300">
+                                    <h2 class="md:text-lg text-xl text-center">
+                                        Visi :
+                                    </h2>
+                                    <p
+                                        class="text-gray-300 md:text-current text-lg text-center"
+                                    >
                                         Mewujudkan HIMATIFA sebagai wadah yang
                                         mendorong perkembangan, dan meningkatkan
                                         kualitas seluruh keluarga mahasiswa
@@ -236,8 +240,12 @@ onBeforeUnmount(() => {
                                 </div>
 
                                 <div class="mt-5">
-                                    <h2 class="text-lg">Visi :</h2>
-                                    <p class="text-gray-300">
+                                    <h2 class="md:text-lg text-xl text-center">
+                                        Visi :
+                                    </h2>
+                                    <p
+                                        class="text-gray-300 md:text-current text-lg text-center"
+                                    >
                                         Mewujudkan HIMATIFA sebagai wadah yang
                                         mendorong perkembangan, dan meningkatkan
                                         kualitas seluruh keluarga mahasiswa
@@ -360,8 +368,7 @@ onBeforeUnmount(() => {
                         >
                             <div class="aspect-w-16 aspect-h-9">
                                 <iframe
-                                    src="https://drive.google.com/file/d/1i7Y2DXZuB51AF5l6LMgfnuonqgg-FnPD/preview"
-                                    allow="autoplay"
+                                    src="https://www.youtube.com/embed/T6zwNFFuzd8?si=eljZNW1K5cOMUleO"
                                     class="absolute inset-0 w-full h-full rounded-lg"
                                     frameborder="0"
                                     allowfullscreen
