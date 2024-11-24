@@ -1,19 +1,11 @@
 <script lang="ts" setup>
-import { ref, watch, onMounted, onBeforeUnmount } from 'vue';
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
 import { useAuth } from '@/composables/useAuth';
 import StartCard from '@/components/StartCard.vue';
 
 const auth = useAuth();
 const user = ref(auth.user());
 const loading = ref(false);
-interface Slide {
-    image: string;
-    name: string;
-    angkatan: string;
-}
-
-const slides = ref<Slide[]>([]);
-const electionDone = ref(false);
 
 const slides = ref<
     Array<{
@@ -34,39 +26,66 @@ watch(
     (newUser) => {
         user.value = newUser;
     },
+    { immediate: true },
 );
 
 const cancel = async () => {
     loading.value = true;
-    await auth.signOut();
-    loading.value = false;
-    navigateTo('/login');
+    try {
+        await auth.signOut();
+        navigateTo('/login');
+    } finally {
+        loading.value = false;
+    }
 };
 
 const fetchSlides = async () => {
     try {
         const response = await fetch('/BLJ.json');
-        if (!response.ok) throw new Error('Failed to fetch JSON data');
+        if (!response.ok)
+            throw new Error(
+                `Failed to fetch JSON data: ${response.statusText}`,
+            );
+
         const data = await response.json();
-        slides.value = data;
+        if (Array.isArray(data)) {
+            slides.value = data.map((slide) => ({
+                image: slide.image || '',
+                name: slide.name || 'Unknown',
+                angkatan: slide.angkatan || 'N/A',
+            }));
+        } else {
+            console.warn('Unexpected data format:', data);
+        }
     } catch (error) {
-        console.error('Error fetching slides:', error);
+        if (error instanceof Error) {
+            console.error('Error fetching slides:', error.message);
+        } else {
+            console.error('Error fetching slides:', error);
+        }
     }
 };
 
+const computedSlideCount = computed(() => slides.value.length);
+
 const nextSlide = () => {
-    currentIndex.value = (currentIndex.value + 1) % slides.value.length;
+    if (computedSlideCount.value > 0) {
+        currentIndex.value =
+            (currentIndex.value + 1) % computedSlideCount.value;
+    }
 };
 
 const prevSlide = () => {
-    currentIndex.value =
-        (currentIndex.value - 1 + slides.value.length) % slides.value.length;
+    if (computedSlideCount.value > 0) {
+        currentIndex.value =
+            (currentIndex.value - 1 + computedSlideCount.value) %
+            computedSlideCount.value;
+    }
 };
 
 const startAutoSlide = () => {
-    autoSlideInterval = setInterval(() => {
-        nextSlide();
-    }, 4000);
+    if (autoSlideInterval) stopAutoSlide();
+    autoSlideInterval = setInterval(nextSlide, 4000);
 };
 
 const stopAutoSlide = () => {
@@ -77,15 +96,19 @@ const stopAutoSlide = () => {
 };
 
 const isScrolled = ref(false);
+let scrollTimeout: ReturnType<typeof setTimeout> | null = null;
+
 const handleScroll = () => {
-    isScrolled.value = window.scrollY > 50;
+    if (scrollTimeout) clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+        isScrolled.value = window.scrollY > 50;
+    }, 100);
 };
 
 // Lifecycle hooks
 onMounted(async () => {
     await fetchSlides();
     startAutoSlide();
-
     window.addEventListener('scroll', handleScroll);
 });
 

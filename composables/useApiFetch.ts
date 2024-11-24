@@ -44,7 +44,7 @@ const fetchCookie = async () => {
             throw new Error('Failed to fetch CSRF cookie');
         }
 
-        const token = useCookie('X-XSRF-TOKEN')?.value;
+        const token = useCookie('XSRF-TOKEN')?.value;
         if (!token) {
             throw new Error('CSRF token not found in cookies');
         }

@@ -226,7 +226,7 @@ watch(
                 >
                     <UiAspectRatio
                         v-show="picture"
-                        :ratio="portrait ? 16 / 9 : 9 / 16"
+                        :ratio="portrait ? 16 / 9 : 16 / 9"
                         class="flex"
                     >
                         <canvas
