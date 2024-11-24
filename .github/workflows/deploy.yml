@@ -16,7 +16,7 @@ jobs:
             - name: Set up Node.js
               uses: actions/setup-node@v3
               with:
-                  node-version: '20' # Explicitly set Node 20
+                  node-version: '20'
 
             - name: Set up SSH
               run: |
@@ -32,8 +32,9 @@ jobs:
                     source ~/.bashrc &&
                     cd /home/u531289105/public_html/pemira-client &&
                     git pull origin main &&
-                    npm install &&  # Install dependencies on the server
-                    npm run build    # Build your Nuxt app in production mode on the server
+                    npm install && 
+                    npm run build &&   
+                    npm run generate 
                   "
               env:
                   SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
