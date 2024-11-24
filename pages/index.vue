@@ -125,21 +125,21 @@ onBeforeUnmount(() => {
                 <!-- Hero Section -->
                 <section
                     id="home"
-                    class="flex items-center justify-center bg-[#282d35] md:min-h-[calc(100vh-8rem)] min-h-[calc(100vh-0rem)] w-full"
+                    class="flex items-center justify-center bg-[#282d35] md:min-h-[calc(100vh-8rem)] min-h-[calc(130vh-0rem)] w-full"
                 >
                     <div class="w-full max-w-6xl text-center px-4">
                         <img
                             src="/logo_pemira24.png"
                             alt="Logo"
-                            class="w-44 md:w-32 md:h-32 aspect-square mx-auto mb-6"
+                            class="w-[13rem] md:w-32 aspect-square mx-auto mb-6"
                         />
                         <h1
-                            class="text-6xl md:text-6xl lg:text-7xl font-bold text-primary mb-4 md:mb-6"
+                            class="text-7xl md:text-6xl lg:text-7xl font-bold mb-4 md:mb-6 bg-gradient-to-b from-[#bee5f9] to-[#2079a9] bg-clip-text text-transparent"
                         >
                             Crowning Valor<br />A Legacy of Leadership
                         </h1>
                         <p
-                            class="text-xl lg:text-2xl text-muted-foreground mb-8 md:mb-10 max-w-3xl mx-auto px-4"
+                            class="text-2xl lg:text-2xl text-muted-foreground mb-8 md:mb-10 max-w-3xl mx-auto px-4"
                         >
                             Vote for the best candidate to build a brighter
                             future for everyone.
@@ -158,16 +158,112 @@ onBeforeUnmount(() => {
                     </div>
                 </section>
 
-                <!-- KAHIMA Section -->
+                <!-- Candidate Section -->
                 <section
-                    id="kahima1"
-                    class="flex items-center justify-center bg-[#282d35] min-h-[calc(100vh-4rem)] w-full px-4"
+                    id="candidate"
+                    class="bg-[#282d35] min-h-[calc(100vh-4rem)] w-full px-4 mt-[4rem]"
                 >
                     <h2
-                        class="text-3xl md:text-4xl lg:text-5xl font-bold text-primary text-center"
+                        class="text-5xl md:text-4xl lg:text-5xl font-bold text-primary text-center"
                     >
-                        Kandidat KAHIMA 2025
+                        <span class="text-white">The</span>
+
+                        <span
+                            class="bg-gradient-to-tl from-[#44BCFF] to-[#0a405d] bg-clip-text text-transparent"
+                        >
+                            Candidates
+                        </span>
                     </h2>
+
+                    <!-- First Candidate -->
+                    <div class="mt-[1rem]">
+                        <h3
+                            class="text-center text-2xl font-semibold text-gray-400 mb-[3rem]"
+                        >
+                            Calon Ketua HIMA & Wakil Ketua HIMA
+                        </h3>
+
+                        <div
+                            class="flex flex-col items-center gap-8 px-4 md:grid md:grid-cols-2 xl:gap-16 xl:px-16"
+                        >
+                            <div
+                                class="relative flex items-center justify-center"
+                            >
+                                <div
+                                    class="absolute w-96 h-96 rounded-full bg-gradient-to-r from-[#44BCFF] via-[#6ac8fb] to-[#44BCFF] opacity-70 blur-3xl"
+                                ></div>
+                                <img
+                                    src="/dummyKahima/halfbody-1.png"
+                                    alt="Prabowo & Gibran"
+                                    class="relative object-cover rounded-full z-10"
+                                />
+                            </div>
+
+                            <div class="mt-[4rem]">
+                                <div class="text-center text-3xl">
+                                    <h2>Bisma Putra Sulung</h2>
+                                    <h3 class="text-gray-500">&</h3>
+                                    <h2>Moch Wahyu Sampurno Utomo</h2>
+                                </div>
+
+                                <div class="mt-5">
+                                    <h2 class="text-lg">Visi :</h2>
+                                    <p class="text-gray-300">
+                                        Mewujudkan HIMATIFA sebagai wadah yang
+                                        mendorong perkembangan, dan meningkatkan
+                                        kualitas seluruh keluarga mahasiswa
+                                        Informatika, serta menjadi mitra
+                                        terpercaya bagi semua pihak dalam
+                                        menciptakan lingkungan yang inovatif dan
+                                        berprestasi.
+                                    </p>
+                                    <br />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Second Candidate -->
+                    <div class="mt-[3rem]">
+                        <div
+                            class="flex flex-col items-center gap-8 px-4 md:grid md:grid-cols-2 xl:gap-16 xl:px-16"
+                        >
+                            <div class="mt-[4rem] md:order-1 order-2">
+                                <div class="text-center text-3xl">
+                                    <h2>Anies Baswedan</h2>
+                                    <h3 class="text-gray-500">&</h3>
+                                    <h2>Muhaimin Iskandar</h2>
+                                </div>
+
+                                <div class="mt-5">
+                                    <h2 class="text-lg">Visi :</h2>
+                                    <p class="text-gray-300">
+                                        Mewujudkan HIMATIFA sebagai wadah yang
+                                        mendorong perkembangan, dan meningkatkan
+                                        kualitas seluruh keluarga mahasiswa
+                                        Informatika, serta menjadi mitra
+                                        terpercaya bagi semua pihak dalam
+                                        menciptakan lingkungan yang inovatif dan
+                                        berprestasi.
+                                    </p>
+                                    <br />
+                                </div>
+                            </div>
+
+                            <div
+                                class="relative flex items-center justify-center md:order-2 order-1"
+                            >
+                                <div
+                                    class="absolute w-96 h-96 rounded-full bg-gradient-to-r from-[#9037cc] via-[#b444ff] to-[#9037cc] opacity-70 blur-3xl"
+                                ></div>
+                                <img
+                                    src="/dummyKahima/halfbody-2.png"
+                                    alt="Anies & Imin"
+                                    class="relative object-cover z-10"
+                                />
+                            </div>
+                        </div>
+                    </div>
                 </section>
 
                 <!-- BLJ Kandidat Section -->
@@ -175,7 +271,7 @@ onBeforeUnmount(() => {
                     class="flex flex-col items-center justify-center bg-[#282d35] w-full py-12 px-4 border-b-2"
                 >
                     <UiCard
-                        class="items-center justify-center flex flex-col py-8 md:py-10 px-6 md:px-10 w-full max-w-4xl"
+                        class="items-center bg-transparent border-none justify-center flex flex-col py-8 md:py-10 px-6 md:px-10 w-full max-w-4xl"
                     >
                         <h2
                             class="text-4xl font-bold text-primary text-center mb-4"
