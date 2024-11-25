@@ -70,8 +70,7 @@ const computedSlideCount = computed(() => slides.value.length);
 
 const nextSlide = () => {
     if (computedSlideCount.value > 0) {
-        currentIndex.value =
-            (currentIndex.value + 1) % computedSlideCount.value;
+        currentIndex.value = (currentIndex.value + 1) % computedSlideCount.value;
     }
 };
 
@@ -82,6 +81,7 @@ const prevSlide = () => {
             computedSlideCount.value;
     }
 };
+
 
 const startAutoSlide = () => {
     if (autoSlideInterval) stopAutoSlide();
@@ -220,61 +220,64 @@ onBeforeUnmount(() => {
                         </p>
 
                         <div
-                            class="relative flex items-center justify-center w-full max-w-4xl overflow-hidden"
-                        >
-                            <!-- Slides -->
-                            <div
-                                class="flex w-full transition-transform duration-500"
-                                :style="{
-                                    transform: `translateX(-${
-                                        currentIndex * 100
-                                    }%)`,
-                                }"
-                            >
-                                <div
-                                    v-for="(slide, index) in slides"
-                                    :key="index"
-                                    class="flex-shrink-0 w-full flex flex-col items-center p-4"
-                                >
-                                    <img
-                                        :src="slide.image"
-                                        alt="BLJ Image"
-                                        class="w-32 h-32 md:w-40 md:h-40 rounded-sm mb-4 object-cover"
-                                    />
-                                    <h3
-                                        class="text-xl md:text-xl font-semibold text-center"
-                                    >
-                                        {{ slide.name }}
-                                    </h3>
-                                    <p
-                                        class="text-xl md:text-base text-gray-400"
-                                    >
-                                        Angkatan {{ slide.angkatan }}
-                                    </p>
-                                </div>
-                            </div>
+    class="relative flex items-center justify-center w-full max-w-4xl overflow-hidden"
+>
+    <!-- Slides -->
+    <div
+        class="flex w-full transition-transform duration-500"
+        :style="{
+            transform: `translateX(-${
+                currentIndex * (100 / 3)
+            }%)`,
+        }"
+    >
+        <div
+            v-for="(slide, index) in slides"
+            :key="index"
+            class="flex-shrink-0 w-1/3 flex flex-col items-center p-4  "
+        >
+            <img
+                :src="slide.image"
+                alt="BLJ Image"
+                class="w-32 h-32 md:w-40 md:h-40 rounded-sm mb-4 object-cover"
+            />
+            <h3
+                class="text-xl md:text-xl font-semibold text-center"
+            >
+                {{ slide.name }}
+            </h3>
+            <p
+                class="text-xl md:text-base text-gray-400 text-center"
+            >
+                Angkatan {{ slide.angkatan }}
+            </p>
+        </div>
+    </div>
 
-                            <!-- Navigation Buttons -->
-                            <button
-                                @click="prevSlide"
-                                class="absolute left-0 md:left-2 bg-primary rounded-full p-2 md:p-3 shadow-md hover:bg-gray-500 transition"
-                            >
-                                <Icon
-                                    name="oui:arrow-left"
-                                    class="text-background w-4 h-4 md:w-5 md:h-5"
-                                ></Icon>
-                            </button>
+    <!-- Navigation Buttons -->
+  <!-- Navigation Buttons -->
+<button
+    @click="prevSlide"
+    class="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 bg-gradient-to-br from-primary/70 to-primary/90 text-white rounded-full p-3 md:p-4 shadow-lg hover: hover:bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300"
+>
+    <Icon
+        name="oui:arrow-left"
+        class="w-5 h-5 md:w-6 md:h-6"
+    ></Icon>
+</button>
 
-                            <button
-                                @click="nextSlide"
-                                class="absolute right-0 md:right-2 bg-primary rounded-full p-2 md:p-3 shadow-md hover:bg-gray-500 transition"
-                            >
-                                <Icon
-                                    name="oui:arrow-right"
-                                    class="text-background w-4 h-4 md:w-5 md:h-5"
-                                ></Icon>
-                            </button>
+<button
+    @click="nextSlide"
+    class="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 bg-gradient-to-br from-primary/70 to-primary/90 text-white rounded-full p-3 md:p-4 shadow-lg hover: hover:bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300"
+>
+    <Icon
+        name="oui:arrow-right"
+        class="w-5 h-5 md:w-6 md:h-6"
+    ></Icon>
+</button>
+
                         </div>
+
                     </UiCard>
                 </section>
 
