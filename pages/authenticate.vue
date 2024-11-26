@@ -1,11 +1,10 @@
 <script lang="ts" setup>
 definePageMeta({
     layout: 'main',
-    ssr: false,
+    ssr: false, // Menonaktifkan SSR untuk halaman ini
 });
 
 const isProcessing = ref(true);
-const { useToast } = require('vue-toastification');
 const auth = useAuth();
 const route = useRoute();
 const router = useRouter();
@@ -21,28 +20,28 @@ const getAccessToken = () => {
 
         // Cek hash terlebih dahulu
         if (route.hash) {
-            const cleanHash = route.hash.replace(/^#/, '');
+            const cleanHash = route.hash.replace(/^#/, ''); // Membersihkan '#' pada hash
             console.log('Clean Hash:', cleanHash);
 
             const hashParams = new URLSearchParams(cleanHash);
-            token = hashParams.get('access_token');
+            token = hashParams.get('access_token'); // Mengambil access_token dari hash
 
             console.log('Token from Hash:', token);
         }
 
         // Jika tidak ada di hash, cek query
-        if (!token) {
-            token = route.query.access_token as string;
+        if (!token && route.query.access_token) {
+            token = route.query.access_token as string; // Mengambil access_token dari query
             console.log('Token from Query:', token);
         }
 
         console.log('Final Extracted Token:', token);
         console.groupEnd();
 
-        return token;
+        return token; // Mengembalikan token
     } catch (error) {
         console.error('❌ Error in token extraction:', error);
-        return undefined;
+        return undefined; // Mengembalikan undefined jika terjadi error
     }
 };
 
@@ -62,10 +61,6 @@ const handleOAuthLogin = async () => {
         if (!accessToken) {
             console.warn('❗ No access token found');
 
-            // Tambahkan toast atau notifikasi
-            const toast = useToast();
-            toast.error('Login failed: No access token found');
-
             // Navigasi balik ke login dengan pesan error
             await router.push({
                 path: '/login',
@@ -84,9 +79,6 @@ const handleOAuthLogin = async () => {
         // Validasi panjang token minimal
         if (accessToken.length < 20) {
             console.error('❌ Invalid token length');
-
-            const toast = useToast();
-            toast.error('Login failed: Invalid access token');
 
             await router.push({
                 path: '/login',
@@ -115,9 +107,6 @@ const handleOAuthLogin = async () => {
         if (error.value) {
             console.error('❌ Server Login Error:', error.value);
 
-            const toast = useToast();
-            toast.error('Login failed: Server error');
-
             await router.push({
                 path: '/login',
                 query: {
@@ -133,9 +122,6 @@ const handleOAuthLogin = async () => {
         if (data.value) {
             console.log('✅ Login Successful');
 
-            const toast = useToast();
-            toast.success('Login successful');
-
             // Simpan data login
             auth.signIn(data.value);
 
@@ -144,7 +130,7 @@ const handleOAuthLogin = async () => {
                 window.history.replaceState(
                     {},
                     document.title,
-                    window.location.pathname,
+                    window.location.pathname, // Hanya menyisakan path tanpa parameter URL
                 );
             }
 
@@ -153,9 +139,6 @@ const handleOAuthLogin = async () => {
         }
     } catch (err) {
         console.error('❌ Unexpected Login Error:', err);
-
-        const toast = useToast();
-        toast.error('Unexpected login error');
 
         await router.push({
             path: '/login',
