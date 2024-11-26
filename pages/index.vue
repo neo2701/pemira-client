@@ -14,6 +14,7 @@ const slides = ref<
         angkatan: string | number;
     }>
 >([]);
+
 const currentIndex = ref(0);
 let autoSlideInterval: ReturnType<typeof setInterval> | null = null;
 
@@ -63,6 +64,7 @@ const fetchSlides = async () => {
         } else {
             console.error('Error fetching slides:', error);
         }
+        slides.value = []; // Ensure fallback to empty state
     }
 };
 
@@ -70,7 +72,8 @@ const computedSlideCount = computed(() => slides.value.length);
 
 const nextSlide = () => {
     if (computedSlideCount.value > 0) {
-        currentIndex.value = (currentIndex.value + 1) % computedSlideCount.value;
+        currentIndex.value =
+            (currentIndex.value + 1) % computedSlideCount.value;
     }
 };
 
@@ -81,7 +84,6 @@ const prevSlide = () => {
             computedSlideCount.value;
     }
 };
-
 
 const startAutoSlide = () => {
     if (autoSlideInterval) stopAutoSlide();
@@ -102,14 +104,17 @@ const handleScroll = () => {
     if (scrollTimeout) clearTimeout(scrollTimeout);
     scrollTimeout = setTimeout(() => {
         isScrolled.value = window.scrollY > 50;
+        scrollTimeout = null; // Cleanup
     }, 100);
 };
 
 // Lifecycle hooks
 onMounted(async () => {
     await fetchSlides();
-    startAutoSlide();
-    window.addEventListener('scroll', handleScroll);
+    if (computedSlideCount.value > 0) {
+        startAutoSlide();
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true });
 });
 
 onBeforeUnmount(() => {
@@ -323,83 +328,152 @@ onBeforeUnmount(() => {
                             Angkatan 2025.
                         </p>
 
-                        <div class="relative flex items-center justify-center w-full max-w-4xl overflow-hidden">
-    <!-- Slides -->
-    <div
-        class="flex w-full transition-transform duration-500"
-        :style="{
-            transform: `translateX(-${
-                currentIndex * (100 / 3)
-            }%)`,
-        }"
-    >
-    
-        <!-- <div
-            v-for="(slide, index) in slides"
-            :key="index"
-            class="flex-shrink-0 w-1/3 flex flex-col items-center p-4  "
-        > -->
-        <UiCard v-for="(slide, index) in slides"
-            :key="index"
-            class="flex-shrink-0 w-1/3 flex flex-col items-center">
-            <UiAspectRatio
-                                :ratio="1"
-                                class="relative border-b border-white pb-0.2"
+                        <div
+                            class="relative flex items-center justify-center w-full max-w-4xl overflow-hidden"
+                        >
+                            <!-- Slides -->
+                            <div
+                                class="flex w-full transition-transform duration-500 space-x-4"
+                                :style="{
+                                    transform: `translateX(-${
+                                        currentIndex * (100 / 3)
+                                    }%)`,
+                                }"
                             >
-            <img
-                :src="slide.image"
-                alt="BLJ Image"
-                class="object-cover w-full h-full rounded-t-md"
-            />
-        </UiAspectRatio>
-        <UiCardHeader>
-            <UiCardTitle>
-            <h3
-                class="text-xl md:text-xl font-semibold text-center"
-            >
-                {{ slide.name }}
-            </h3>
-        </UiCardTitle>
+                                <!-- Cloned Last Slide (for infinite loop) -->
+                                <UiCard
+                                    v-if="slides.length > 0"
+                                    :key="'clone-last'"
+                                    class="flex-shrink-0 w-1/3 flex flex-col items-center"
+                                >
+                                    <UiAspectRatio
+                                        :ratio="1"
+                                        class="relative border-b border-white pb-0.2"
+                                    >
+                                        <img
+                                            :src="
+                                                slides[slides.length - 1].image
+                                            "
+                                            alt="BLJ Image"
+                                            class="object-cover w-full h-full rounded-t-md"
+                                        />
+                                    </UiAspectRatio>
+                                    <UiCardHeader>
+                                        <UiCardTitle>
+                                            <h3
+                                                class="text-xl md:text-xl font-semibold text-center"
+                                            >
+                                                {{
+                                                    slides[slides.length - 1]
+                                                        .name
+                                                }}
+                                            </h3>
+                                        </UiCardTitle>
+                                        <UiCardDescription>
+                                            <p
+                                                class="text-xl md:text-base text-gray-400 text-center"
+                                            >
+                                                Angkatan
+                                                {{
+                                                    slides[slides.length - 1]
+                                                        .angkatan
+                                                }}
+                                            </p>
+                                        </UiCardDescription>
+                                    </UiCardHeader>
+                                </UiCard>
 
-        <UiCardDescription>
-            <p
-                class="text-xl md:text-base text-gray-400 text-center"
-            >
-                Angkatan {{ slide.angkatan }}
-            </p>
-        </UiCardDescription>
-        </UiCardHeader>
-        
-            
-        </UiCard>
-        <!-- </div> -->
-        
-    </div>
+                                <!-- Main Slides -->
+                                <UiCard
+                                    v-for="(slide, index) in slides"
+                                    :key="index"
+                                    class="flex-shrink-0 w-1/3 flex flex-col items-center"
+                                >
+                                    <UiAspectRatio
+                                        :ratio="1"
+                                        class="relative border-b border-white pb-0.2"
+                                    >
+                                        <img
+                                            :src="slide.image"
+                                            alt="BLJ Image"
+                                            class="object-cover w-full h-full rounded-t-md"
+                                        />
+                                    </UiAspectRatio>
+                                    <UiCardHeader>
+                                        <UiCardTitle>
+                                            <h3
+                                                class="text-xl md:text-xl font-semibold text-center"
+                                            >
+                                                {{ slide.name }}
+                                            </h3>
+                                        </UiCardTitle>
+                                        <UiCardDescription>
+                                            <p
+                                                class="text-xl md:text-base text-gray-400 text-center"
+                                            >
+                                                Angkatan {{ slide.angkatan }}
+                                            </p>
+                                        </UiCardDescription>
+                                    </UiCardHeader>
+                                </UiCard>
 
-    <!-- Navigation Buttons -->
-  <!-- Navigation Buttons -->
-<button
-    @click="prevSlide"
-    class="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 bg-gradient-to-br from-primary/70 to-primary/90 text-white rounded-full p-3 md:p-4 shadow-lg hover: hover:bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300"
->
-    <Icon
-        name="oui:arrow-left"
-        class="w-5 h-5 md:w-6 md:h-6"
-    ></Icon>
-</button>
+                                <!-- Cloned First Slide (for infinite loop) -->
+                                <UiCard
+                                    v-if="slides.length > 0"
+                                    :key="'clone-first'"
+                                    class="flex-shrink-0 w-1/3 flex flex-col items-center"
+                                >
+                                    <UiAspectRatio
+                                        :ratio="1"
+                                        class="relative border-b border-white pb-0.2"
+                                    >
+                                        <img
+                                            :src="slides[0].image"
+                                            alt="BLJ Image"
+                                            class="object-cover w-full h-full rounded-t-md"
+                                        />
+                                    </UiAspectRatio>
+                                    <UiCardHeader>
+                                        <UiCardTitle>
+                                            <h3
+                                                class="text-xl md:text-xl font-semibold text-center"
+                                            >
+                                                {{ slides[0].name }}
+                                            </h3>
+                                        </UiCardTitle>
+                                        <UiCardDescription>
+                                            <p
+                                                class="text-xl md:text-base text-gray-400 text-center"
+                                            >
+                                                Angkatan
+                                                {{ slides[0].angkatan }}
+                                            </p>
+                                        </UiCardDescription>
+                                    </UiCardHeader>
+                                </UiCard>
+                            </div>
 
-<button
-    @click="nextSlide"
-    class="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 bg-gradient-to-br from-primary/70 to-primary/90 text-white rounded-full p-3 md:p-4 shadow-lg hover: hover:bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300"
->
-    <Icon
-        name="oui:arrow-right"
-        class="w-5 h-5 md:w-6 md:h-6"
-    ></Icon>
-</button>
+                            <!-- Navigation Buttons -->
+                            <button
+                                @click="prevSlide"
+                                class="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 bg-gradient-to-br from-primary/70 to-primary/90 text-white rounded-full p-3 md:p-4 shadow-lg hover: hover:bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300"
+                            >
+                                <Icon
+                                    name="oui:arrow-left"
+                                    class="w-5 h-5 md:w-6 md:h-6"
+                                ></Icon>
+                            </button>
 
+                            <button
+                                @click="nextSlide"
+                                class="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 bg-gradient-to-br from-primary/70 to-primary/90 text-white rounded-full p-3 md:p-4 shadow-lg hover: hover:bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300"
+                            >
+                                <Icon
+                                    name="oui:arrow-right"
+                                    class="w-5 h-5 md:w-6 md:h-6"
+                                ></Icon>
+                            </button>
                         </div>
-
                     </UiCard>
                 </section>
 

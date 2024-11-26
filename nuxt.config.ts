@@ -9,22 +9,20 @@ export default defineNuxtConfig({
 
     devtools: { enabled: true },
 
-    ssr: false,
-
-    plugins: ['~/plugins/hash-to-query.ts'],
+    ssr: false, // Nonaktifkan SSR untuk aplikasi ini
 
     runtimeConfig: {
         public: {
-            build: process.env.BUILD,
-            apiBase: process.env.API_BASE,
-            googleClientId: process.env.GOOGLE_CLIENT_ID,
-            googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            googleRedirectUrl: process.env.GOOGLE_REDIRECT_URL,
+            build: process.env.BUILD || 'development',
+            apiBase: process.env.API_BASE || 'http://localhost:3000/api',
+            googleClientId: process.env.GOOGLE_CLIENT_ID || '',
+            googleClientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+            googleRedirectUrl: process.env.GOOGLE_REDIRECT_URL || '',
         },
     },
 
     imports: {
-        dirs: ['~/types'],
+        dirs: ['~/types'], // Pastikan folder ini ada
     },
 
     modules: [
