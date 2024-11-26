@@ -1,117 +1,180 @@
 <script lang="ts" setup>
 definePageMeta({
     layout: 'main',
-    // Tandai halaman ini untuk client-side rendering
     ssr: false,
 });
 
 const isProcessing = ref(true);
-const auth = useAuth(); // Asumsi auth composable ada
+const { useToast } = require('vue-toastification');
+const auth = useAuth();
+const route = useRoute();
+const router = useRouter();
 
-/**
- * Helper untuk mengambil access token dari hash atau query.
- */
 const getAccessToken = () => {
-    if (process.client) {
-        // Pastikan hash tidak kosong
+    try {
+        console.group('🔍 Token Extraction Debug');
+        console.log('Full Route:', route);
+        console.log('Route Hash:', route.hash);
+        console.log('Route Query:', route.query);
+
+        let token;
+
+        // Cek hash terlebih dahulu
         if (route.hash) {
-            // Hapus karakter '#' di awal
-            const hashString = route.hash.substring(1);
+            const cleanHash = route.hash.replace(/^#/, '');
+            console.log('Clean Hash:', cleanHash);
 
-            // Buat URLSearchParams dari hash
-            const hashParams = new URLSearchParams(hashString);
+            const hashParams = new URLSearchParams(cleanHash);
+            token = hashParams.get('access_token');
 
-            // Ekstrak access_token
-            const accessToken = hashParams.get('access_token');
-
-            if (accessToken) {
-                console.log('Access Token ditemukan di hash');
-                return accessToken;
-            }
+            console.log('Token from Hash:', token);
         }
 
-        // Fallback ke query parameter jika tidak ditemukan di hash
-        const queryToken = route.query.access_token as string | undefined;
-
-        if (queryToken) {
-            console.log('Access Token ditemukan di query');
-            return queryToken;
+        // Jika tidak ada di hash, cek query
+        if (!token) {
+            token = route.query.access_token as string;
+            console.log('Token from Query:', token);
         }
+
+        console.log('Final Extracted Token:', token);
+        console.groupEnd();
+
+        return token;
+    } catch (error) {
+        console.error('❌ Error in token extraction:', error);
+        return undefined;
     }
-
-    console.warn('Tidak ada access token yang ditemukan');
-    return undefined;
 };
 
 const handleOAuthLogin = async () => {
     try {
+        // Set processing flag
+        isProcessing.value = true;
+
+        // Ekstrak token
         const accessToken = getAccessToken();
 
+        // Logging untuk debugging
+        console.group('🚀 OAuth Login Process');
+        console.log('Extracted Access Token:', accessToken);
+
+        // Validasi token
         if (!accessToken) {
-            console.warn('Access token tidak ditemukan');
-            await navigateTo('/login');
+            console.warn('❗ No access token found');
+
+            // Tambahkan toast atau notifikasi
+            const toast = useToast();
+            toast.error('Login failed: No access token found');
+
+            // Navigasi balik ke login dengan pesan error
+            await router.push({
+                path: '/login',
+                query: {
+                    error: 'No access token',
+                    detail: JSON.stringify({
+                        hash: route.hash,
+                        query: route.query,
+                    }),
+                },
+            });
+
             return;
         }
 
-        // Tambahkan informasi tambahan dari URL
-        const hashString = route.hash.substring(1);
-        const hashParams = new URLSearchParams(hashString);
+        // Validasi panjang token minimal
+        if (accessToken.length < 20) {
+            console.error('❌ Invalid token length');
 
-        const additionalInfo = {
-            tokenType: hashParams.get('token_type'),
-            expiresIn: hashParams.get('expires_in'),
-            scope: hashParams.get('scope'),
-            authuser: hashParams.get('authuser'),
-            hd: hashParams.get('hd'),
-            prompt: hashParams.get('prompt'),
-        };
+            const toast = useToast();
+            toast.error('Login failed: Invalid access token');
 
-        // Kirim token beserta informasi tambahan ke server
+            await router.push({
+                path: '/login',
+                query: {
+                    error: 'Invalid token',
+                    tokenLength: accessToken.length.toString(),
+                },
+            });
+
+            return;
+        }
+
+        // Kirim token ke server
         const { data, error } = await useApiFetch('/auth/login', {
             method: 'POST',
             body: JSON.stringify({
                 accessToken,
-                ...additionalInfo,
+                // Tambahan informasi debugging
+                sourceUrl: window.location.href,
             }),
         });
 
-        // Proses selanjutnya sama seperti sebelumnya
-        if (error.value || !data.value) {
-            const errorMessage =
-                data.value?.message || error.value?.message || 'Unknown error';
-            throw new Error(errorMessage);
+        console.log('Server Response:', { data, error });
+
+        // Validasi respon server
+        if (error.value) {
+            console.error('❌ Server Login Error:', error.value);
+
+            const toast = useToast();
+            toast.error('Login failed: Server error');
+
+            await router.push({
+                path: '/login',
+                query: {
+                    error: 'Server login failed',
+                    serverError: JSON.stringify(error.value),
+                },
+            });
+
+            return;
         }
 
-        // Simpan data login
-        auth.signIn(data.value);
+        // Proses login berhasil
+        if (data.value) {
+            console.log('✅ Login Successful');
 
-        // Bersihkan hash dari URL
-        if (process.client) {
-            window.history.replaceState(
-                {},
-                document.title,
-                window.location.pathname,
-            );
+            const toast = useToast();
+            toast.success('Login successful');
+
+            // Simpan data login
+            auth.signIn(data.value);
+
+            // Bersihkan URL
+            if (process.client) {
+                window.history.replaceState(
+                    {},
+                    document.title,
+                    window.location.pathname,
+                );
+            }
+
+            // Navigasi ke halaman utama
+            await router.push('/');
         }
-
-        // Arahkan ke halaman utama
-        await navigateTo('/');
     } catch (err) {
-        console.error('Login error:', err);
-        const errorMsg = encodeURIComponent(
-            (err as Error).message || 'Login failed',
-        );
-        await navigateTo(`/login?error=${errorMsg}`);
+        console.error('❌ Unexpected Login Error:', err);
+
+        const toast = useToast();
+        toast.error('Unexpected login error');
+
+        await router.push({
+            path: '/login',
+            query: {
+                error: 'Unexpected error',
+                details: JSON.stringify(err),
+            },
+        });
     } finally {
         isProcessing.value = false;
+        console.groupEnd();
     }
 };
 
-// Gunakan watch untuk mendeteksi perubahan hash route
-const route = useRoute();
+// Gunakan watch untuk mendeteksi perubahan
 watch(
     () => route.hash,
-    () => {
+    (newHash) => {
+        console.log('🔄 Route Hash Changed:', newHash);
         if (process.client) {
             handleOAuthLogin();
         }
