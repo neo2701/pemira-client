@@ -12,63 +12,96 @@ const auth = useAuth(); // Asumsi auth composable ada
  * Helper untuk mengambil access token dari hash atau query.
  */
 const getAccessToken = () => {
-    if (process.client && route.hash) {
-        console.log('Route hash:', route.hash); // Debugging
-        const hashParams = new URLSearchParams(route.hash.substring(1));
-        console.log('Parsed hashParams:', hashParams); // Debugging
-        return hashParams.get('access_token') || undefined;
+    if (process.client) {
+        // Pastikan hash tidak kosong
+        if (route.hash) {
+            // Hapus karakter '#' di awal
+            const hashString = route.hash.substring(1);
+
+            // Buat URLSearchParams dari hash
+            const hashParams = new URLSearchParams(hashString);
+
+            // Ekstrak access_token
+            const accessToken = hashParams.get('access_token');
+
+            if (accessToken) {
+                console.log('Access Token ditemukan di hash');
+                return accessToken;
+            }
+        }
+
+        // Fallback ke query parameter jika tidak ditemukan di hash
+        const queryToken = route.query.access_token as string | undefined;
+
+        if (queryToken) {
+            console.log('Access Token ditemukan di query');
+            return queryToken;
+        }
     }
-    console.warn('Access token not found in hash or query');
-    return route.query.access_token as string | undefined;
+
+    console.warn('Tidak ada access token yang ditemukan');
+    return undefined;
 };
 
-/**
- * Fungsi untuk menangani proses login OAuth.
- */
 const handleOAuthLogin = async () => {
-    const route = useRoute();
-
-    let accessToken: string | undefined;
-
     try {
-        accessToken = getAccessToken();
+        const accessToken = getAccessToken();
 
         if (!accessToken) {
-            console.warn('Access token not found');
-            await navigateTo('/login'); // Arahkan kembali ke login jika token tidak ditemukan
+            console.warn('Access token tidak ditemukan');
+            await navigateTo('/login');
             return;
         }
 
-        // Log untuk debugging
-        if (process.dev) {
-            console.group('OAuth Login Info');
-            console.log('Access Token:', accessToken);
-            console.groupEnd();
-        }
+        // Tambahkan informasi tambahan dari URL
+        const hashString = route.hash.substring(1);
+        const hashParams = new URLSearchParams(hashString);
 
-        // Kirim token ke server untuk validasi
+        const additionalInfo = {
+            tokenType: hashParams.get('token_type'),
+            expiresIn: hashParams.get('expires_in'),
+            scope: hashParams.get('scope'),
+            authuser: hashParams.get('authuser'),
+            hd: hashParams.get('hd'),
+            prompt: hashParams.get('prompt'),
+        };
+
+        // Kirim token beserta informasi tambahan ke server
         const { data, error } = await useApiFetch('/auth/login', {
             method: 'POST',
-            body: JSON.stringify({ accessToken }),
+            body: JSON.stringify({
+                accessToken,
+                ...additionalInfo,
+            }),
         });
 
+        // Proses selanjutnya sama seperti sebelumnya
         if (error.value || !data.value) {
             const errorMessage =
                 data.value?.message || error.value?.message || 'Unknown error';
             throw new Error(errorMessage);
         }
 
-        // Simpan data login ke auth state (misalnya Vuex atau LocalStorage)
+        // Simpan data login
         auth.signIn(data.value);
 
-        // Arahkan ke halaman utama setelah login berhasil
+        // Bersihkan hash dari URL
+        if (process.client) {
+            window.history.replaceState(
+                {},
+                document.title,
+                window.location.pathname,
+            );
+        }
+
+        // Arahkan ke halaman utama
         await navigateTo('/');
     } catch (err) {
         console.error('Login error:', err);
         const errorMsg = encodeURIComponent(
             (err as Error).message || 'Login failed',
         );
-        await navigateTo(`/login?error=${errorMsg}`); // Kirim pesan error ke halaman login
+        await navigateTo(`/login?error=${errorMsg}`);
     } finally {
         isProcessing.value = false;
     }
