@@ -136,7 +136,7 @@ onBeforeUnmount(() => {
         <!-- Landing Page for Non-Logged In Users -->
         <div v-else class="flex flex-col bg-[#282d35]">
             <!-- Responsive Header -->
-            <header
+            <div
                 :class="{
                     'bg-transparent': !isScrolled,
                     'bg-primary-foreground shadow-sm': isScrolled,
@@ -144,7 +144,7 @@ onBeforeUnmount(() => {
                 class="sticky top-0 w-full transition-all duration-300 z-[60]"
             >
                 <nav
-                    class="flex items-center justify-between h-16 px-4 md:px-8 md:py-10 py-14 max-w-7xl mx-2"
+                    class="flex items-center justify-between h-16 px-4 md:px-8 md:py-10 py-14 min-w-full"
                 >
                     <div class="text-3xl font-bold text-primary">PEMIRA</div>
                     <button
@@ -154,13 +154,13 @@ onBeforeUnmount(() => {
                         Vote Now
                     </button>
                 </nav>
-            </header>
+            </div>
 
-            <main class="flex-1">
+            <div class="flex-1">
                 <!-- Hero Section -->
                 <section
-                    id="home"
-                    class="flex items-center justify-center bg-[#282d35] md:min-h-[calc(100vh-8rem)] min-h-[calc(130vh-0rem)] w-full"
+                    id="hero"
+                    class="scroll-m-[80px] flex items-center justify-center bg-[#282d35] md:min-h-[calc(100vh-8rem)] min-h-[calc(130vh-0rem)] w-full"
                 >
                     <div class="w-full max-w-6xl text-center px-4">
                         <img
@@ -195,8 +195,8 @@ onBeforeUnmount(() => {
 
                 <!-- Candidate Section -->
                 <section
-                    id="candidate"
-                    class="bg-[#282d35] min-h-[calc(100vh-4rem)] w-full px-4 mt-[4rem]"
+                    id="candidates"
+                    class="bg-[#282d35] min-h-[calc(100vh-4rem)] w-full px-4 mt-[4rem] scroll-m-[100px]"
                 >
                     <h2
                         class="text-5xl md:text-4xl lg:text-5xl font-bold text-primary text-center"
@@ -215,7 +215,7 @@ onBeforeUnmount(() => {
                         <h3
                             class="text-center text-2xl font-semibold text-gray-400 mb-[3rem]"
                         >
-                            Calon Ketua HIMA & Wakil Ketua HIMA
+                            Ketua HIMA &amp; Wakil Ketua HIMA
                         </h3>
 
                         <div
@@ -237,7 +237,7 @@ onBeforeUnmount(() => {
                             <div class="mt-[4rem]">
                                 <div class="text-center text-3xl">
                                     <h2>Bisma Putra Sulung</h2>
-                                    <h3 class="text-gray-500">&</h3>
+                                    <h3 class="text-gray-500">&amp;</h3>
                                     <h2>Moch Wahyu Sampurno Utomo</h2>
                                 </div>
 
@@ -311,25 +311,31 @@ onBeforeUnmount(() => {
 
                 <!-- BLJ Kandidat Section -->
                 <section
-                    class="flex flex-col items-center justify-center bg-background w-full py-12 px-4 border-b-2"
+                    id="blj"
+                    class="flex flex-col items-center justify-center py-10 mt-[4rem]"
                 >
-                    <UiCard
-                        class="items-center bg-transparent border-none justify-center flex flex-col py-8 md:py-10 px-6 md:px-10 w-full max-w-4xl"
+                    <div
+                        class="items-center justify-center flex flex-col py-8 md:py-10 px-6 md:px-10 w-full max-w-4xl"
                     >
                         <h2
-                            class="text-4xl font-bold text-primary text-center mb-4"
+                            class="text-5xl md:text-4xl lg:text-5xl font-bold text-primary text-center"
                         >
-                            Kandidat BLJ 2025
+                            <span class="text-white">The</span>
+
+                            <span
+                                class="bg-gradient-to-tl from-[#9037cc] to-[#4a2463] bg-clip-text text-transparent"
+                            >
+                                Candidates
+                            </span>
                         </h2>
-                        <p
-                            class="text-lg text-gray-400 mb-6 md:mb-8 text-center max-w-xl"
+                        <h3
+                            class="text-center text-2xl font-semibold text-gray-400 mb-[3rem] mt-[1rem]"
                         >
-                            Daftar kandidat yang mencalonkan diri sebagai BLJ
-                            Angkatan 2025.
-                        </p>
+                            Badan Legislatif Jurusan
+                        </h3>
 
                         <div
-                            class="relative flex items-center justify-center w-full max-w-4xl overflow-hidden"
+                            class="relative flex items-center justify-center w-full overflow-hidden mt-[2rem]"
                         >
                             <!-- Slides -->
                             <div
@@ -344,7 +350,7 @@ onBeforeUnmount(() => {
                                 <UiCard
                                     v-if="slides.length > 0"
                                     :key="'clone-last'"
-                                    class="flex-shrink-0 w-1/3 flex flex-col items-center"
+                                    class="flex-shrink-0 w-1/3 flex flex-col items-center bg-[#4a2463]"
                                 >
                                     <UiAspectRatio
                                         :ratio="1"
@@ -387,7 +393,7 @@ onBeforeUnmount(() => {
                                 <UiCard
                                     v-for="(slide, index) in slides"
                                     :key="index"
-                                    class="flex-shrink-0 w-1/3 flex flex-col items-center"
+                                    class="flex-shrink-0 w-1/3 flex flex-col items-center bg-[#4a2463]"
                                 >
                                     <UiAspectRatio
                                         :ratio="1"
@@ -421,7 +427,7 @@ onBeforeUnmount(() => {
                                 <UiCard
                                     v-if="slides.length > 0"
                                     :key="'clone-first'"
-                                    class="flex-shrink-0 w-1/3 flex flex-col items-center"
+                                    class="flex-shrink-0 w-1/3 flex flex-col items-center bg-[#4a2463]"
                                 >
                                     <UiAspectRatio
                                         :ratio="1"
@@ -474,19 +480,24 @@ onBeforeUnmount(() => {
                                 ></Icon>
                             </button>
                         </div>
-                    </UiCard>
+                    </div>
                 </section>
 
                 <!-- Video Tutorial Section -->
                 <section
-                    class="flex flex-col items-center justify-center bg-background w-full py-12 px-4"
+                    id="tutorial"
+                    class="flex flex-col items-center justify-center w-full py-12 px-4 mb-[2rem] scroll-m-[50px]"
                 >
                     <div class="w-full max-w-6xl text-center px-4">
-                        <h6
-                            class="text-4xl md:text-4xl font-semibold text-primary mb-8 md:mb-10 [line-height:3rem] md:[line-height:2.5rem]"
+                        <h2 class="text-5xl md:text-4xl lg:text-5xl font-bold">
+                            <span class="text-white">Video </span>
+                            <span class="text-white">Tutorial</span>
+                        </h2>
+                        <h3
+                            class="text-center text-2xl font-semibold text-gray-400 mb-[3rem] mt-[1rem]"
                         >
-                            Video Tutorial Website PEMIRA 2025
-                        </h6>
+                            Pemilihan Raya Informatika 2025
+                        </h3>
 
                         <div
                             class="relative w-full max-w-4xl mx-auto rounded-lg overflow-hidden shadow-lg"
@@ -502,13 +513,127 @@ onBeforeUnmount(() => {
                         </div>
                     </div>
                 </section>
-            </main>
+
+                <footer
+                    class="bg-primary-foreground py-10 justify-items-center"
+                >
+                    <div
+                        class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8"
+                    >
+                        <div class="md:flex md:justify-between">
+                            <div class="mb-6 md:mb-0">
+                                <a href="#" class="flex items-center">
+                                    <img
+                                        src="/logo_pemira24.png"
+                                        class="h-[4rem] me-3"
+                                        alt="PEMIRA25 Logo"
+                                    />
+                                    <span
+                                        class="self-center text-2xl font-semibold whitespace-nowrap"
+                                        >PEMIRA</span
+                                    >
+                                </a>
+
+                                <p class="mt-3 text-gray-500">
+                                    Gunakan hakmu untuk Informatika yang lebih
+                                    baik!
+                                </p>
+                            </div>
+                            <div
+                                class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3"
+                            >
+                                <div>
+                                    <h2
+                                        class="mb-6 text-sm font-semibold uppercase"
+                                    >
+                                        Content
+                                    </h2>
+                                    <ul class="text-gray-500 font-medium">
+                                        <li class="mb-4">
+                                            <a
+                                                href="#hero"
+                                                class="hover:underline"
+                                                >Vote Now</a
+                                            >
+                                        </li>
+                                        <li class="mb-4">
+                                            <a
+                                                href="#candidates"
+                                                class="hover:underline"
+                                                >The Candidates</a
+                                            >
+                                        </li>
+                                        <li>
+                                            <a
+                                                href="#tutorial"
+                                                class="hover:underline"
+                                                >Video Tutorial</a
+                                            >
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h2
+                                        class="mb-6 text-sm font-semibold uppercase"
+                                    >
+                                        Follow us
+                                    </h2>
+                                    <ul class="text-gray-500 font-medium">
+                                        <li class="mb-4">
+                                            <a
+                                                href="https://www.instagram.com/pemiraif2025"
+                                                class="hover:underline"
+                                                >Instagram</a
+                                            >
+                                        </li>
+                                        <li>
+                                            <a
+                                                href="https://wa.me/6281283635565"
+                                                class="hover:underline"
+                                                >Whatsapp</a
+                                            >
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h2
+                                        class="mb-6 text-sm font-semibold uppercase"
+                                    >
+                                        Legal
+                                    </h2>
+                                    <ul class="text-gray-500 font-medium">
+                                        <li class="mb-4">
+                                            <a href="#" class="hover:underline"
+                                                >Privacy Policy</a
+                                            >
+                                        </li>
+                                        <li>
+                                            <a href="#" class="hover:underline"
+                                                >Terms &amp; Conditions</a
+                                            >
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <hr
+                            class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8"
+                        />
+                        <div class="sm:flex sm:items-center sm:justify-between">
+                            <span class="text-sm text-gray-500 sm:text-center"
+                                >© 2025
+                                <a href="#" class="hover:underline">PEMIRA</a>.
+                                All Rights Reserved.
+                            </span>
+                        </div>
+                    </div>
+                </footer>
+            </div>
         </div>
     </NuxtLayout>
 </template>
 
 <style scoped>
-/* Aspect ratio utility for responsive iframe */
 .aspect-w-16 {
     position: relative;
     width: 100%;
@@ -521,6 +646,6 @@ onBeforeUnmount(() => {
     left: 0;
 }
 .aspect-h-9 {
-    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    padding-bottom: 56.25%;
 }
 </style>
