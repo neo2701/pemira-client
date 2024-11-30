@@ -236,9 +236,9 @@ onBeforeUnmount(() => {
 
                             <div class="mt-[4rem]">
                                 <div class="text-center text-3xl">
-                                    <h2>Bisma Putra Sulung</h2>
+                                    <h2>Moh Angga Yunus</h2>
                                     <h3 class="text-gray-500">&</h3>
-                                    <h2>Moch Wahyu Sampurno Utomo</h2>
+                                    <h2>Lovianno Desta</h2>
                                 </div>
 
                                 <div class="mt-5">
