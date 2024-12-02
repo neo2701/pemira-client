@@ -1,145 +1,74 @@
 <script lang="ts" setup>
 definePageMeta({
     layout: 'main',
-    ssr: false,
+    ssr: false, // Menonaktifkan SSR untuk halaman ini
 });
 
 const isProcessing = ref(true);
-const { useToast } = require('vue-toastification');
 const auth = useAuth();
 const route = useRoute();
 const router = useRouter();
 
-const getAccessToken = () => {
-    try {
-        console.group('🔍 Token Extraction Debug');
-        console.log('Full Route:', route);
-        console.log('Route Hash:', route.hash);
-        console.log('Route Query:', route.query);
+/**
+ * Ekstrak access token dari URL hash atau query.
+ * @returns Access token atau undefined jika tidak ditemukan.
+ */
+const getAccessToken = (): string | undefined => {
+    const hashParams = route.hash
+        ? new URLSearchParams(route.hash.replace(/^#/, ''))
+        : null;
+    const tokenFromHash = hashParams?.get('access_token');
+    const tokenFromQuery = route.query.access_token as string;
 
-        let token;
-
-        // Cek hash terlebih dahulu
-        if (route.hash) {
-            const cleanHash = route.hash.replace(/^#/, '');
-            console.log('Clean Hash:', cleanHash);
-
-            const hashParams = new URLSearchParams(cleanHash);
-            token = hashParams.get('access_token');
-
-            console.log('Token from Hash:', token);
-        }
-
-        // Jika tidak ada di hash, cek query
-        if (!token) {
-            token = route.query.access_token as string;
-            console.log('Token from Query:', token);
-        }
-
-        console.log('Final Extracted Token:', token);
-        console.groupEnd();
-
-        return token;
-    } catch (error) {
-        console.error('❌ Error in token extraction:', error);
-        return undefined;
-    }
+    return tokenFromHash || tokenFromQuery;
 };
 
+/**
+ * Proses login OAuth menggunakan access token.
+ */
 const handleOAuthLogin = async () => {
-    try {
-        // Set processing flag
-        isProcessing.value = true;
+    isProcessing.value = true;
 
-        // Ekstrak token
+    try {
         const accessToken = getAccessToken();
 
-        // Logging untuk debugging
-        console.group('🚀 OAuth Login Process');
-        console.log('Extracted Access Token:', accessToken);
-
-        // Validasi token
-        if (!accessToken) {
-            console.warn('❗ No access token found');
-
-            // Tambahkan toast atau notifikasi
-            const toast = useToast();
-            toast.error('Login failed: No access token found');
-
-            // Navigasi balik ke login dengan pesan error
+        if (!accessToken || accessToken.length < 20) {
+            console.error('❌ Invalid or missing access token');
             await router.push({
                 path: '/login',
                 query: {
-                    error: 'No access token',
-                    detail: JSON.stringify({
+                    error: 'Invalid or missing token',
+                    details: JSON.stringify({
                         hash: route.hash,
                         query: route.query,
                     }),
                 },
             });
-
             return;
         }
 
-        // Validasi panjang token minimal
-        if (accessToken.length < 20) {
-            console.error('❌ Invalid token length');
-
-            const toast = useToast();
-            toast.error('Login failed: Invalid access token');
-
-            await router.push({
-                path: '/login',
-                query: {
-                    error: 'Invalid token',
-                    tokenLength: accessToken.length.toString(),
-                },
-            });
-
-            return;
-        }
-
-        // Kirim token ke server
         const { data, error } = await useApiFetch('/auth/login', {
             method: 'POST',
             body: JSON.stringify({
                 accessToken,
-                // Tambahan informasi debugging
                 sourceUrl: window.location.href,
             }),
         });
 
-        console.log('Server Response:', { data, error });
-
-        // Validasi respon server
         if (error.value) {
-            console.error('❌ Server Login Error:', error.value);
-
-            const toast = useToast();
-            toast.error('Login failed: Server error');
-
+            console.error('❌ Server login failed', error.value);
             await router.push({
                 path: '/login',
                 query: {
                     error: 'Server login failed',
-                    serverError: JSON.stringify(error.value),
+                    details: JSON.stringify(error.value),
                 },
             });
-
             return;
         }
 
-        // Proses login berhasil
         if (data.value) {
-            console.log('✅ Login Successful');
-
-            const toast = useToast();
-            toast.success('Login successful');
-
-            // Simpan data login
             auth.signIn(data.value);
-
-            // Bersihkan URL
             if (process.client) {
                 window.history.replaceState(
                     {},
@@ -147,40 +76,25 @@ const handleOAuthLogin = async () => {
                     window.location.pathname,
                 );
             }
-
-            // Navigasi ke halaman utama
             await router.push('/');
         }
     } catch (err) {
-        console.error('❌ Unexpected Login Error:', err);
-
-        const toast = useToast();
-        toast.error('Unexpected login error');
-
+        console.error('❌ Unexpected error during login', err);
         await router.push({
             path: '/login',
-            query: {
-                error: 'Unexpected error',
-                details: JSON.stringify(err),
-            },
+            query: { error: 'Unexpected error', details: JSON.stringify(err) },
         });
     } finally {
         isProcessing.value = false;
-        console.groupEnd();
     }
 };
 
-// Gunakan watch untuk mendeteksi perubahan
-watch(
-    () => route.hash,
-    (newHash) => {
-        console.log('🔄 Route Hash Changed:', newHash);
-        if (process.client) {
-            handleOAuthLogin();
-        }
-    },
-    { immediate: true },
-);
+// Jalankan proses login OAuth saat halaman dimuat
+onMounted(() => {
+    if (process.client) {
+        handleOAuthLogin();
+    }
+});
 </script>
 
 <template>
