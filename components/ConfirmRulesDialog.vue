@@ -21,7 +21,7 @@ defineEmits<{
                 <UiAlertDialogTitle  class="text-center">
                     {{ $props.title }}
                 </UiAlertDialogTitle>
-                <UiAlertDialogDescription class="whitespace-pre-line text-start h-56 overflow-y-scroll border p-2">
+                <UiAlertDialogDescription class="whitespace-pre-line text-start h-56 overflow-y-scroll border p-2 text-white">
                     {{ $props.description }}
                 </UiAlertDialogDescription>
             </UiAlertDialogHeader>
@@ -32,7 +32,7 @@ defineEmits<{
                 <UiCardDescription class="md:[display:none] text-center"
                     >Atau</UiCardDescription
                 >
-                <UiAlertDialogAction class="h-10" @click="$emit('confirm')">
+                <UiAlertDialogAction class="h-10 text-white bg-green-600 hover:bg-green-700" @click="$emit('confirm')">
                     {{ $props.confirmText ?? 'Continue' }}
                 </UiAlertDialogAction>
             </UiAlertDialogFooter>

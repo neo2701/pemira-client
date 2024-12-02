@@ -1,58 +1,60 @@
 export default defineNuxtConfig({
-    app: {
-        head: {
-            title: 'PEMIRA 2025',
-        },
-    },
+  app: {
+      head: {
+          title: 'PEMIRA 2025',
+      },
+  },
 
-    css: ['~/assets/css/main.css'],
+  css: ['~/assets/css/main.css'],
+  devtools: { enabled: true },
 
-    devtools: { enabled: true },
+  // Nonaktifkan SSR untuk aplikasi ini
+  ssr: false,
 
-    ssr: false, // Nonaktifkan SSR untuk aplikasi ini
+  runtimeConfig: {
+      public: {
+          build: process.env.BUILD || 'development',
+          apiBase: process.env.API_BASE || 'http://localhost:3000/api',
+          googleClientId: process.env.GOOGLE_CLIENT_ID || '',
+          googleClientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+          googleRedirectUrl: process.env.GOOGLE_REDIRECT_URL || '',
+      },
+  },
 
-    runtimeConfig: {
-        public: {
-            build: process.env.BUILD || 'development',
-            apiBase: process.env.API_BASE || 'http://localhost:3000/api',
-            googleClientId: process.env.GOOGLE_CLIENT_ID || '',
-            googleClientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-            googleRedirectUrl: process.env.GOOGLE_REDIRECT_URL || '',
-        },
-    },
+  imports: {
+      dirs: ['~/types'], // Pastikan folder ini ada
+  },
 
-    imports: {
-        dirs: ['~/types'], // Pastikan folder ini ada
-    },
+  modules: [
+      '@nuxtjs/tailwindcss',
+      '@nuxtjs/google-fonts',
+      '@pinia/nuxt',
+      '@vueuse/nuxt',
+      'nuxt-icon',
+      '@vee-validate/nuxt',
+      '@nuxt/image',
+  ],
 
-    modules: [
-        '@nuxtjs/tailwindcss',
-        '@nuxtjs/google-fonts',
-        '@pinia/nuxt',
-        '@vueuse/nuxt',
-        'nuxt-icon',
-        '@vee-validate/nuxt',
-        '@nuxt/image',
-    ],
+  components: [
+      {
+          path: '~/components',
+      },
+      {
+          path: '~/components/ui',
+          extensions: ['.vue'],
+          prefix: 'Ui',
+      },
+  ],
 
-    components: [
-        {
-            path: '~/components',
-        },
-        {
-            path: '~/components/ui',
-            extensions: ['.vue'],
-            prefix: 'Ui',
-        },
-    ],
+  tailwindcss: {
+      exposeConfig: true,
+  },
 
-    tailwindcss: {
-        exposeConfig: true,
-    },
+  googleFonts: {
+      families: {
+          Inter: [400, 500, 600, 700, 800, 900],
+      },
+  },
 
-    googleFonts: {
-        families: {
-            Inter: [400, 500, 600, 700, 800, 900],
-        },
-    },
+  compatibilityDate: '2024-12-02',
 });

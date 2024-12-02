@@ -138,7 +138,7 @@ const cancel = async () => {
                 cancelText="Tidak Setuju"
                 confirmText="Setuju"
                 @confirm="start"
-               
+                
             >
                 <UiButton
                     :loading="loading"
