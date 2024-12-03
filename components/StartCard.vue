@@ -8,7 +8,8 @@ const router = useRouter();
 const loading = ref(false);
 const auth = useAuth();
 
- const rules = "1. Masuk ke website PEMIRA INFORMATIKA\n2. Login menggunakan akun google UPN (Jika  bukan  email UPN maka akses tidak diizinkan/Ditolak)\n3. Selesaikan proses verifikasi (wajib foto langsung menggunakan camera, tidak bisa membuka gallery, dilarang memakai masker dan kacamata hitam dan wajah harus jelas)\n4. Mengupload KTM dengan syarat wajah harus jelas, foto KTM harus full tidak terpotong\n5. Proses pemilihan calon berisi foto calon, visi & misi, lalu pemilihan calon\n6. Pemilihan calon BLJ dibagi menjadi 3:\n   a. Pemilihan calon 2022\n   b. Pemilihan calon 2023\n   c. Pemilihan calon 2024\n7. Pemilihan calon Kahima & Wakahima\n8. Pemilihan selesai dan masuk ke halaman Selamat dan Terima kasih\n9. Setelah halaman Selamat dan Terimakasih pemilih WAJIB me-logout akun email yang telah digunakan\n\nNote: \n1. Jika sudah memilih/coblos, maka akan langsung diarahkan ke halaman Selamat dan terimakasih (dipastikan tidak bisa mencoblos lagi)\n2. Apabila setelah login di web pemira user tidak segera menggunakan hak pilihnya/idle selama 5 menit, maka sesi login user akan berakhir dan dialihkan ke halaman login untuk memasukan data diri dari awal\n3. Proses verifikasi ktm dan wajah secara manual saat pengesahan ";
+const rules =
+    '1. Masuk ke website PEMIRA INFORMATIKA\n2. Login menggunakan akun google UPN (Jika  bukan  email UPN maka akses tidak diizinkan/Ditolak)\n3. Selesaikan proses verifikasi (wajib foto langsung menggunakan camera, tidak bisa membuka gallery, dilarang memakai masker dan kacamata hitam dan wajah harus jelas)\n4. Mengupload KTM dengan syarat wajah harus jelas, foto KTM harus full tidak terpotong\n5. Proses pemilihan calon berisi foto calon, visi & misi, lalu pemilihan calon\n6. Pemilihan calon BLJ dibagi menjadi 3:\n   a. Pemilihan calon 2022\n   b. Pemilihan calon 2023\n   c. Pemilihan calon 2024\n7. Pemilihan calon Kahima & Wakahima\n8. Pemilihan selesai dan masuk ke halaman Selamat dan Terima kasih\n9. Setelah halaman Selamat dan Terimakasih pemilih WAJIB me-logout akun email yang telah digunakan\n\nNote: \n1. Jika sudah memilih/coblos, maka akan langsung diarahkan ke halaman Selamat dan terimakasih (dipastikan tidak bisa mencoblos lagi)\n2. Apabila setelah login di web pemira user tidak segera menggunakan hak pilihnya/idle selama 5 menit, maka sesi login user akan berakhir dan dialihkan ke halaman login untuk memasukan data diri dari awal\n3. Proses verifikasi ktm dan wajah secara manual saat pengesahan ';
 
 const user = ref(auth.user());
 watch(
@@ -138,7 +139,6 @@ const cancel = async () => {
                 cancelText="Tidak Setuju"
                 confirmText="Setuju"
                 @confirm="start"
-                
             >
                 <UiButton
                     :loading="loading"
