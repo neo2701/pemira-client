@@ -56,6 +56,4 @@ export default defineNuxtConfig({
             Inter: [400, 500, 600, 700, 800, 900],
         },
     },
-
-    compatibilityDate: '2024-12-02',
 });
