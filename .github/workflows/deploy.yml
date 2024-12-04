@@ -26,12 +26,15 @@ jobs:
                   SSH_HOST: ${{ secrets.SSH_HOST }}
                   SSH_USER: ${{ secrets.SSH_USER }}
               run: |
-                  ssh $SSH_USER@$SSH_HOST << EOF
+                  ssh $SSH_USER@$SSH_HOST << 'EOF'
                     source ~/.bashrc
                     source ~/.profile
+
                     cd /root/www/pemira-client
                     git pull
+
                     npm install --production
                     npm run build
-                    pm2 restart pemira-client
+
+                    pm2 restart pemira-client || pm2 start npm --name "pemira-client" -- run start
                   EOF
