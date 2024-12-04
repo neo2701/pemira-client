@@ -1,22 +1,57 @@
 [
     {
-        "image": "/dummyBLJ/dummy_candidate.png",
-        "name": "Pier Goodman",
-        "angkatan": "2023"
-    },
-    {
-        "image": "/dummyBLJ/dummy_candidate1.jpg",
-        "name": "Prabowo Subianto",
-        "angkatan": "2024"
-    },
-    {
-        "image": "/dummyBLJ/dummy_candidate2.jpg",
-        "name": "Mulyono",
+        "image": "/BLJ/dummy_candidate.png",
+        "name": "Desta Rizky Andhika",
         "angkatan": "2022"
     },
     {
-        "image": "/dummyBLJ/dummy_candidate3.jpg",
-        "name": "Gibran Rakabuming",
-        "angkatan": "2020"
+        "image": "/BLJ/dummy_candidate1.jpg",
+        "name": "Rafie Najwan Anjasmara",
+        "angkatan": "2022"
+    },
+    {
+        "image": "/BLJ/dummy_candidate2.jpg",
+        "name": "Muhammad Bagus Satrio Aji",
+        "angkatan": "2023"
+    },
+    {
+        "image": "/BLJ/dummy_candidate3.jpg",
+        "name": "Heraldi Rizky Anggriawan",
+        "angkatan": "2023"
+    },
+    {
+        "image": "/BLJ/dummy_candidate3.jpg",
+        "name": "Ghabriella Auranizza Fransrico",
+        "angkatan": "2023"
+    },
+    {
+        "image": "/BLJ/dummy_candidate3.jpg",
+        "name": "Theodore Manuel Sahasika",
+        "angkatan": "2023"
+    },
+    {
+        "image": "/BLJ/dummy_candidate3.jpg",
+        "name": "Feomita Ramadhany Fudiansah",
+        "angkatan": "2023"
+    },
+    {
+        "image": "/BLJ/dummy_candidate3.jpg",
+        "name": "Evrillia Kurniawati",
+        "angkatan": "2024"
+    },
+    {
+        "image": "/BLJ/dummy_candidate3.jpg",
+        "name": "Dio Afrizal Yona Saputra",
+        "angkatan": "2024"
+    },
+    {
+        "image": "/BLJ/dummy_candidate3.jpg",
+        "name": "Fidelia Hahas Asabela",
+        "angkatan": "2024"
+    },
+    {
+        "image": "/BLJ/dummy_candidate3.jpg",
+        "name": "Henri Tri Herdiansyah",
+        "angkatan": "2024"
     }
 ]
