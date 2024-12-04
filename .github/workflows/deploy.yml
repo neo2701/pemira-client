@@ -26,15 +26,21 @@ jobs:
                   SSH_HOST: ${{ secrets.SSH_HOST }}
                   SSH_USER: ${{ secrets.SSH_USER }}
               run: |
-                  ssh $SSH_USER@$SSH_HOST "
-                    source ~/.profile &&
-                    source ~/.bashrc &&
+                  ssh $SSH_USER@$SSH_HOST << 'EOF'
+                    # Load environment variables
+                    source ~/.profile
+                    source ~/.bashrc
 
-                    cd /root/www/pemira-client &&
-                    git pull &&
+                    # Navigate to the project directory
+                    cd /root/www/pemira-client
 
-                    npm install --production &&
-                    npm run build &&
+                    # Pull the latest code
+                    git pull
 
+                    # Install dependencies and build the project
+                    npm install --production
+                    npm run build
+
+                    # Restart the application using PM2
                     pm2 restart pemira-client || pm2 start npm --name "pemira-client" -- run start
-                  "
+                  EOF
