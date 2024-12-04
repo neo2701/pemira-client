@@ -136,8 +136,8 @@ const cancel = async () => {
                         ? rules
                         : 'Pemilihan belum dimulai, Anda tidak bisa melanjutkan pemilihan.'
                 "
-                cancelText="Tidak Setuju"
-                confirmText="Setuju"
+                cancelText="Kembali"
+                confirmText="Lanjut"
                 @confirm="start"
             >
                 <UiButton
