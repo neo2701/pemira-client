@@ -27,6 +27,8 @@ jobs:
                   SSH_USER: ${{ secrets.SSH_USER }}
               run: |
                   ssh $SSH_USER@$SSH_HOST << EOF
+                    source ~/.bashrc
+                    source ~/.profile
                     cd /root/www/pemira-client
                     git pull
                     npm install --production
