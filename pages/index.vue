@@ -17,6 +17,19 @@ const slides = ref<
 
 const currentIndex = ref(0);
 let autoSlideInterval: ReturnType<typeof setInterval> | null = null;
+const loadedImages = ref<Set<string>>(new Set());
+
+const preloadImage = (src: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+            loadedImages.value.add(src);
+            resolve();
+        };
+        img.onerror = reject;
+        img.src = src;
+    });
+};
 
 definePageMeta({
     layout: 'landing',
@@ -43,10 +56,11 @@ const cancel = async () => {
 const fetchSlides = async () => {
     try {
         const response = await fetch('/BLJ.json');
-        if (!response.ok)
+        if (!response.ok) {
             throw new Error(
                 `Failed to fetch JSON data: ${response.statusText}`,
             );
+        }
 
         const data = await response.json();
         if (Array.isArray(data)) {
@@ -55,6 +69,15 @@ const fetchSlides = async () => {
                 name: slide.name || 'Unknown',
                 angkatan: slide.angkatan || 'N/A',
             }));
+
+            // Preload all images immediately
+            await Promise.all(
+                slides.value
+                    .filter((slide) => slide.image)
+                    .map((slide) => preloadImage(slide.image)),
+            ).catch((error) => {
+                console.error('Error preloading images:', error);
+            });
         } else {
             console.warn('Unexpected data format:', data);
         }
@@ -108,9 +131,15 @@ const handleScroll = () => {
     }, 100);
 };
 
+// Loading state for images
+const isLoading = ref(true);
+
 // Lifecycle hooks
 onMounted(async () => {
+    isLoading.value = true;
     await fetchSlides();
+    isLoading.value = false;
+
     if (computedSlideCount.value > 0) {
         startAutoSlide();
     }
@@ -225,7 +254,7 @@ onBeforeUnmount(() => {
                                 class="absolute w-96 h-96 rounded-full bg-gradient-to-r from-[#44BCFF] via-[#6ac8fb] to-[#44BCFF] opacity-70 blur-3xl"
                             ></div>
                             <img
-                                src="/KAHIMA/halfbody-1.png"
+                                src="/KAHIMA/cakahima.png"
                                 alt="Prabowo & Gibran"
                                 class="relative object-cover z-10 aspect-square w-[15rem] md:w-[20rem]"
                             />
@@ -272,7 +301,6 @@ onBeforeUnmount(() => {
                             class="text-4xl md:text-4xl lg:text-5xl font-bold text-primary text-center"
                         >
                             <span class="text-white">Calon</span>
-
                             <span
                                 class="bg-gradient-to-tl from-[#44BCFF] to-[#0a405d] bg-clip-text text-transparent"
                             >
@@ -285,19 +313,30 @@ onBeforeUnmount(() => {
                             Badan Legislatif Jurusan
                         </h3>
 
+                        <!-- Loading State -->
                         <div
+                            v-if="isLoading"
+                            class="w-full flex justify-center items-center py-20"
+                        >
+                            <div
+                                class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"
+                            ></div>
+                        </div>
+
+                        <!-- Slider Content -->
+                        <div
+                            v-else
                             class="relative flex items-center justify-center w-full overflow-hidden mt-[1rem]"
                         >
-                            <!-- Slides -->
                             <div
-                                class="flex w-full transition-transform duration-500 space-x-4"
+                                class="flex w-full transition-transform duration-500 ease-out space-x-4"
                                 :style="{
                                     transform: `translateX(-${
                                         currentIndex * (100 / 3)
                                     }%)`,
                                 }"
                             >
-                                <!-- Cloned Last Slide (for infinite loop) -->
+                                <!-- Cloned Last Slide -->
                                 <UiCard
                                     v-if="slides.length > 0"
                                     :key="'clone-last'"
@@ -312,7 +351,17 @@ onBeforeUnmount(() => {
                                                 slides[slides.length - 1].image
                                             "
                                             alt="BLJ Image"
-                                            class="object-cover w-full h-full rounded-t-md"
+                                            class="object-cover w-full h-full rounded-t-md transition-opacity duration-300"
+                                            :class="{
+                                                'opacity-100': loadedImages.has(
+                                                    slides[slides.length - 1]
+                                                        .image,
+                                                ),
+                                                'opacity-0': !loadedImages.has(
+                                                    slides[slides.length - 1]
+                                                        .image,
+                                                ),
+                                            }"
                                         />
                                     </UiAspectRatio>
                                     <UiCardHeader>
@@ -353,7 +402,15 @@ onBeforeUnmount(() => {
                                         <img
                                             :src="slide.image"
                                             alt="BLJ Image"
-                                            class="object-cover w-full h-full rounded-t-md"
+                                            class="object-cover w-full h-full rounded-t-md transition-opacity duration-300"
+                                            :class="{
+                                                'opacity-100': loadedImages.has(
+                                                    slide.image,
+                                                ),
+                                                'opacity-0': !loadedImages.has(
+                                                    slide.image,
+                                                ),
+                                            }"
                                         />
                                     </UiAspectRatio>
                                     <UiCardHeader>
@@ -374,7 +431,7 @@ onBeforeUnmount(() => {
                                     </UiCardHeader>
                                 </UiCard>
 
-                                <!-- Cloned First Slide (for infinite loop) -->
+                                <!-- Cloned First Slide -->
                                 <UiCard
                                     v-if="slides.length > 0"
                                     :key="'clone-first'"
@@ -387,7 +444,15 @@ onBeforeUnmount(() => {
                                         <img
                                             :src="slides[0].image"
                                             alt="BLJ Image"
-                                            class="object-cover w-full h-full rounded-t-md"
+                                            class="object-cover w-full h-full rounded-t-md transition-opacity duration-300"
+                                            :class="{
+                                                'opacity-100': loadedImages.has(
+                                                    slides[0].image,
+                                                ),
+                                                'opacity-0': !loadedImages.has(
+                                                    slides[0].image,
+                                                ),
+                                            }"
                                         />
                                     </UiAspectRatio>
                                     <UiCardHeader>
@@ -413,22 +478,26 @@ onBeforeUnmount(() => {
                             <!-- Navigation Buttons -->
                             <button
                                 @click="prevSlide"
-                                class="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 bg-gradient-to-br from-primary/70 to-primary/90 text-white rounded-full p-3 md:p-4 shadow-lg hover: hover:bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300"
+                                @mouseenter="stopAutoSlide"
+                                @mouseleave="startAutoSlide"
+                                class="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 bg-gradient-to-br from-primary/70 to-primary/90 text-white rounded-full p-3 md:p-4 shadow-lg hover:bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300"
                             >
                                 <Icon
                                     name="oui:arrow-left"
                                     class="w-5 h-5 md:w-6 md:h-6"
-                                ></Icon>
+                                />
                             </button>
 
                             <button
                                 @click="nextSlide"
-                                class="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 bg-gradient-to-br from-primary/70 to-primary/90 text-white rounded-full p-3 md:p-4 shadow-lg hover: hover:bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300"
+                                @mouseenter="stopAutoSlide"
+                                @mouseleave="startAutoSlide"
+                                class="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 bg-gradient-to-br from-primary/70 to-primary/90 text-white rounded-full p-3 md:p-4 shadow-lg hover:bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300"
                             >
                                 <Icon
                                     name="oui:arrow-right"
                                     class="w-5 h-5 md:w-6 md:h-6"
-                                ></Icon>
+                                />
                             </button>
                         </div>
                     </div>
