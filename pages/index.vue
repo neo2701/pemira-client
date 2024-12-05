@@ -256,7 +256,7 @@ onBeforeUnmount(() => {
                             <img
                                 src="/KAHIMA/cakahima.png"
                                 alt="Prabowo & Gibran"
-                                class="relative object-cover z-10 aspect-square w-[15rem] md:w-[20rem]"
+                                class="relative object-cover z-10 aspect-square w-[20rem] md:w-[25rem]"
                             />
                         </div>
 
