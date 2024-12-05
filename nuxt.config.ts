@@ -14,8 +14,8 @@ export default defineNuxtConfig({
 
     runtimeConfig: {
         public: {
-            build: process.env.BUILD || 'development',
-            apiBase: process.env.API_BASE || 'http://localhost:3000/api',
+            build: process.env.BUILD,
+            apiBase: process.env.API_BASE,
             googleClientId: process.env.GOOGLE_CLIENT_ID || '',
             googleClientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
             googleRedirectUrl: process.env.GOOGLE_REDIRECT_URL || '',
