@@ -254,7 +254,7 @@ onBeforeUnmount(() => {
                                 class="absolute w-96 h-96 rounded-full bg-gradient-to-r from-[#44BCFF] via-[#6ac8fb] to-[#44BCFF] opacity-70 blur-3xl"
                             ></div>
                             <img
-                                src="/KAHIMA/cakahima.png"
+                                src="/KAHIMA/cakahima.webp"
                                 alt="Prabowo & Gibran"
                                 class="relative object-cover z-10 aspect-square w-[20rem] md:w-[25rem]"
                             />
