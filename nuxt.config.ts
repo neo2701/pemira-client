@@ -9,8 +9,7 @@ export default defineNuxtConfig({
 
     devtools: { enabled: false },
 
-    // Nonaktifkan SSR untuk aplikasi ini
-    ssr: false,
+    ssr: false, // Nonaktifkan SSR
 
     runtimeConfig: {
         public: {
@@ -27,7 +26,6 @@ export default defineNuxtConfig({
     },
 
     modules: [
-        '@nuxtjs/tailwindcss',
         '@nuxtjs/google-fonts',
         '@pinia/nuxt',
         '@vueuse/nuxt',
@@ -47,13 +45,16 @@ export default defineNuxtConfig({
         },
     ],
 
-    tailwindcss: {
-        exposeConfig: true,
-    },
-
     googleFonts: {
         families: {
             Inter: [400, 500, 600, 700, 800, 900],
+        },
+    },
+
+    postcss: {
+        plugins: {
+            tailwindcss: {},
+            autoprefixer: {},
         },
     },
 });
