@@ -1,9 +1,15 @@
 import animate from 'tailwindcss-animate';
 
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
     darkMode: ['class'],
-
+    content: [
+        './components/**/*.{vue,js,ts}', // Semua file di folder components
+        './layouts/**/*.vue', // Semua file di folder layouts
+        './pages/**/*.vue', // Semua file di folder pages
+        './plugins/**/*.{js,ts}', // Semua file di folder plugins
+        './nuxt.config.{js,ts}', // File Nuxt config
+    ],
     theme: {
         container: {
             center: true,
