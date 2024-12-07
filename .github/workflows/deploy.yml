@@ -31,6 +31,9 @@ jobs:
               run: |
                   ssh $SSH_USER@$SSH_HOST << 'EOF'
                     bash -l -c "
+                      # Menambahkan path npm dan pm2 ke environment shell
+                      export PATH=$PATH:/usr/local/bin
+
                       # Pindah ke direktori proyek
                       cd /root/www/pemira-client
 
@@ -44,6 +47,6 @@ jobs:
                       npm run build
 
                       # Restart aplikasi menggunakan PM2
-                      pm2 restart pemiraif.com
+                      pm2 restart pemira-client || pm2 start npm --name 'pemira-client' -- run start
                     "
                   EOF
