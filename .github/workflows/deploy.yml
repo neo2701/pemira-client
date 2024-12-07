@@ -11,9 +11,11 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
+            # 1. Checkout kode dari GitHub
             - name: Checkout Code
               uses: actions/checkout@v2
 
+            # 2. Setup SSH untuk koneksi ke VPS
             - name: Setup SSH
               run: |
                   mkdir -p ~/.ssh/
@@ -21,6 +23,7 @@ jobs:
                   chmod 600 ~/.ssh/id_rsa
                   ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
+            # 3. Deploy aplikasi ke VPS
             - name: Deploy Application
               env:
                   SSH_HOST: ${{ secrets.SSH_HOST }}
@@ -28,17 +31,19 @@ jobs:
               run: |
                   ssh $SSH_USER@$SSH_HOST << 'EOF'
                     bash -l -c "
-                      # Navigate to the project directory
+                      # Pindah ke direktori proyek
                       cd /root/www/pemira-client
 
-                      # Pull the latest code
+                      # Tarik perubahan terbaru dari GitHub
                       git pull
 
-                      # Install dependencies and build the project
-                      npm install --production
+                      # Install dependensi (menggunakan semua dependensi, termasuk devDependencies untuk build)
+                      npm install
+
+                      # Build proyek
                       npm run build
 
-                      # Restart the application using PM2
-                      pm2 restart pemira-client || pm2 start npm --name 'pemira-client' -- run start
+                      # Restart aplikasi menggunakan PM2
+                      pm2 restart pemiraif.com
                     "
                   EOF
