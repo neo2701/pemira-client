@@ -1,30 +1,51 @@
 export default defineNuxtConfig({
+    // Menetapkan metadata di head tag
     app: {
         head: {
-            title: 'PEMIRA 2025',
+            title: 'PEMIRA Informatika 2025',
+            meta: [
+                {
+                    name: 'description',
+                    content: 'Aplikasi untuk pemilihan raya Informatika 2025',
+                },
+            ],
+            link: [
+                { rel: 'icon', type: 'image/png', href: '/logo_pemira24.png' },
+            ],
         },
     },
 
+    // Menambahkan file CSS utama
     css: ['~/assets/css/main.css'],
 
+    // Menonaktifkan devtools di production
     devtools: { enabled: false },
 
-    ssr: false, // Nonaktifkan SSR
+    // Menonaktifkan SSR (Single Page Application)
+    ssr: false,
 
+    // Konfigurasi runtimeConfig untuk akses ke environment variables
     runtimeConfig: {
         public: {
-            build: process.env.BUILD,
+            // API base URL untuk frontend (akses di klien)
             apiBase: process.env.API_BASE,
-            googleClientId: process.env.GOOGLE_CLIENT_ID || '',
-            googleClientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-            googleRedirectUrl: process.env.GOOGLE_REDIRECT_URL || '',
+
+            // Google OAuth configuration
+            googleClientId: process.env.GOOGLE_CLIENT_ID,
+            googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            googleRedirectUrl: process.env.GOOGLE_REDIRECT_URL,
+
+            // Variabel build untuk mengidentifikasi build atau environment
+            build: process.env.BUILD,
         },
     },
 
+    // Mengimport tipe data TypeScript
     imports: {
         dirs: ['~/types'], // Pastikan folder ini ada
     },
 
+    // Mengonfigurasi modul Nuxt
     modules: [
         '@nuxtjs/google-fonts',
         '@pinia/nuxt',
@@ -34,6 +55,7 @@ export default defineNuxtConfig({
         '@nuxt/image',
     ],
 
+    // Menambahkan komponen otomatis
     components: [
         {
             path: '~/components',
@@ -41,16 +63,18 @@ export default defineNuxtConfig({
         {
             path: '~/components/ui',
             extensions: ['.vue'],
-            prefix: 'Ui',
+            prefix: 'Ui', // Menggunakan prefix 'Ui' untuk komponen di folder ui
         },
     ],
 
+    // Mengonfigurasi font Google
     googleFonts: {
         families: {
             Inter: [400, 500, 600, 700, 800, 900],
         },
     },
 
+    // Mengonfigurasi PostCSS dengan TailwindCSS dan Autoprefixer
     postcss: {
         plugins: {
             tailwindcss: {},

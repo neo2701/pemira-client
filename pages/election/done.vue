@@ -124,7 +124,7 @@ const exit = () => {
                     <UiCardContent>
                         <UiCardDescription>
                             Terima kasih telah menggunakan hak suaramu dan
-                            berpartisipasi di PEMIRA 2024.
+                            berpartisipasi di PEMIRA Informatika 2025.
                         </UiCardDescription>
                     </UiCardContent>
                     <UiCardFooter>
@@ -150,7 +150,7 @@ const exit = () => {
                                         name="fluent:calendar-24-regular"
                                         class="shrink-0"
                                     />
-                                    Jumat, 29 Desember 2023
+                                    Jumat, 13 Desember 2024
                                 </li>
                                 <li class="flex items-center gap-2">
                                     <Icon

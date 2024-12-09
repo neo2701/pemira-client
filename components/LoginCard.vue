@@ -21,9 +21,9 @@ const goBack = () => {
             />
             <div class="grid gap-2">
                 <div>
-                    <h2 class="text-3xl">PEMIRA</h2>
+                    <h2 class="text-3xl">PEMIRA Informatika 2025</h2>
                     <div class="text-sm font-bold">
-                        HIMA KM Informatika 2025
+                        Himatifa 2025
                     </div>
                 </div>
                 <UiCardDescription>

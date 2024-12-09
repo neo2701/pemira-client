@@ -57,9 +57,7 @@ const fetchSlides = async () => {
     try {
         const response = await fetch('/BLJ.json');
         if (!response.ok) {
-            throw new Error(
-                `Failed to fetch JSON data: ${response.statusText}`,
-            );
+            throw new Error('Failed to fetch JSON data');
         }
 
         const data = await response.json();
@@ -75,18 +73,11 @@ const fetchSlides = async () => {
                 slides.value
                     .filter((slide) => slide.image)
                     .map((slide) => preloadImage(slide.image)),
-            ).catch((error) => {
-                console.error('Error preloading images:', error);
-            });
+            );
         } else {
-            console.warn('Unexpected data format:', data);
+            slides.value = [];
         }
-    } catch (error) {
-        if (error instanceof Error) {
-            console.error('Error fetching slides:', error.message);
-        } else {
-            console.error('Error fetching slides:', error);
-        }
+    } catch {
         slides.value = []; // Ensure fallback to empty state
     }
 };
@@ -175,7 +166,7 @@ onBeforeUnmount(() => {
                     class="flex items-center justify-between h-16 px-4 md:px-8 md:py-10 py-4 min-w-full"
                 >
                     <div class="text-2xl md:text-3xl font-bold text-primary">
-                        PEMIRA
+                        PEMIRA Informatika 2025
                     </div>
                     <button
                         @click="navigateTo('/login')"
@@ -243,7 +234,7 @@ onBeforeUnmount(() => {
                     <h3
                         class="text-center text-xl md:text-2xl font-semibold text-gray-400 mb-[3rem] mt-[1rem]"
                     >
-                        Ketua HIMATIFA &amp; Wakil HIMATIFA
+                        Ketua Himatifa &amp; Wakil Ketua Himatifa
                     </h3>
 
                     <div
@@ -278,7 +269,7 @@ onBeforeUnmount(() => {
                                 <p
                                     class="text-gray-300 md:text-current lg:text-lg text-base text-justify"
                                 >
-                                    Menjadikan HIMATIFA sebagai wadah yang
+                                    Menjadikan Himatifa sebagai wadah yang
                                     mendukung perkembangan dan peningkatan
                                     kualitas mahasiswa informatika, serta mampu
                                     beradaptasi terhadapi lingkungan dan terbuka
@@ -551,12 +542,12 @@ onBeforeUnmount(() => {
                                     />
                                     <span
                                         class="self-center text-2xl font-semibold whitespace-nowrap"
-                                        >PEMIRA</span
+                                        >PEMIRA Informatika 2025</span
                                     >
                                 </a>
 
                                 <p class="mt-3 text-gray-500">
-                                    Gunakan hakmu untuk Informatika yang lebih
+                                    Gunakan hakmu untuk Himatifa yang lebih
                                     baik!
                                 </p>
                             </div>
@@ -641,8 +632,9 @@ onBeforeUnmount(() => {
                         <div class="sm:flex sm:items-center sm:justify-between">
                             <span class="text-sm text-gray-500 sm:text-center"
                                 >© 2025
-                                <a href="#" class="hover:underline">PEMIRA</a>.
-                                All Rights Reserved.
+                                <a href="#" class="hover:underline"
+                                    >PEMIRA Informatika</a
+                                >. All Rights Reserved.
                             </span>
                         </div>
                     </div>

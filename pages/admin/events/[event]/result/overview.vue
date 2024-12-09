@@ -21,7 +21,7 @@ const next = () => {
     >
         <UiCardHeader>
             <UiCardTitle class="text-2xl">Hasil Validasi</UiCardTitle>
-            <UiCardDescription>PEMIRA 2024</UiCardDescription>
+            <UiCardDescription>PEMIRA 2025</UiCardDescription>
         </UiCardHeader>
         <UiCardFooter class="justify-center gap-2">
             <UiButton variant="secondary" @click="previous">Kembali</UiButton>

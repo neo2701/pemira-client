@@ -1,4 +1,4 @@
-name: Deploy Nuxt.Js to VPS
+name: Deploy Nuxt.js to VPS
 
 on:
     push:
@@ -7,43 +7,64 @@ on:
 
 jobs:
     deploy:
-        name: Deploy Nuxt.Js to VPS
+        name: Deploy Nuxt.js to VPS
         runs-on: ubuntu-latest
 
+        environment: production
+
         steps:
-            # 1. Checkout kode dari GitHub
             - name: Checkout Code
               uses: actions/checkout@v2
+              with:
+                  fetch-depth: 2
 
-            # 2. Setup SSH untuk koneksi ke VPS
-            - name: Setup SSH
+            - name: Set up SSH
               run: |
-                  mkdir -p ~/.ssh/
+                  # Menyiapkan konfigurasi SSH untuk akses ke VPS
+                  mkdir -p ~/.ssh
                   echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
                   chmod 600 ~/.ssh/id_rsa
                   ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+              env:
+                  SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+                  SSH_HOST: ${{ secrets.SSH_HOST }}
 
-            # 3. Deploy aplikasi ke VPS
-            - name: Deploy Application
+            - name: Deploy Application to VPS
               env:
                   SSH_HOST: ${{ secrets.SSH_HOST }}
                   SSH_USER: ${{ secrets.SSH_USER }}
+                  DEPLOY_DIR: /var/www/my-nuxt-app
               run: |
+                  # Menjalankan perintah di VPS via SSH
+                  echo "Deploying to VPS..."
                   ssh $SSH_USER@$SSH_HOST << 'EOF'
-                    bash -l -c "
-                      # Pindah ke direktori proyek
-                      cd /root/www/pemira-client
+                    set -e  # Menyebabkan skrip berhenti jika ada perintah yang gagal
 
-                      # Tarik perubahan terbaru dari GitHub
-                      git pull
+                    # Menampilkan versi Node.js dan npm di VPS untuk debugging
+                    node -v
+                    npm -v
 
-                      # Install dependensi (menggunakan semua dependensi, termasuk devDependencies untuk build)
-                      npm install
+                    # Menambahkan path npm dan pm2 jika perlu
+                    export PATH=$PATH:/usr/local/bin
 
-                      # Build proyek
-                      npm run build
+                    # Pindah ke direktori aplikasi
+                    cd $DEPLOY_DIR
 
-                      # Restart aplikasi menggunakan PM2
-                      pm2 restart pemiraif.com
-                    "
+                    # Menarik perubahan terbaru dari GitHub
+                    echo "Pulling latest changes from GitHub..."
+                    git pull origin main
+
+                    # Install dependensi aplikasi
+                    echo "Installing dependencies..."
+                    npm install --production  # Menggunakan flag --production untuk hanya menginstal dependensi produksi
+
+                    # Build aplikasi Nuxt.js
+                    echo "Building Nuxt.js application..."
+                    npm run build
+
+                    # Restart aplikasi menggunakan PM2
+                    echo "Restarting application with PM2..."
+                    pm2 restart nuxt-app || pm2 start npm --name 'nuxt-app' -- run start
+
+                    echo "Deployment completed successfully."
                   EOF

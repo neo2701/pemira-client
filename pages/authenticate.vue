@@ -33,15 +33,10 @@ const handleOAuthLogin = async () => {
         const accessToken = getAccessToken();
 
         if (!accessToken || accessToken.length < 20) {
-            console.error('❌ Invalid or missing access token');
             await router.push({
                 path: '/login',
                 query: {
                     error: 'Invalid or missing token',
-                    details: JSON.stringify({
-                        hash: route.hash,
-                        query: route.query,
-                    }),
                 },
             });
             return;
@@ -56,13 +51,9 @@ const handleOAuthLogin = async () => {
         });
 
         if (error.value) {
-            console.error('❌ Server login failed', error.value);
             await router.push({
                 path: '/login',
-                query: {
-                    error: 'Server login failed',
-                    details: JSON.stringify(error.value),
-                },
+                query: { error: 'Server login failed' },
             });
             return;
         }
@@ -79,10 +70,9 @@ const handleOAuthLogin = async () => {
             await router.push('/');
         }
     } catch (err) {
-        console.error('❌ Unexpected error during login', err);
         await router.push({
             path: '/login',
-            query: { error: 'Unexpected error', details: JSON.stringify(err) },
+            query: { error: 'Unexpected error' },
         });
     } finally {
         isProcessing.value = false;
@@ -107,12 +97,12 @@ onMounted(() => {
                         alt="Logo"
                         class="w-32 h-32 aspect-square mx-auto"
                     />
-                    <h2 class="text-3xl">PEMIRA</h2>
+                    <h2 class="text-3xl">PEMIRA 2025</h2>
                     <div class="text-sm font-bold">
                         HIMA KM Informatika 2025
                     </div>
                     <UiCardDescription class="text-sm mt-0">
-                        E-Vote HIMATIFA
+                        E-Vote Himatifa
                     </UiCardDescription>
                 </UiCardHeader>
                 <UiCardContent class="grid gap-4 justify-center">

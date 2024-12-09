@@ -42,7 +42,7 @@ const handleSignIn = () => {
                 src="/logo_pemira24.png"
                 alt="Logo"
             />
-            <h2 class="mt-10 text-center text-3xl">PEMIRA 2024</h2>
+            <h2 class="mt-10 text-center text-3xl">PEMIRA 2025</h2>
             <UiCardDescription> Admin Login Section</UiCardDescription>
         </UiCardHeader>
         <div class="mt-1 sm:mx-auto sm:w-full sm:max-w-sm">

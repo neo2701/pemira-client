@@ -32,15 +32,7 @@ const fetchCookie = async () => {
             },
         );
 
-        // Tangani error jika pengambilan gagal
         if (error.value) {
-            console.group('Fetch CSRF Cookie Error');
-            console.error(
-                'Endpoint:',
-                config.public.apiBase + '/../sanctum/csrf-cookie',
-            );
-            console.error('Error details:', error.value);
-            console.groupEnd();
             throw new Error('Failed to fetch CSRF cookie');
         }
 
@@ -51,14 +43,6 @@ const fetchCookie = async () => {
 
         return token;
     } catch (error) {
-        console.group('CSRF Cookie Fetch Unexpected Error');
-        if (error instanceof Error) {
-            console.error('Message:', error.message || 'No message provided');
-        } else {
-            console.error('Message:', 'No message provided');
-        }
-        console.error('Details:', error);
-        console.groupEnd();
         throw error;
     }
 };
@@ -80,16 +64,8 @@ export const useApiFetch = async (url: string, options: RequestInit = {}) => {
             headers,
         }).json();
 
-        // Log respons API untuk debugging
-        console.group('API Fetch Response');
-        console.log('Endpoint:', config.public.apiBase + url);
-        console.log('Options:', options);
-        console.log('Response data:', response.data.value);
-        console.groupEnd();
-
         // Menangani status code tertentu dan memberikan respons sesuai
         if (response?.statusCode?.value === 401) {
-            console.warn('Unauthorized access - redirecting to login');
             useAuth().signOut();
             const route = useRoute();
             const loginPath = route.fullPath.includes('/admin')
@@ -97,32 +73,21 @@ export const useApiFetch = async (url: string, options: RequestInit = {}) => {
                 : '/login';
             navigateTo(loginPath);
         } else if (response?.statusCode?.value === 500) {
-            console.error('Server error (500) encountered');
             useAlertStore().show(
                 'Server error. Please try again later.',
                 'error',
             );
         } else if (response?.statusCode?.value === 403) {
-            console.warn('Forbidden access - user may not have permissions');
             useAlertStore().show(
                 'You do not have permission to access this resource.',
                 'error',
             );
         } else if (response?.statusCode?.value === 404) {
-            console.warn('Not Found - The requested resource does not exist');
             useAlertStore().show('Requested resource not found.', 'error');
         }
 
         return response;
     } catch (error) {
-        // Log error untuk debugging
-        console.group('API Fetch Error');
-        console.error('Endpoint:', config.public.apiBase + url);
-        console.error('Options:', options);
-        console.error('Error details:', error);
-        console.groupEnd();
-
-        // Tangani error sesuai kebutuhan
         throw error;
     }
 };

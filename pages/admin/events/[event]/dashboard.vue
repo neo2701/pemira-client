@@ -39,9 +39,6 @@ const isOpen = computed(() => {
 onMounted(() => {
     getSummary();
 });
-
-// Log and display the current election status
-console.log('Current election status:', isOpen.value);
 </script>
 
 <template>
