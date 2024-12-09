@@ -326,7 +326,7 @@ onBeforeUnmount(() => {
                         <!-- Slider Content -->
                         <div
                             v-else
-                            class="relative flex items-center justify-center w-full overflow-hidden mt-[1rem]"
+                            class="relative flex items-center justify-center w-full overflow-x-auto mt-[1rem]"
                         >
                             <div
                                 class="flex w-full transition-transform duration-500 ease-out space-x-4"
@@ -474,13 +474,17 @@ onBeforeUnmount(() => {
                                     </UiCardHeader>
                                 </UiCard>
                             </div>
+                        </div>
 
-                            <!-- Navigation Buttons -->
+                        <!-- Navigation Buttons -->
+                        <div
+                            class="absolute inset-x-0 flex justify-between items-center mx-auto w-full px-[2rem] md:px-[8rem] translate-y-full"
+                        >
                             <button
                                 @click="prevSlide"
                                 @mouseenter="stopAutoSlide"
                                 @mouseleave="startAutoSlide"
-                                class="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 bg-gradient-to-br from-primary/70 to-primary/90 text-white rounded-full p-3 md:p-4 shadow-lg hover:bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300"
+                                class="bg-gradient-to-br from-primary/70 to-primary/90 text-white rounded-full p-3 md:p-4 shadow-lg hover:bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300"
                             >
                                 <Icon
                                     name="oui:arrow-left"
@@ -492,7 +496,7 @@ onBeforeUnmount(() => {
                                 @click="nextSlide"
                                 @mouseenter="stopAutoSlide"
                                 @mouseleave="startAutoSlide"
-                                class="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 bg-gradient-to-br from-primary/70 to-primary/90 text-white rounded-full p-3 md:p-4 shadow-lg hover:bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300"
+                                class="bg-gradient-to-br from-primary/70 to-primary/90 text-white rounded-full p-3 md:p-4 shadow-lg hover:bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300"
                             >
                                 <Icon
                                     name="oui:arrow-right"
@@ -652,4 +656,13 @@ onBeforeUnmount(() => {
     </NuxtLayout>
 </template>
 
-<style scoped></style>
+<style scoped>
+.overflow-x-auto {
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.overflow-x-auto::-webkit-scrollbar {
+    display: none;
+}
+</style>
