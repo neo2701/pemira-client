@@ -3,14 +3,14 @@ useSeoMeta({
     title: 'PEMIRA 2025',
     ogType: 'website',
     ogTitle: 'PEMIRA 2025',
-    ogUrl: 'https://pemira.himatifa.com',
-    ogImage: 'https://pemira.himatifa.com/logo.png',
+    ogUrl: 'https://pemiraif.com',
+    ogImage: 'https://pemiraif.com/logo.png',
     description: 'Pemilihan Raya Hima KM Informatika',
     ogDescription: 'Pemilihan Raya Hima KM Informatika',
     twitterTitle: 'PEMIRA 2025',
     twitterDescription: 'Pemilihan Raya Hima KM Informatika',
     twitterCard: 'summary_large_image',
-    twitterImage: 'https://pemira.himatifa.com/logo.png',
+    twitterImage: 'https://pemiraif.com/logo.png',
 });
 </script>
 

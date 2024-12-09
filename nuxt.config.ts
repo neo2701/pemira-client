@@ -9,9 +9,7 @@ export default defineNuxtConfig({
                     content: 'Aplikasi untuk pemilihan raya Informatika 2025',
                 },
             ],
-            link: [
-                { rel: 'icon', type: 'image/png', href: '/logo_pemira24.png' },
-            ],
+            link: [{ rel: 'icon', type: 'image/png', href: '/logo.png' }],
         },
     },
 

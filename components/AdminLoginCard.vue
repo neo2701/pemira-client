@@ -39,7 +39,7 @@ const handleSignIn = () => {
         <UiCardHeader class="text-center">
             <img
                 class="w-32 h-32 aspect-square mx-auto"
-                src="/logo_pemira24.png"
+                src="/logo.png"
                 alt="Logo"
             />
             <h2 class="mt-10 text-center text-3xl">PEMIRA 2025</h2>
