@@ -110,7 +110,7 @@ const cancel = async () => {
 <template>
     <UiCard class="max-w-sm w-full bg-transparent border-none">
         <UiCardHeader class="text-center">
-            <h2 class="text-3xl">PEMIRA Informatika 2025</h2>
+            <h2 class="text-3xl">PEMIRA IF 2025</h2>
             <UiCardDescription class="text-sm mt-0">
                 Selamat datang!
             </UiCardDescription>

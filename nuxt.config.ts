@@ -17,7 +17,7 @@ export default defineNuxtConfig({
     css: ['~/assets/css/main.css'],
 
     // Menonaktifkan devtools di production
-    devtools: { enabled: false },
+    devtools: { enabled: true },
 
     // Menonaktifkan SSR (Single Page Application)
     ssr: false,
