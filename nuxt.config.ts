@@ -28,15 +28,15 @@ export default defineNuxtConfig({
     runtimeConfig: {
         public: {
             // API base URL untuk frontend (akses di klien)
-            apiBase: process.env.API_BASE,
+            apiBase: process.env.NUXT_PUBLIC_API_BASE,
 
             // Google OAuth configuration
-            googleClientId: process.env.GOOGLE_CLIENT_ID,
-            googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            googleRedirectUrl: process.env.GOOGLE_REDIRECT_URL,
+            googleClientId: process.env.NUXT_PUBLIC_GOOGLE_CLIENT_ID,
+            googleClientSecret: process.env.NUXT_PUBLIC_GOOGLE_CLIENT_SECRET,
+            googleRedirectUrl: process.env.NUXT_PUBLIC_GOOGLE_REDIRECT_URL,
 
             // Variabel build untuk mengidentifikasi build atau environment
-            build: process.env.BUILD,
+            build: process.env.NUXT_PUBLIC_BUILD,
         },
     },
 

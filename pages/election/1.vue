@@ -87,21 +87,68 @@ const capture = () => {
 
     const context = canvas.value!.getContext('2d')!;
 
-    canvas.value!.width = video.value.videoWidth;
-    canvas.value!.height = video.value.videoHeight;
+    // Dimensi video
+    const videoWidth = video.value.videoWidth;
+    const videoHeight = video.value.videoHeight;
 
-    context.save();
-    context.scale(-1, 1);
-    context.translate(-video.value.videoWidth, 0);
+    // Tentukan orientasi gambar
+    const isPortrait = isMobile.value && videoHeight > videoWidth;
 
-    context.drawImage(
-        video.value,
-        0,
-        0,
-        video.value.videoWidth,
-        video.value.videoHeight,
-    );
+    if (isPortrait) {
+        // Crop bagian tengah untuk mendapatkan rasio landscape
+        const landscapeHeight = (videoWidth * 9) / 16; // Rasio 16:9
+        const cropStartY = (videoHeight - landscapeHeight) / 2;
 
+        // Atur ukuran canvas
+        canvas.value!.width = videoWidth;
+        canvas.value!.height = landscapeHeight;
+
+        context.save();
+        // Flip horizontal
+        context.scale(-1, 1);
+        context.translate(-canvas.value!.width, 0);
+
+        // Gambar hasil crop di canvas
+        context.drawImage(
+            video.value,
+            0,
+            cropStartY,
+            videoWidth,
+            landscapeHeight, // Area crop
+            0,
+            0,
+            videoWidth,
+            landscapeHeight, // Tujuan di canvas
+        );
+
+        context.restore();
+    } else {
+        // Landscape langsung
+        canvas.value!.width = videoWidth;
+        canvas.value!.height = videoHeight;
+
+        context.save();
+        // Flip horizontal
+        context.scale(-1, 1);
+        context.translate(-canvas.value!.width, 0);
+
+        // Gambar video langsung di canvas
+        context.drawImage(
+            video.value,
+            0,
+            0,
+            videoWidth,
+            videoHeight,
+            0,
+            0,
+            videoWidth,
+            videoHeight,
+        );
+
+        context.restore();
+    }
+
+    // Simpan hasil sebagai data URL
     const data = canvas.value!.toDataURL('image/png');
     picture.value = data;
 };

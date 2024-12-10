@@ -84,17 +84,54 @@ const capture = () => {
 
     const context = canvas.value!.getContext('2d')!;
 
-    canvas.value!.width = video.value.videoWidth;
-    canvas.value!.height = video.value.videoHeight;
+    // Dimensi video
+    const videoWidth = video.value.videoWidth;
+    const videoHeight = video.value.videoHeight;
 
-    context.drawImage(
-        video.value,
-        0,
-        0,
-        video.value.videoWidth,
-        video.value.videoHeight,
-    );
+    // Tentukan orientasi gambar
+    const isPortrait = isMobile.value && videoHeight > videoWidth;
 
+    if (isPortrait) {
+        // Crop bagian tengah untuk mendapatkan rasio landscape
+        const landscapeHeight = (videoWidth * 9) / 16; // Rasio 16:9
+        const cropStartY = (videoHeight - landscapeHeight) / 2;
+
+        // Atur ukuran canvas
+        canvas.value!.width = videoWidth;
+        canvas.value!.height = landscapeHeight;
+
+        // Gambar hasil crop di canvas tanpa flipping
+        context.drawImage(
+            video.value,
+            0,
+            cropStartY,
+            videoWidth,
+            landscapeHeight, // Area crop
+            0,
+            0,
+            videoWidth,
+            landscapeHeight, // Tujuan di canvas
+        );
+    } else {
+        // Landscape langsung
+        canvas.value!.width = videoWidth;
+        canvas.value!.height = videoHeight;
+
+        // Gambar video langsung di canvas tanpa flipping
+        context.drawImage(
+            video.value,
+            0,
+            0,
+            videoWidth,
+            videoHeight,
+            0,
+            0,
+            videoWidth,
+            videoHeight,
+        );
+    }
+
+    // Simpan hasil sebagai data URL
     const data = canvas.value!.toDataURL('image/png');
     picture.value = data;
 };
