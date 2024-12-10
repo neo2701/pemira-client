@@ -2,7 +2,7 @@ export default defineNuxtConfig({
     // Menetapkan metadata di head tag
     app: {
         head: {
-            title: 'PEMIRA Informatika 2025',
+            title: 'PEMIRA INFORMATIKA 2025',
             meta: [
                 {
                     name: 'description',
@@ -17,7 +17,7 @@ export default defineNuxtConfig({
     css: ['~/assets/css/main.css'],
 
     // Menonaktifkan devtools di production
-    devtools: { enabled: true },
+    devtools: { enabled: false },
 
     // Menonaktifkan SSR (Single Page Application)
     ssr: false,
