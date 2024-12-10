@@ -110,24 +110,27 @@ onMounted(async () => {
                 </UiButton>
             </UiCardFooter>
             <UiCardContent>
-                <div
-                    class="max-w-screen-lg mx-auto grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
-                >
-                    <div
-                        v-for="candidate in candidates"
-                        :class="{
-                            'col-span-1':
+                <div class="max-w-screen-lg mx-auto grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4">
+      
+        <div
+            v-for="(candidate, index) in candidates"
+            :key="candidate.id"
+            :class="{
+                 'col-span-1':
                                 selected?.id === candidate.id &&
                                 selected?.first !== '-',
-                        }"
-                    >
-                        <ElectionCandidateCard
-                            :candidate="candidate"
-                            :active="selected?.id === candidate.id"
-                            @click="selected = candidate"
-                        />
-                    </div>
-                </div>
+                'lg:col-start-2': index === candidates.length - 1 && candidates.length % 3 === 1,
+                'md:col-start-2': index === candidates.length - 1 && candidates.length % 3 === 1,
+            }"
+        >
+            <ElectionCandidateCard
+                :candidate="candidate"
+                :active="selected?.id === candidate.id"
+                @click="selected = candidate"
+            />
+        </div>
+    </div>
+                
             </UiCardContent>
         </template>
     </UiCard>

@@ -82,12 +82,17 @@ const confirm = async () => {
             </UiCardFooter>
             <UiCardContent>
                 <div
-                    class="max-w-screen-lg mx-auto grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-8"
+                    class="max-w-screen-lg mx-auto grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-x-4 gap-y-4"
                 >
-                    <div
-                        v-for="ballot in electionStore.ballots"
-                        class="flex flex-col gap-2"
-                    >
+                <div
+            v-for="(ballot, index) in electionStore.ballots"
+            :key="index"
+            :class="{
+                'lg:col-start-2': parseInt(index) === 4,
+                'md:col-start-2': parseInt(index) === 4,
+            }"
+            class="flex flex-col gap-2"
+        >
                         <div
                             :class="
                                 ballot.division.name === 'KAHIMA & WAKAHIMA'
