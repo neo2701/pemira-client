@@ -56,7 +56,7 @@ const flipToFront = () => {
                     :class="{
                         'hover:outline hover:scale-105':
                             !isFlipped && !props.active && !props.display,
-                        'border-0 outline': props.active,
+                        'border-0 outline scale-105': props.active,
                         'cursor-pointer': !props.display,
                     }"
                     class="overflow-hidden transition w-full"
@@ -107,12 +107,12 @@ const flipToFront = () => {
             </div>
 
             <!-- Back of the card -->
-            <div class="relative backface-hidden rotate-y-180 h-1/2">
+            <div class="relative backface-hidden rotate-y-180">
                 <UiCard
                     :class="{
                         'hover:outline hover:scale-105':
                             isFlipped && !props.active && !props.display,
-                        'border-0 outline': props.active,
+                        'border-0 outline scale-105': props.active,
                         'cursor-pointer': !props.display,
                     }"
                     class="overflow-hidden transition"
@@ -195,16 +195,17 @@ const flipToFront = () => {
     .absolute.backface-hidden {
         width: 100%;
         height: 100%;
-        display: flex; /* Memusatkan konten di dalam front card */
+        display: flex;
         justify-content: center;
         align-items: center;
     }
 
     .relative.backface-hidden.rotate-y-180 {
         width: 100%;
-        display: flex; /* Memusatkan konten di dalam back card */
-        justify-content: flex-start; /* Sesuaikan posisi konten back card */
-        align-items: flex-start; /* Atur untuk kebutuhan back card */
+        height: 100%;
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
     }
 }
 </style>

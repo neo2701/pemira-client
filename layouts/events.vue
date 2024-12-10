@@ -36,7 +36,7 @@ const logout = async () => {
     </main>
     <main
         v-else
-        class="md:max-w-screen-xl mx-auto md:grid md:grid-cols-[240px_minmax(0,1fr)]"
+        class="md:max-w-screen-2xl mx-auto md:grid md:grid-cols-[240px_minmax(0,1fr)]"
     >
         <div
             v-if="showSidebar"

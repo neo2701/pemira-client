@@ -20,8 +20,16 @@ watch(
 );
 
 const avatarSrc = computed(() => {
-    return user.value?.picture || '/default-avatar.png'; // Ganti dengan path default avatar Anda
+    return user.value?.picture || '/default_avatar.jpg';
 });
+
+const imageLoading = ref(true);
+const imageError = ref(false);
+
+const handleImageError = () => {
+    imageLoading.value = false;
+    imageError.value = true;
+};
 
 const isOpen = ref(false);
 
@@ -110,15 +118,33 @@ const cancel = async () => {
 <template>
     <UiCard class="max-w-sm w-full bg-transparent border-none">
         <UiCardHeader class="text-center">
-            <h2 class="text-3xl">PEMIRA Informatika 2025</h2>
+            <h2 class="text-3xl">PEMIRA IF 2025</h2>
             <UiCardDescription class="text-sm mt-0">
                 Selamat datang!
             </UiCardDescription>
         </UiCardHeader>
 
         <UiCardContent class="flex flex-col gap-6 items-center">
-            <UiAvatar size="lg">
-                <UiAvatarImage :src="avatarSrc" />
+            <UiAvatar size="lg" class="relative">
+                <div
+                    v-if="imageLoading"
+                    class="absolute inset-0 flex items-center justify-center rounded-full"
+                >
+                    <Icon
+                        name="line-md:loading-twotone-loop"
+                        class="animate-spin aspect-square h-12 text-slate-600"
+                    />
+                </div>
+                <UiAvatarImage
+                    :src="avatarSrc"
+                    @load="imageLoading = false"
+                    @error="handleImageError"
+                    :class="{
+                        'opacity-0': imageLoading,
+                        'opacity-100': !imageLoading,
+                    }"
+                />
+                <UiAvatarFallback v-if="imageError">User</UiAvatarFallback>
             </UiAvatar>
             <UiCardDescription class="text-center">
                 Sebagai:

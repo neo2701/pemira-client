@@ -20,7 +20,9 @@ onMounted(getEvents);
             </div>
         </div>
         <NuxtLink to="/admin/events/create">
-            <UiButton class="hover:bg-[#8e94a0] hover:text-white">
+            <UiButton
+                class="hover:bg-[#8e94a0] hover:text-white whitespace-nowrap"
+            >
                 Tambah Event <Icon name="fluent:add-12-regular" />
             </UiButton>
         </NuxtLink>

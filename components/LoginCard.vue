@@ -15,16 +15,14 @@ const goBack = () => {
     <UiCard class="max-w-sm w-full bg-transparent border-none">
         <UiCardHeader class="pt-10 text-center">
             <img
-                src="/logo_pemira24.png"
+                src="/logo.png"
                 alt="Logo"
                 class="w-32 h-32 aspect-square mx-auto"
             />
             <div class="grid gap-2">
                 <div>
-                    <h2 class="text-3xl">PEMIRA Informatika 2025</h2>
-                    <div class="text-sm font-bold">
-                        Himatifa 2025
-                    </div>
+                    <h2 class="text-3xl">PEMIRA IF 2025</h2>
+                    <div class="text-sm font-bold">Himatifa 2025</div>
                 </div>
                 <UiCardDescription>
                     Universitas Pembangunan Nasional "Veteran" Jawa Timur

@@ -166,7 +166,7 @@ onBeforeUnmount(() => {
                     class="flex items-center justify-between h-16 px-4 md:px-8 md:py-10 py-4 min-w-full"
                 >
                     <div class="text-2xl md:text-3xl font-bold text-primary">
-                        PEMIRA Informatika 2025
+                        PEMIRA IF 2025
                     </div>
                     <button
                         @click="navigateTo('/login')"
@@ -185,7 +185,7 @@ onBeforeUnmount(() => {
                 >
                     <div class="w-full max-w-6xl text-center px-4">
                         <img
-                            src="/logo_pemira24.png"
+                            src="/logo.png"
                             alt="Logo"
                             class="w-[10rem] md:w-32 aspect-square mx-auto mb-6"
                         />
@@ -202,7 +202,7 @@ onBeforeUnmount(() => {
                         </p>
                         <div class="group relative inline-flex">
                             <div
-                                class="animate-tilt absolute -inset-px rounded-xl bg-gradient-to-r from-[#44BCFF] via-[#6ac8fb] to-[#44BCFF] opacity-70 blur-lg transition-all duration-1000 group-hover:-inset-1 group-hover:opacity-100 group-hover:duration-200"
+                                class="absolute -inset-px rounded-xl bg-gradient-to-r from-[#44BCFF] via-[#6ac8fb] to-[#44BCFF] opacity-70 blur-lg transition-all duration-1000 group-hover:-inset-1 group-hover:opacity-100 group-hover:duration-500"
                             ></div>
                             <button
                                 @click="navigateTo('/login')"
@@ -540,13 +540,13 @@ onBeforeUnmount(() => {
                                     class="flex items-center my-auto gap-4"
                                 >
                                     <img
-                                        src="/logo_pemira24.png"
+                                        src="/logo.png"
                                         class="h-[4rem]"
                                         alt="PEMIRA25 Logo"
                                     />
                                     <span
                                         class="self-center text-2xl font-semibold whitespace-nowrap"
-                                        >PEMIRA Informatika 2025</span
+                                        >PEMIRA IF 2025</span
                                     >
                                 </a>
 
