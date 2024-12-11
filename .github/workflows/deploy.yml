@@ -39,7 +39,7 @@ jobs:
               env:
                   SSH_HOST: ${{ secrets.SSH_HOST }}
                   SSH_USER: ${{ secrets.SSH_USER }}
-                  DEPLOY_DIR: /www/pemira-client
+                  DEPLOY_DIR: /root/www/pemira-client
               run: |
                   # Menjalankan perintah di VPS via SSH
                   echo "Deploying to VPS..."
