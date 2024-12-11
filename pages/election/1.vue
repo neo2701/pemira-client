@@ -87,68 +87,21 @@ const capture = () => {
 
     const context = canvas.value!.getContext('2d')!;
 
-    // Dimensi video
-    const videoWidth = video.value.videoWidth;
-    const videoHeight = video.value.videoHeight;
+    canvas.value!.width = video.value.videoWidth;
+    canvas.value!.height = video.value.videoHeight;
 
-    // Tentukan orientasi gambar
-    const isPortrait = isMobile.value && videoHeight > videoWidth;
+    context.save();
+    context.scale(-1, 1);
+    context.translate(-video.value.videoWidth, 0);
 
-    if (isPortrait) {
-        // Crop bagian tengah untuk mendapatkan rasio landscape
-        const landscapeHeight = (videoWidth * 9) / 16; // Rasio 16:9
-        const cropStartY = (videoHeight - landscapeHeight) / 2;
+    context.drawImage(
+        video.value,
+        0,
+        0,
+        video.value.videoWidth,
+        video.value.videoHeight,
+    );
 
-        // Atur ukuran canvas
-        canvas.value!.width = videoWidth;
-        canvas.value!.height = landscapeHeight;
-
-        context.save();
-        // Flip horizontal
-        context.scale(-1, 1);
-        context.translate(-canvas.value!.width, 0);
-
-        // Gambar hasil crop di canvas
-        context.drawImage(
-            video.value,
-            0,
-            cropStartY,
-            videoWidth,
-            landscapeHeight, // Area crop
-            0,
-            0,
-            videoWidth,
-            landscapeHeight, // Tujuan di canvas
-        );
-
-        context.restore();
-    } else {
-        // Landscape langsung
-        canvas.value!.width = videoWidth;
-        canvas.value!.height = videoHeight;
-
-        context.save();
-        // Flip horizontal
-        context.scale(-1, 1);
-        context.translate(-canvas.value!.width, 0);
-
-        // Gambar video langsung di canvas
-        context.drawImage(
-            video.value,
-            0,
-            0,
-            videoWidth,
-            videoHeight,
-            0,
-            0,
-            videoWidth,
-            videoHeight,
-        );
-
-        context.restore();
-    }
-
-    // Simpan hasil sebagai data URL
     const data = canvas.value!.toDataURL('image/png');
     picture.value = data;
 };
@@ -273,7 +226,7 @@ watch(
                 >
                     <UiAspectRatio
                         v-show="picture"
-                        :ratio="portrait ? 16 / 9 : 16 / 9"
+                        :ratio="portrait ? 9 / 16 : 16 / 9"
                         class="flex"
                     >
                         <canvas
@@ -299,18 +252,7 @@ watch(
                         ></span>
                     </div>
                     <template v-if="portrait">
-                        <div
-                            class="absolute bottom-[10%] left-[5%] w-1/2 border-4 border-dashed rounded-lg opacity-50"
-                        >
-                            <UiAspectRatio :ratio="17 / 10"></UiAspectRatio>
-                        </div>
-                        <div
-                            class="absolute top-[10%] right-[5%] w-1/3 border-4 border-dashed rounded-full opacity-50"
-                        >
-                            <UiAspectRatio :ratio="3 / 4"></UiAspectRatio>
-                        </div>
-
-                        <!-- <div class="absolute bottom-[10%] left-0 w-full p-4">
+                        <div class="absolute bottom-[10%] left-0 w-full p-4">
                             <div
                                 class="border-4 border-dashed rounded-lg opacity-50"
                             >
@@ -325,18 +267,18 @@ watch(
                             >
                                 <UiAspectRatio :ratio="3 / 4"></UiAspectRatio>
                             </div>
-                        </div> -->
+                        </div>
                     </template>
                     <template v-else>
-                        <div
-                            class="absolute bottom-[10%] left-[5%] w-1/2 border-4 border-dashed rounded-lg opacity-50"
-                        >
-                            <UiAspectRatio :ratio="17 / 10"></UiAspectRatio>
-                        </div>
                         <div
                             class="absolute top-[10%] right-[5%] w-1/3 border-4 border-dashed rounded-full opacity-50"
                         >
                             <UiAspectRatio :ratio="3 / 4"></UiAspectRatio>
+                        </div>
+                        <div
+                            class="absolute bottom-[10%] left-[5%] w-1/2 border-4 border-dashed rounded-lg opacity-50"
+                        >
+                            <UiAspectRatio :ratio="17 / 10"></UiAspectRatio>
                         </div>
                     </template>
                 </div>

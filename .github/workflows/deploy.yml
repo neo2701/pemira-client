@@ -15,8 +15,14 @@ jobs:
         steps:
             - name: Checkout Code
               uses: actions/checkout@v2
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v3
               with:
-                  fetch-depth: 2
+                  node-version: '22'
+              env:
+                  SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+                  SSH_HOST: ${{ secrets.SSH_HOST }}
 
             - name: Set up SSH
               run: |
@@ -33,38 +39,24 @@ jobs:
               env:
                   SSH_HOST: ${{ secrets.SSH_HOST }}
                   SSH_USER: ${{ secrets.SSH_USER }}
-                  DEPLOY_DIR: /var/www/my-nuxt-app
+                  DEPLOY_DIR: /www/pemira-client
               run: |
                   # Menjalankan perintah di VPS via SSH
                   echo "Deploying to VPS..."
-                  ssh $SSH_USER@$SSH_HOST << 'EOF'
-                    set -e  # Menyebabkan skrip berhenti jika ada perintah yang gagal
-
-                    # Menampilkan versi Node.js dan npm di VPS untuk debugging
-                    node -v
-                    npm -v
-
-                    # Menambahkan path npm dan pm2 jika perlu
-                    export PATH=$PATH:/usr/local/bin
-
-                    # Pindah ke direktori aplikasi
+                  ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST << 'EOF'
                     cd $DEPLOY_DIR
 
-                    # Menarik perubahan terbaru dari GitHub
-                    echo "Pulling latest changes from GitHub..."
+                    # Pull the latest changes from the main branch
                     git pull origin main
 
-                    # Install dependensi aplikasi
-                    echo "Installing dependencies..."
-                    npm install --production  # Menggunakan flag --production untuk hanya menginstal dependensi produksi
+                    # Ensure NVM is loaded
+                    export NVM_DIR=~/.nvm
+                    source ~/.nvm/nvm.sh
 
-                    # Build aplikasi Nuxt.js
-                    echo "Building Nuxt.js application..."
+                    # Install dependencies and build the application
+                    npm install
                     npm run build
 
-                    # Restart aplikasi menggunakan PM2
-                    echo "Restarting application with PM2..."
-                    pm2 restart nuxt-app || pm2 start npm --name 'nuxt-app' -- run start
-
-                    echo "Deployment completed successfully."
+                    # Restart the application using pm2
+                    pm2 restart 0
                   EOF

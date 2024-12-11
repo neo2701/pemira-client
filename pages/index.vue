@@ -245,7 +245,7 @@ onBeforeUnmount(() => {
                                 class="absolute w-96 h-96 rounded-full bg-gradient-to-r from-[#44BCFF] via-[#6ac8fb] to-[#44BCFF] opacity-70 blur-3xl"
                             ></div>
                             <img
-                                src="/KAHIMA/cakahima.webp"
+                                src="/KAHIMA/1.webp"
                                 alt="Prabowo & Gibran"
                                 class="relative object-cover z-10 aspect-square w-[20rem] md:w-[25rem]"
                             />
@@ -519,7 +519,7 @@ onBeforeUnmount(() => {
                         >
                             <div class="aspect-video">
                                 <iframe
-                                    src="https://www.youtube.com/embed/T6zwNFFuzd8?si=eljZNW1K5cOMUleO"
+                                    src="https://www.youtube.com/embed/x7oc9-yMIeg?si=xet-HA-z5vvQoAer"
                                     class="absolute inset-0 w-full h-full rounded-lg"
                                     frameborder="0"
                                     allowfullscreen

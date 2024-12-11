@@ -241,7 +241,6 @@ onMounted(() => {
                         <img
                             :src="storageUrl + ballot?.ktm_picture"
                             class="w-full rounded-lg"
-                            @load="setLandscape"
                         />
                     </UiAspectRatio>
                 </div>
