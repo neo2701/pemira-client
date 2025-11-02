@@ -1,10 +1,5 @@
 name: Deploy Nuxt.js to VPS
 
-on:
-    push:
-        branches:
-            - main
-
 jobs:
     deploy:
         name: Deploy Nuxt.js to VPS
