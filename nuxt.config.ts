@@ -53,21 +53,6 @@ export default defineNuxtConfig({
         '@nuxt/image',
     ],
 
-    // Konfigurasi server Nitro untuk CORS
-    nitro: {
-        routeRules: {
-            '/**': {
-                cors: true,
-                headers: {
-                    'Access-Control-Allow-Origin': 'http://20.10.10.50:8000',
-                    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-                    'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept, Authorization',
-                    'Access-Control-Allow-Credentials': 'true',
-                },
-            },
-        },
-    },
-
     // Menambahkan komponen otomatis
     components: [
         {
@@ -94,4 +79,6 @@ export default defineNuxtConfig({
             autoprefixer: {},
         },
     },
+
+    compatibilityDate: '2025-11-01',
 });
