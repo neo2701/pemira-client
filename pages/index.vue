@@ -67,13 +67,6 @@ const fetchSlides = async () => {
                 name: slide.name || 'Unknown',
                 angkatan: slide.angkatan || 'N/A',
             }));
-
-            // Preload all images immediately
-            await Promise.all(
-                slides.value
-                    .filter((slide) => slide.image)
-                    .map((slide) => preloadImage(slide.image)),
-            );
         } else {
             slides.value = [];
         }
@@ -108,6 +101,17 @@ const stopAutoSlide = () => {
     if (autoSlideInterval) {
         clearInterval(autoSlideInterval);
         autoSlideInterval = null;
+    }
+};
+
+const sliderContainer = ref<HTMLElement | null>(null);
+
+const scrollHandler = () => {
+    if (sliderContainer.value) {
+        const { scrollLeft, clientWidth, scrollWidth } = sliderContainer.value;
+        if (scrollLeft + clientWidth >= scrollWidth - 200) {
+            slides.value = [...slides.value, ...slides.value];
+        }
     }
 };
 
@@ -317,74 +321,18 @@ onBeforeUnmount(() => {
                         <!-- Slider Content -->
                         <div
                             v-else
-                            class="relative flex items-center justify-center w-full overflow-x-auto mt-[1rem]"
+                            class="relative flex items-center justify-center w-full overflow-x-auto snap-x snap-mandatory mt-[1rem]"
+                            ref="sliderContainer"
+                            @scroll="scrollHandler"
                         >
                             <div
                                 class="flex w-full transition-transform duration-500 ease-out space-x-4"
-                                :style="{
-                                    transform: `translateX(-${
-                                        currentIndex * (100 / 3)
-                                    }%)`,
-                                }"
                             >
-                                <!-- Cloned Last Slide -->
-                                <UiCard
-                                    v-if="slides.length > 0"
-                                    :key="'clone-last'"
-                                    class="flex-shrink-0 w-1/2 md:w-1/3 flex flex-col items-center bg-[#ffffff]"
-                                >
-                                    <UiAspectRatio
-                                        :ratio="1"
-                                        class="relative border-b border-white pb-0.2"
-                                    >
-                                        <img
-                                            :src="
-                                                slides[slides.length - 1].image
-                                            "
-                                            alt="BLJ Image"
-                                            class="object-cover w-full h-full rounded-t-md transition-opacity duration-300"
-                                            :class="{
-                                                'opacity-100': loadedImages.has(
-                                                    slides[slides.length - 1]
-                                                        .image,
-                                                ),
-                                                'opacity-0': !loadedImages.has(
-                                                    slides[slides.length - 1]
-                                                        .image,
-                                                ),
-                                            }"
-                                        />
-                                    </UiAspectRatio>
-                                    <UiCardHeader>
-                                        <UiCardTitle>
-                                            <h3
-                                                class="text-base md:text-xl font-semibold text-center text-gray-500"
-                                            >
-                                                {{
-                                                    slides[slides.length - 1]
-                                                        .name
-                                                }}
-                                            </h3>
-                                        </UiCardTitle>
-                                        <UiCardDescription>
-                                            <p
-                                                class="text-sm md:text-base text-gray-400 text-center"
-                                            >
-                                                Angkatan
-                                                {{
-                                                    slides[slides.length - 1]
-                                                        .angkatan
-                                                }}
-                                            </p>
-                                        </UiCardDescription>
-                                    </UiCardHeader>
-                                </UiCard>
-
                                 <!-- Main Slides -->
                                 <UiCard
                                     v-for="(slide, index) in slides"
                                     :key="index"
-                                    class="flex-shrink-0 w-1/2 md:w-1/3 flex flex-col items-center bg-[#ffffff]"
+                                    class="flex-shrink-0 w-1/2 md:w-1/3 flex snap-start flex-col items-center bg-[#ffffff]"
                                 >
                                     <UiAspectRatio
                                         :ratio="1"
@@ -394,14 +342,6 @@ onBeforeUnmount(() => {
                                             :src="slide.image"
                                             alt="BLJ Image"
                                             class="object-cover w-full h-full rounded-t-md transition-opacity duration-300"
-                                            :class="{
-                                                'opacity-100': loadedImages.has(
-                                                    slide.image,
-                                                ),
-                                                'opacity-0': !loadedImages.has(
-                                                    slide.image,
-                                                ),
-                                            }"
                                         />
                                     </UiAspectRatio>
                                     <UiCardHeader>
@@ -417,49 +357,6 @@ onBeforeUnmount(() => {
                                                 class="text-sm md:text-base text-gray-400 text-center"
                                             >
                                                 Angkatan {{ slide.angkatan }}
-                                            </p>
-                                        </UiCardDescription>
-                                    </UiCardHeader>
-                                </UiCard>
-
-                                <!-- Cloned First Slide -->
-                                <UiCard
-                                    v-if="slides.length > 0"
-                                    :key="'clone-first'"
-                                    class="flex-shrink-0 w-1/2 md:w-1/3 flex flex-col items-center bg-[#ffffff]"
-                                >
-                                    <UiAspectRatio
-                                        :ratio="1"
-                                        class="relative border-b border-white pb-0.2"
-                                    >
-                                        <img
-                                            :src="slides[0].image"
-                                            alt="BLJ Image"
-                                            class="object-cover w-full h-full rounded-t-md transition-opacity duration-300"
-                                            :class="{
-                                                'opacity-100': loadedImages.has(
-                                                    slides[0].image,
-                                                ),
-                                                'opacity-0': !loadedImages.has(
-                                                    slides[0].image,
-                                                ),
-                                            }"
-                                        />
-                                    </UiAspectRatio>
-                                    <UiCardHeader>
-                                        <UiCardTitle>
-                                            <h3
-                                                class="text-base md:text-xl font-semibold text-center text-gray-500"
-                                            >
-                                                {{ slides[0].name }}
-                                            </h3>
-                                        </UiCardTitle>
-                                        <UiCardDescription>
-                                            <p
-                                                class="text-sm md:text-base text-gray-400 text-center"
-                                            >
-                                                Angkatan
-                                                {{ slides[0].angkatan }}
                                             </p>
                                         </UiCardDescription>
                                     </UiCardHeader>
