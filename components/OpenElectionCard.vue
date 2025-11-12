@@ -28,12 +28,12 @@ const open = async () => {
 </script>
 
 <template>
-    <UiCard class="max-w-xs mx-auto bg-[#405980]">
+    <UiCard class="max-w-xs mx-auto bg-secondary">
         <UiCardHeader>
-            <UiCardTitle class="text-white">Pemilihan</UiCardTitle>
+            <UiCardTitle class="text-primary">Pemilihan</UiCardTitle>
         </UiCardHeader>
         <UiCardContent>
-            <UiCardDescription class="text-white">
+            <UiCardDescription class="text-foreground">
                 Website pemilihan dapat diakses oleh pemilih setelah pemilihan
                 dibuka.
             </UiCardDescription>
@@ -53,7 +53,7 @@ const open = async () => {
                     :loading="loading"
                     :disabled="loading"
                     variant="outline"
-                    class="w-full text-white bg-[#60799f] hover:bg-[#7e9fcf]"
+                    class="w-full bg-destructive text-destructive-foreground hover:bg-destructive/90"
                 >
                     Buka Pemilihan
                 </UiButton>

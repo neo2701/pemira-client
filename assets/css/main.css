@@ -4,40 +4,43 @@
 
 @layer base {
     :root {
-        /* Color Palette */
-        /* Wild Sand (#F4F4F4) : hsl(0, 0%, 95%) */
-        /* Blue Haze (#BBBCD3) : hsl(240, 18%, 80%) */
-        /* Hoki (#647CA0) : hsl(216, 25%, 50%) */
-        /* Bali Hai (#8494B4) HSL: hsl(218, 20%, 61%)*/
+        /* Dark Theme Color Palette - Ultra Dark Version */
+        /* Deep Burgundy (#2a0f18) - Very dark burgundy background */
+        /* Dark Burgundy (#511c2e) - Dark burgundy accent */
+        /* Burgundy (#782336) - Rich burgundy */
+        /* Red (#a72b33) - Warm red for highlights */
+        /* Cream (#fee8ce) - Soft cream for text */
+        /* Coral Red (#ee523c) - Vibrant coral for CTAs */
+        /* Orange (#fe7646) - Bright orange for accents */
 
-        --background: 220 30% 20%;
-        --foreground: 220 15% 85%;
+        --background: 345 49% 8%; /* Very dark burgundy - almost black */
+        --foreground: 36 96% 91%; /* #fee8ce - Cream text */
 
-        --muted: 220 25% 25%;
-        --muted-foreground: 220 15% 65%;
+        --muted: 345 55% 12%; /* Dark burgundy muted */
+        --muted-foreground: 36 50% 65%; /* Dimmer cream */
 
-        --popover: 220 30% 20%;
-        --popover-foreground: 220 15% 85%;
+        --popover: 345 49% 10%; /* Dark burgundy popover */
+        --popover-foreground: 36 96% 91%; /* Cream text */
 
-        --card: 217, 33%, 38%;
-        --card-foreground: 220 15% 85%;
+        --card: 345 55% 14%; /* Card background - darker burgundy */
+        --card-foreground: 36 96% 91%; /* Cream text */
 
-        --border: 220 25% 25%;
-        --input: 220 25% 25%;
+        --border: 345 45% 18%; /* Darker border */
+        --input: 345 45% 18%; /* Darker input border */
 
-        --primary: 220 15% 85%; /* Abu-abu terang */
-        --primary-foreground: 220 30% 20%;
+        --primary: 36 96% 91%; /* #fee8ce - Cream for primary text */
+        --primary-foreground: 345 49% 8%; /* Very dark burgundy */
 
-        --secondary: 220 25% 25%;
-        --secondary-foreground: 220 15% 85%;
+        --secondary: 345 55% 18%; /* Darker burgundy for secondary */
+        --secondary-foreground: 36 96% 91%; /* Cream text */
 
-        --accent: 220 25% 25%;
-        --accent-foreground: 220 15% 85%;
+        --accent: 355 54% 35%; /* Darker warm red accent */
+        --accent-foreground: 36 96% 91%; /* Cream text */
 
-        --destructive: 216, 25%, 50%;
-        --destructive-foreground: 220 15% 85%;
+        --destructive: 9 86% 59%; /* #ee523c - Coral red for destructive actions */
+        --destructive-foreground: 36 96% 91%; /* Cream text */
 
-        --ring: 220 15% 65%;
+        --ring: 355 54% 42%; /* Ring color - warm red */
 
         --radius: 0.5rem;
     }
@@ -54,9 +57,19 @@
 
 :root,
 pre {
-    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont,
-        'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
-        'Helvetica Neue', sans-serif;
+    font-family:
+        'Poppins',
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        'Segoe UI',
+        Roboto,
+        Oxygen,
+        Ubuntu,
+        Cantarell,
+        'Open Sans',
+        'Helvetica Neue',
+        sans-serif;
 }
 
 h1,

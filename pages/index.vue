@@ -1,7 +1,10 @@
 <script lang="ts" setup>
 import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
 import { useAuth } from '@/composables/useAuth';
+import { usePemiraConfig } from '@/composables/usePemiraConfig';
 import StartCard from '@/components/StartCard.vue';
+
+const { year } = usePemiraConfig();
 
 const auth = useAuth();
 const user = ref(auth.user());
@@ -150,7 +153,7 @@ const handleMouseUp = () => {
 const handleMouseMove = (event: MouseEvent) => {
     const container = sliderContainer.value;
     if (!container) return;
-    if(!isDown.value) return;
+    if (!isDown.value) return;
     const x = event.pageX - container.offsetLeft;
     const walk = (x - startX.value) * 1.5;
     container.scrollLeft = scrollLeft.value - walk;
@@ -205,7 +208,7 @@ onBeforeUnmount(() => {
         </div>
 
         <!-- Landing Page for Non-Logged In Users -->
-        <div v-else class="flex flex-col bg-[#282d35]">
+        <div v-else class="flex flex-col bg-background">
             <div
                 :class="{
                     'bg-transparent': !isScrolled,
@@ -217,7 +220,7 @@ onBeforeUnmount(() => {
                     class="flex items-center justify-between h-16 px-4 md:px-8 md:py-10 py-4 min-w-full"
                 >
                     <div class="text-2xl md:text-3xl font-bold text-primary">
-                        PEMIRA IF 2025
+                        PEMIRA IF {{ year }}
                     </div>
                     <button
                         @click="navigateTo('/login')"
@@ -232,7 +235,7 @@ onBeforeUnmount(() => {
                 <!-- Hero Section -->
                 <section
                     id="hero"
-                    class="scroll-m-[80px] flex items-center justify-center bg-[#282d35] min-h-[calc(90vh-10rem)] w-full md:min-h-[calc(100vh-8rem)]"
+                    class="scroll-m-[80px] flex items-center justify-center bg-background min-h-[calc(90vh-10rem)] w-full md:min-h-[calc(100vh-8rem)]"
                 >
                     <div class="w-full max-w-6xl text-center px-4">
                         <img
@@ -241,7 +244,7 @@ onBeforeUnmount(() => {
                             class="w-[10rem] md:w-32 aspect-square mx-auto mb-6"
                         />
                         <h1
-                            class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 md:mb-6 bg-gradient-to-b from-[#bee5f9] to-[#2079a9] bg-clip-text text-transparent"
+                            class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 md:mb-6 bg-gradient-to-b from-[#fe7646] to-[#ee523c] bg-clip-text text-transparent"
                         >
                             Crowning Valor<br />A Legacy of Leadership
                         </h1>
@@ -253,7 +256,7 @@ onBeforeUnmount(() => {
                         </p>
                         <div class="group relative inline-flex">
                             <div
-                                class="absolute -inset-px rounded-xl bg-gradient-to-r from-[#44BCFF] via-[#6ac8fb] to-[#44BCFF] opacity-70 blur-lg transition-all duration-1000 group-hover:-inset-1 group-hover:opacity-100 group-hover:duration-500"
+                                class="absolute -inset-px rounded-xl bg-gradient-to-r from-[#ee523c] via-[#fe7646] to-[#ee523c] opacity-40 blur-lg transition-all duration-1000 group-hover:-inset-1 group-hover:opacity-70 group-hover:duration-500"
                             ></div>
                             <button
                                 @click="navigateTo('/login')"
@@ -268,7 +271,7 @@ onBeforeUnmount(() => {
                 <!-- Candidate Section -->
                 <section
                     id="candidates"
-                    class="bg-primary-foreground min-h-[calc(100vh-4rem)] w-full px-4 py-[3rem] mt-[6rem] scroll-m-[100px]"
+                    class="bg-muted min-h-[calc(100vh-4rem)] w-full px-4 py-[3rem] mt-[6rem] scroll-m-[100px]"
                 >
                     <h2
                         class="text-4xl md:text-4xl lg:text-5xl font-bold text-primary text-center"
@@ -276,7 +279,7 @@ onBeforeUnmount(() => {
                         <span class="text-white">Calon</span>
 
                         <span
-                            class="bg-gradient-to-tl from-[#44BCFF] to-[#0a405d] bg-clip-text text-transparent"
+                            class="bg-gradient-to-tl from-[#fe7646] to-[#ee523c] bg-clip-text text-transparent"
                         >
                             Kandidat
                         </span>
@@ -293,7 +296,7 @@ onBeforeUnmount(() => {
                     >
                         <div class="relative flex items-center justify-center">
                             <div
-                                class="absolute w-96 h-96 rounded-full bg-gradient-to-r from-[#44BCFF] via-[#6ac8fb] to-[#44BCFF] opacity-70 blur-3xl"
+                                class="absolute w-96 h-96 rounded-full bg-gradient-to-r from-[#ee523c] via-[#fe7646] to-[#ee523c] opacity-20 blur-3xl"
                             ></div>
                             <img
                                 src="/KAHIMA/1.webp"
@@ -334,7 +337,7 @@ onBeforeUnmount(() => {
                 <!-- BLJ Kandidat Section -->
                 <section
                     id="blj"
-                    class="flex flex-col items-center justify-center py-6 bg-primary-foreground"
+                    class="flex flex-col items-center justify-center py-6 bg-muted"
                 >
                     <div
                         class="items-center justify-center flex flex-col py-8 md:py-6 px-6 md:px-10 w-full max-w-4xl mb-10"
@@ -344,7 +347,7 @@ onBeforeUnmount(() => {
                         >
                             <span class="text-white">Calon</span>
                             <span
-                                class="bg-gradient-to-tl from-[#44BCFF] to-[#0a405d] bg-clip-text text-transparent"
+                                class="bg-gradient-to-tl from-[#fe7646] to-[#ee523c] bg-clip-text text-transparent"
                             >
                                 Kandidat
                             </span>
@@ -386,7 +389,7 @@ onBeforeUnmount(() => {
                                 <UiCard
                                     v-for="(slide, index) in slides"
                                     :key="index"
-                                    class="flex-shrink-0 w-full md:w-1/3 flex snap-start flex-col items-center bg-[#ffffff]"
+                                    class="flex-shrink-0 w-full md:w-1/3 flex snap-start flex-col items-center bg-card"
                                 >
                                     <UiAspectRatio
                                         :ratio="1"
@@ -401,14 +404,14 @@ onBeforeUnmount(() => {
                                     <UiCardHeader>
                                         <UiCardTitle>
                                             <h3
-                                                class="text-base md:text-xl font-semibold text-center text-gray-500"
+                                                class="text-base md:text-xl font-semibold text-center text-card-foreground"
                                             >
                                                 {{ slide.name }}
                                             </h3>
                                         </UiCardTitle>
                                         <UiCardDescription>
                                             <p
-                                                class="text-sm md:text-base text-gray-400 text-center"
+                                                class="text-sm md:text-base text-muted-foreground text-center"
                                             >
                                                 Angkatan {{ slide.angkatan }}
                                             </p>
@@ -426,7 +429,7 @@ onBeforeUnmount(() => {
                                 @click="prevSlide"
                                 @mouseenter="stopAutoSlide"
                                 @mouseleave="startAutoSlide"
-                                class="bg-gradient-to-br from-primary/70 to-primary/90 text-white rounded-full p-3 md:p-4 shadow-lg hover:bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300"
+                                class="bg-gradient-to-br from-[#ee523c] to-[#fe7646] text-primary-foreground rounded-full p-3 md:p-4 shadow-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-destructive transition-all duration-300"
                             >
                                 <Icon
                                     name="oui:arrow-left"
@@ -438,7 +441,7 @@ onBeforeUnmount(() => {
                                 @click="nextSlide"
                                 @mouseenter="stopAutoSlide"
                                 @mouseleave="startAutoSlide"
-                                class="bg-gradient-to-br from-primary/70 to-primary/90 text-white rounded-full p-3 md:p-4 shadow-lg hover:bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300"
+                                class="bg-gradient-to-br from-[#ee523c] to-[#fe7646] text-primary-foreground rounded-full p-3 md:p-4 shadow-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-destructive transition-all duration-300"
                             >
                                 <Icon
                                     name="oui:arrow-right"
@@ -462,7 +465,7 @@ onBeforeUnmount(() => {
                         <h3
                             class="text-center text-xl md:text-2xl font-semibold text-gray-400 mb-[3rem] mt-[1rem]"
                         >
-                            Pemilihan Raya Informatika 2025
+                            Pemilihan Raya Informatika {{ year }}
                         </h3>
 
                         <div
@@ -479,9 +482,7 @@ onBeforeUnmount(() => {
                         </div>
                     </div>
                 </section>
-                <footer
-                    class="bg-primary-foreground py-10 justify-items-center"
-                >
+                <footer class="bg-muted py-10 justify-items-center">
                     <div class="mx-auto w-full max-w-screen-xl px-4">
                         <div class="md:flex md:justify-between">
                             <div class="mb-6 md:mb-0">
@@ -496,7 +497,7 @@ onBeforeUnmount(() => {
                                     />
                                     <span
                                         class="self-center text-2xl font-semibold whitespace-nowrap"
-                                        >PEMIRA IF 2025</span
+                                        >PEMIRA IF {{ year }}</span
                                     >
                                 </a>
 
@@ -545,7 +546,7 @@ onBeforeUnmount(() => {
                                     <ul class="text-gray-500 font-medium">
                                         <li class="mb-4">
                                             <a
-                                                href="https://www.instagram.com/pemiraif2025"
+                                                href="https://www.instagram.com/pemiraif2026"
                                                 class="hover:underline"
                                                 >Instagram</a
                                             >
@@ -585,7 +586,7 @@ onBeforeUnmount(() => {
                         />
                         <div class="sm:flex sm:items-center sm:justify-between">
                             <span class="text-sm text-gray-500 sm:text-center"
-                                >© 2025
+                                >© {{ year }}
                                 <a href="#" class="hover:underline"
                                     >PEMIRA Informatika</a
                                 >. All Rights Reserved.

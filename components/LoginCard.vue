@@ -9,6 +9,8 @@ const router = useRouter();
 const goBack = () => {
     router.push('/');
 };
+
+const { year } = usePemiraConfig();
 </script>
 
 <template>
@@ -21,8 +23,8 @@ const goBack = () => {
             />
             <div class="grid gap-2">
                 <div>
-                    <h2 class="text-3xl">PEMIRA IF 2025</h2>
-                    <div class="text-sm font-bold">Himatifa 2025</div>
+                    <h2 class="text-3xl">PEMIRA IF {{ year }}</h2>
+                    <div class="text-sm font-bold">Himatifa {{ year }}</div>
                 </div>
                 <UiCardDescription>
                     Universitas Pembangunan Nasional "Veteran" Jawa Timur
@@ -34,7 +36,7 @@ const goBack = () => {
             <div class="flex items-center gap-2">
                 <UiButton
                     size="lg"
-                    class="gap-2 p-2 hover:bg-[#8e94a0] hover:text-white"
+                    class="gap-2 p-2 hover:bg-accent hover:text-accent-foreground"
                     @click="goBack"
                 >
                     <Icon name="mdi:arrow-left" size="16"></Icon>
@@ -42,7 +44,7 @@ const goBack = () => {
                 </UiButton>
                 <UiButton
                     size="lg"
-                    class="flex-1 gap-2 flex items-center justify-center whitespace-nowrap hover:bg-[#8e94a0] hover:text-white"
+                    class="flex-1 gap-2 flex items-center justify-center whitespace-nowrap hover:bg-accent hover:text-accent-foreground"
                     @click="emit('signIn')"
                 >
                     <Icon name="bxl:google" size="16"></Icon>

@@ -100,7 +100,7 @@ const logout = async () => {
         </Sidebar>
         <section>
             <ResponsiveSpace />
-            <div class="px-4 h-20 border-b border-dashed border-[#4a5e87]">
+            <div class="px-4 h-20 border-b border-dashed border-border">
                 <div class="flex md:block">
                     <button
                         @click="toggleSidebar"

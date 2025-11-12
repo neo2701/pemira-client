@@ -13,6 +13,8 @@ const previous = () => {
 const next = () => {
     navigateTo(`/admin/events/${route.params.event}/dashboard`);
 };
+
+const { year } = usePemiraConfig();
 </script>
 
 <template>
@@ -21,7 +23,7 @@ const next = () => {
     >
         <UiCardHeader>
             <UiCardTitle class="text-2xl">Hasil Validasi</UiCardTitle>
-            <UiCardDescription>PEMIRA 2025</UiCardDescription>
+            <UiCardDescription>PEMIRA {{ year }}</UiCardDescription>
         </UiCardHeader>
         <UiCardFooter class="justify-center gap-2">
             <UiButton variant="secondary" @click="previous">Kembali</UiButton>

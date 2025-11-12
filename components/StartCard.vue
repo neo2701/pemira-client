@@ -113,12 +113,14 @@ const cancel = async () => {
         alert('Terjadi kesalahan saat logout, silakan coba lagi.');
     }
 };
+
+const { year } = usePemiraConfig();
 </script>
 
 <template>
     <UiCard class="max-w-sm w-full bg-transparent border-none">
         <UiCardHeader class="text-center">
-            <h2 class="text-3xl">PEMIRA IF 2025</h2>
+            <h2 class="text-3xl">PEMIRA IF {{ year }}</h2>
             <UiCardDescription class="text-sm mt-0">
                 Selamat datang!
             </UiCardDescription>
@@ -156,7 +158,7 @@ const cancel = async () => {
 
         <UiCardFooter class="w-full grid gap-2 text-center text-black">
             <ConfirmRulesDialog
-                title="TATA CARA PEMILIHAN CALON PEMIRA INFORMATIKA 2025"
+                :title="`TATA CARA PEMILIHAN CALON PEMIRA INFORMATIKA ${year}`"
                 :description="
                     !disabled
                         ? rules
@@ -170,7 +172,7 @@ const cancel = async () => {
                     :loading="loading"
                     :disabled="disabled"
                     size="lg"
-                    class="w-full bg-[#d3d7de] transition-all disabled:bg-[#d3d7de] disabled:text-gray-500 disabled:cursor-not-allowed hover:bg-[#8e94a0] hover:text-white"
+                    class="w-full bg-primary text-primary-foreground transition-all disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed hover:bg-accent hover:text-accent-foreground"
                 >
                     {{ buttonText }}
                 </UiButton>
@@ -182,7 +184,7 @@ const cancel = async () => {
                 :disabled="loading"
                 size="lg"
                 variant="outline"
-                class="w-full hover:bg-[#8e94a0] bg-[#d3d7de] hover:text-white"
+                class="w-full hover:bg-accent bg-primary hover:text-accent-foreground"
                 @click="cancel"
             >
                 <Icon name="material-symbols:logout" size="16"></Icon>
