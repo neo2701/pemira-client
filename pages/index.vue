@@ -16,7 +16,9 @@ const slides = ref<
 >([]);
 
 const currentIndex = ref(0);
-let autoSlideInterval: ReturnType<typeof setInterval> | null = null;
+let autoSlideInterval: { current: ReturnType<typeof setInterval> | null } = {
+    current: null,
+};
 const loadedImages = ref<Set<string>>(new Set());
 
 const preloadImage = (src: string): Promise<void> => {
@@ -67,13 +69,6 @@ const fetchSlides = async () => {
                 name: slide.name || 'Unknown',
                 angkatan: slide.angkatan || 'N/A',
             }));
-
-            // Preload all images immediately
-            await Promise.all(
-                slides.value
-                    .filter((slide) => slide.image)
-                    .map((slide) => preloadImage(slide.image)),
-            );
         } else {
             slides.value = [];
         }
@@ -82,33 +77,92 @@ const fetchSlides = async () => {
     }
 };
 
-const computedSlideCount = computed(() => slides.value.length);
-
 const nextSlide = () => {
-    if (computedSlideCount.value > 0) {
-        currentIndex.value =
-            (currentIndex.value + 1) % computedSlideCount.value;
-    }
+    sliderContainer.value?.scrollBy({ left: 227, behavior: 'smooth' });
 };
 
 const prevSlide = () => {
-    if (computedSlideCount.value > 0) {
-        currentIndex.value =
-            (currentIndex.value - 1 + computedSlideCount.value) %
-            computedSlideCount.value;
-    }
+    sliderContainer.value?.scrollBy({ left: -227, behavior: 'smooth' });
 };
 
 const startAutoSlide = () => {
-    if (autoSlideInterval) stopAutoSlide();
-    autoSlideInterval = setInterval(nextSlide, 4000);
+    stopAutoSlide();
+    autoSlideInterval.current = setInterval(() => {
+        sliderContainer.value?.scrollBy({ left: 227, behavior: 'smooth' });
+    }, 4000);
 };
 
+const currentScrollPosition = ref(0);
+
 const stopAutoSlide = () => {
-    if (autoSlideInterval) {
-        clearInterval(autoSlideInterval);
-        autoSlideInterval = null;
+    if (sliderContainer.value) {
+        currentScrollPosition.value = sliderContainer.value.scrollLeft;
+        sliderContainer.value.scrollLeft = currentScrollPosition.value;
     }
+    if (autoSlideInterval.current) {
+        clearInterval(autoSlideInterval.current);
+        autoSlideInterval.current = null;
+    }
+};
+
+const sliderContainer = ref<HTMLElement | null>(null);
+
+const scrollHandler = () => {
+    if (sliderContainer.value) {
+        const { scrollLeft, clientWidth, scrollWidth } = sliderContainer.value;
+        if (scrollLeft + clientWidth >= scrollWidth - 200) {
+            slides.value.push(...slides.value);
+        }
+    }
+};
+
+const isDown = ref(false);
+const startX = ref(0);
+const scrollLeft = ref(0);
+
+const handleMouseDownSlide = (event: MouseEvent) => {
+    isDown.value = true;
+    sliderContainer.value?.classList.remove('cursor-pointer');
+    sliderContainer.value?.classList.add('cursor-grabbing');
+    startX.value = event.pageX - (sliderContainer.value?.offsetLeft || 0);
+    scrollLeft.value = sliderContainer.value?.scrollLeft || 0;
+};
+const handleMouseEnterSlide = () => {
+    stopAutoSlide();
+    console.log(autoSlideInterval.current);
+    console.log(sliderContainer.value?.scrollLeft);
+    sliderContainer.value?.classList.add('cursor-pointer');
+};
+
+const handleMouseLeaveSlide = () => {
+    isDown.value = false;
+    sliderContainer.value?.classList.remove('cursor-grabbing');
+    sliderContainer.value?.classList.remove('cursor-pointer');
+    startAutoSlide();
+};
+
+const handleMouseUp = () => {
+    sliderContainer.value?.classList.remove('cursor-grabbing');
+    sliderContainer.value?.classList.add('cursor-pointer');
+    isDown.value = false;
+};
+
+const handleMouseMove = (event: MouseEvent) => {
+    const container = sliderContainer.value;
+    if (!container) return;
+    if(!isDown.value) return;
+    const x = event.pageX - container.offsetLeft;
+    const walk = (x - startX.value) * 1.5;
+    container.scrollLeft = scrollLeft.value - walk;
+};
+
+const handleTouchStart = () => {
+    isDown.value = true;
+    stopAutoSlide();
+};
+const handleTouchEnd = () => {
+    isDown.value = false;
+    startAutoSlide();
 };
 
 const isScrolled = ref(false);
@@ -130,10 +184,7 @@ onMounted(async () => {
     isLoading.value = true;
     await fetchSlides();
     isLoading.value = false;
-
-    if (computedSlideCount.value > 0) {
-        startAutoSlide();
-    }
+    startAutoSlide();
     window.addEventListener('scroll', handleScroll, { passive: true });
 });
 
@@ -317,74 +368,25 @@ onBeforeUnmount(() => {
                         <!-- Slider Content -->
                         <div
                             v-else
-                            class="relative flex items-center justify-center w-full overflow-x-auto mt-[1rem]"
+                            class="relative scroll-smooth w-[300px] md:w-full flex items-center justify-center overflow-x-auto snap-x snap-mandatory mt-[1rem]"
+                            ref="sliderContainer"
+                            @scroll="scrollHandler"
+                            @mousedown.prevent="handleMouseDownSlide($event)"
+                            @mouseleave="handleMouseLeaveSlide"
+                            @mouseenter="handleMouseEnterSlide"
+                            @mouseup="handleMouseUp"
+                            @mousemove="handleMouseMove($event)"
+                            @touchstart="handleTouchStart"
+                            @touchend="handleTouchEnd"
                         >
                             <div
                                 class="flex w-full transition-transform duration-500 ease-out space-x-4"
-                                :style="{
-                                    transform: `translateX(-${
-                                        currentIndex * (100 / 3)
-                                    }%)`,
-                                }"
                             >
-                                <!-- Cloned Last Slide -->
-                                <UiCard
-                                    v-if="slides.length > 0"
-                                    :key="'clone-last'"
-                                    class="flex-shrink-0 w-1/2 md:w-1/3 flex flex-col items-center bg-[#ffffff]"
-                                >
-                                    <UiAspectRatio
-                                        :ratio="1"
-                                        class="relative border-b border-white pb-0.2"
-                                    >
-                                        <img
-                                            :src="
-                                                slides[slides.length - 1].image
-                                            "
-                                            alt="BLJ Image"
-                                            class="object-cover w-full h-full rounded-t-md transition-opacity duration-300"
-                                            :class="{
-                                                'opacity-100': loadedImages.has(
-                                                    slides[slides.length - 1]
-                                                        .image,
-                                                ),
-                                                'opacity-0': !loadedImages.has(
-                                                    slides[slides.length - 1]
-                                                        .image,
-                                                ),
-                                            }"
-                                        />
-                                    </UiAspectRatio>
-                                    <UiCardHeader>
-                                        <UiCardTitle>
-                                            <h3
-                                                class="text-base md:text-xl font-semibold text-center text-gray-500"
-                                            >
-                                                {{
-                                                    slides[slides.length - 1]
-                                                        .name
-                                                }}
-                                            </h3>
-                                        </UiCardTitle>
-                                        <UiCardDescription>
-                                            <p
-                                                class="text-sm md:text-base text-gray-400 text-center"
-                                            >
-                                                Angkatan
-                                                {{
-                                                    slides[slides.length - 1]
-                                                        .angkatan
-                                                }}
-                                            </p>
-                                        </UiCardDescription>
-                                    </UiCardHeader>
-                                </UiCard>
-
                                 <!-- Main Slides -->
                                 <UiCard
                                     v-for="(slide, index) in slides"
                                     :key="index"
-                                    class="flex-shrink-0 w-1/2 md:w-1/3 flex flex-col items-center bg-[#ffffff]"
+                                    class="flex-shrink-0 w-full md:w-1/3 flex snap-start flex-col items-center bg-[#ffffff]"
                                 >
                                     <UiAspectRatio
                                         :ratio="1"
@@ -394,14 +396,6 @@ onBeforeUnmount(() => {
                                             :src="slide.image"
                                             alt="BLJ Image"
                                             class="object-cover w-full h-full rounded-t-md transition-opacity duration-300"
-                                            :class="{
-                                                'opacity-100': loadedImages.has(
-                                                    slide.image,
-                                                ),
-                                                'opacity-0': !loadedImages.has(
-                                                    slide.image,
-                                                ),
-                                            }"
                                         />
                                     </UiAspectRatio>
                                     <UiCardHeader>
@@ -421,55 +415,12 @@ onBeforeUnmount(() => {
                                         </UiCardDescription>
                                     </UiCardHeader>
                                 </UiCard>
-
-                                <!-- Cloned First Slide -->
-                                <UiCard
-                                    v-if="slides.length > 0"
-                                    :key="'clone-first'"
-                                    class="flex-shrink-0 w-1/2 md:w-1/3 flex flex-col items-center bg-[#ffffff]"
-                                >
-                                    <UiAspectRatio
-                                        :ratio="1"
-                                        class="relative border-b border-white pb-0.2"
-                                    >
-                                        <img
-                                            :src="slides[0].image"
-                                            alt="BLJ Image"
-                                            class="object-cover w-full h-full rounded-t-md transition-opacity duration-300"
-                                            :class="{
-                                                'opacity-100': loadedImages.has(
-                                                    slides[0].image,
-                                                ),
-                                                'opacity-0': !loadedImages.has(
-                                                    slides[0].image,
-                                                ),
-                                            }"
-                                        />
-                                    </UiAspectRatio>
-                                    <UiCardHeader>
-                                        <UiCardTitle>
-                                            <h3
-                                                class="text-base md:text-xl font-semibold text-center text-gray-500"
-                                            >
-                                                {{ slides[0].name }}
-                                            </h3>
-                                        </UiCardTitle>
-                                        <UiCardDescription>
-                                            <p
-                                                class="text-sm md:text-base text-gray-400 text-center"
-                                            >
-                                                Angkatan
-                                                {{ slides[0].angkatan }}
-                                            </p>
-                                        </UiCardDescription>
-                                    </UiCardHeader>
-                                </UiCard>
                             </div>
                         </div>
 
                         <!-- Navigation Buttons -->
                         <div
-                            class="absolute inset-x-0 flex justify-between items-center mx-auto w-full px-[2rem] md:px-[8rem] translate-y-full"
+                            class="flex justify-center gap-5 items-center mx-auto w-full px-[2rem] md:px-[8rem] translate-y-full"
                         >
                             <button
                                 @click="prevSlide"
@@ -528,7 +479,6 @@ onBeforeUnmount(() => {
                         </div>
                     </div>
                 </section>
-
                 <footer
                     class="bg-primary-foreground py-10 justify-items-center"
                 >
