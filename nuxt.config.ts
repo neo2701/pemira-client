@@ -2,11 +2,11 @@ export default defineNuxtConfig({
     // Menetapkan metadata di head tag
     app: {
         head: {
-            title: 'PEMIRA INFORMATIKA 2025',
+            title: `PEMIRA INFORMATIKA ${process.env.NUXT_PUBLIC_YEAR || '2026'}`,
             meta: [
                 {
                     name: 'description',
-                    content: 'Aplikasi untuk pemilihan raya Informatika 2025',
+                    content: `Aplikasi untuk pemilihan raya Informatika ${process.env.NUXT_PUBLIC_YEAR || '2026'}`,
                 },
             ],
             link: [{ rel: 'icon', type: 'image/png', href: '/logo.png' }],
