@@ -244,9 +244,10 @@ onBeforeUnmount(() => {
                             class="w-[10rem] md:w-32 aspect-square mx-auto mb-6"
                         />
                         <h1
-                            class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 md:mb-6 bg-gradient-to-b from-[#fe7646] to-[#ee523c] bg-clip-text text-transparent"
+                            class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 bg-gradient-to-b from-[#fe7646] to-[#ee523c] bg-clip-text text-transparent"
                         >
-                            Crowning Valor<br />A Legacy of Leadership
+                            Collaboration, Innovation, and Dedication:<br/> Building
+                            Progressive Informatics
                         </h1>
                         <p
                             class="text-lg sm:text-xl lg:text-2xl text-muted-foreground mb-6 md:mb-10 max-w-xl sm:max-w-2xl mx-auto px-2 sm:px-4"
