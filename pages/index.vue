@@ -340,7 +340,7 @@ onBeforeUnmount(() => {
                     class="flex flex-col items-center justify-center py-6 bg-muted"
                 >
                     <div
-                        class="items-center justify-center flex flex-col py-8 md:py-6 px-6 md:px-10 w-full max-w-4xl mb-10"
+                        class="items-center justify-center flex flex-col py-8 md:py-6 px-6 md:px-10 w-[900px] max-w-4xl mb-10"
                     >
                         <h2
                             class="text-4xl md:text-4xl lg:text-5xl font-bold text-primary text-center"
@@ -371,7 +371,7 @@ onBeforeUnmount(() => {
                         <!-- Slider Content -->
                         <div
                             v-else
-                            class="relative scroll-smooth w-[300px] md:w-full flex items-center justify-center overflow-x-auto snap-x snap-mandatory mt-[1rem]"
+                            class="relative scroll-smooth w-[300px] md:w-[948px] flex items-center justify-center overflow-x-auto snap-x snap-mandatory mt-[1rem]"
                             ref="sliderContainer"
                             @scroll="scrollHandler"
                             @mousedown.prevent="handleMouseDownSlide($event)"
@@ -383,13 +383,13 @@ onBeforeUnmount(() => {
                             @touchend="handleTouchEnd"
                         >
                             <div
-                                class="flex w-full transition-transform duration-500 ease-out space-x-4"
+                                class="flex w-full transition-transform duration-500 ease-out gap-4"
                             >
                                 <!-- Main Slides -->
                                 <UiCard
                                     v-for="(slide, index) in slides"
                                     :key="index"
-                                    class="flex-shrink-0 w-full md:w-1/3 flex snap-start flex-col items-center bg-card"
+                                    class="flex-shrink-0 w-[300px] flex snap-start flex-col items-center bg-card"
                                 >
                                     <UiAspectRatio
                                         :ratio="1"
