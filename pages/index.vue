@@ -371,7 +371,7 @@ onBeforeUnmount(() => {
                         <!-- Slider Content -->
                         <div
                             v-else
-                            class="relative scroll-smooth w-[300px] md:w-[948px] flex items-center justify-center overflow-x-auto snap-x snap-mandatory mt-[1rem]"
+                            class="relative scroll-smooth w-[300px] lg:w-[948px] flex items-center justify-center overflow-x-auto snap-x snap-mandatory mt-[1rem]"
                             ref="sliderContainer"
                             @scroll="scrollHandler"
                             @mousedown.prevent="handleMouseDownSlide($event)"
