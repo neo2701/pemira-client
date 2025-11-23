@@ -47,28 +47,28 @@ onMounted(() => {
         <div class="grid grid-cols-2 gap-4">
             <UiCard>
                 <UiCardHeader>
-                    <UiCardTitle class="flex justify-between text-white">
+                    <UiCardTitle class="flex justify-between">
                         Total Kandidat
                         <Icon
                             name="fluent:people-16-regular"
-                            class="text-muted-foreground text-white"
+                            class="text-muted-foreground"
                         />
                     </UiCardTitle>
-                    <UiCardDescription class="text-2xl text-white">
+                    <UiCardDescription class="text-2xl text-foreground">
                         {{ counts.candidates }}
                     </UiCardDescription>
                 </UiCardHeader>
             </UiCard>
             <UiCard>
                 <UiCardHeader>
-                    <UiCardTitle class="flex justify-between text-white">
+                    <UiCardTitle class="flex justify-between">
                         Total Whitelist
                         <Icon
                             name="fluent:checkbox-person-16-regular"
-                            class="text-muted-foreground text-white"
+                            class="text-muted-foreground"
                         />
                     </UiCardTitle>
-                    <UiCardDescription class="text-2xl text-white">
+                    <UiCardDescription class="text-2xl text-foreground">
                         {{ counts.whitelists }}
                     </UiCardDescription>
                 </UiCardHeader>

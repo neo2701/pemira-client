@@ -1,13 +1,17 @@
+<script setup>
+const { year } = usePemiraConfig();
+</script>
+
 <template>
     <aside
-        class="md:sticky top-0 md:h-screen h-full border-r bg-[#242e42] border-[#4a5e87]"
+        class="md:sticky top-0 md:h-screen h-full border-r bg-secondary border-border"
     >
         <ResponsiveSpace />
-        <div class="h-20 px-4 border-b border-dashed border-[#4a5e87]">
-            <h2 class="text-3xl text-[#647CA0] whitespace-nowrap">
-                PEMIRA 2025
+        <div class="h-20 px-4 border-b border-dashed border-border">
+            <h2 class="text-3xl text-primary whitespace-nowrap">
+                PEMIRA {{ year }}
             </h2>
-            <div class="text-sm font-semibold text-[#B0B8C3]">
+            <div class="text-sm font-semibold text-muted-foreground">
                 E-Vote Himatifa
             </div>
         </div>

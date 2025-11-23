@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { usePemiraConfig } from '../composables/usePemiraConfig';
+
 defineProps<{
     loading?: boolean;
 }>();
@@ -30,6 +32,8 @@ const handleSignIn = () => {
     }
     emit('signIn', form.email, form.password);
 };
+
+const { year } = usePemiraConfig();
 </script>
 
 <template>
@@ -42,7 +46,7 @@ const handleSignIn = () => {
                 src="/logo.png"
                 alt="Logo"
             />
-            <h2 class="mt-10 text-center text-3xl">PEMIRA 2025</h2>
+            <h2 class="mt-10 text-center text-3xl">PEMIRA {{ year }}</h2>
             <UiCardDescription> Admin Login Section</UiCardDescription>
         </UiCardHeader>
         <div class="mt-1 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -73,7 +77,7 @@ const handleSignIn = () => {
             <UiCardFooter>
                 <UiButton
                     :loading="$props.loading"
-                    class="w-full hover:bg-[#8e94a0] hover:text-white"
+                    class="w-full hover:bg-accent hover:text-accent-foreground"
                     @click="handleSignIn"
                 >
                     <Icon

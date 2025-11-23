@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { usePemiraConfig } from '~/composables/usePemiraConfig';
+
 definePageMeta({
     layout: 'main',
     ssr: false, // Menonaktifkan SSR untuk halaman ini
@@ -85,6 +87,8 @@ onMounted(() => {
         handleOAuthLogin();
     }
 });
+
+const { year } = usePemiraConfig();
 </script>
 
 <template>
@@ -97,8 +101,8 @@ onMounted(() => {
                         alt="Logo"
                         class="w-32 h-32 aspect-square mx-auto"
                     />
-                    <h2 class="text-3xl">PEMIRA IF 2025</h2>
-                    <div class="text-sm font-bold">Himatifa 2025</div>
+                    <h2 class="text-3xl">PEMIRA IF {{ year }}</h2>
+                    <div class="text-sm font-bold">Himatifa {{ year }}</div>
                     <UiCardDescription class="text-sm mt-0">
                         E-Vote Himatifa
                     </UiCardDescription>

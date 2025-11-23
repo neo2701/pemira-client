@@ -17,13 +17,15 @@ onMounted(async () => {
     useAuth().signIn(data.value);
     navigateTo('/');
 });
+
+const { year } = usePemiraConfig();
 </script>
 
 <template>
     <div class="h-[calc(100dvh)] flex items-center justify-center">
         <UiCard class="max-w-sm w-full">
             <UiCardHeader class="text-center">
-                <h2 class="text-3xl">PEMIRA 2025</h2>
+                <h2 class="text-3xl">PEMIRA {{ year }}</h2>
                 <UiCardDescription class="text-sm mt-0">
                     E-Vote Himatifa
                 </UiCardDescription>

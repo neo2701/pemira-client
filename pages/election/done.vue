@@ -105,6 +105,7 @@ const exit = () => {
     useAuth().signOut();
     navigateTo('/');
 };
+const { year } = usePemiraConfig();
 </script>
 
 <template>
@@ -124,7 +125,7 @@ const exit = () => {
                     <UiCardContent>
                         <UiCardDescription>
                             Terima kasih telah menggunakan hak suaramu dan
-                            berpartisipasi di PEMIRA Informatika 2025.
+                            berpartisipasi di PEMIRA Informatika {{ year }}.
                         </UiCardDescription>
                     </UiCardContent>
                     <UiCardFooter>
