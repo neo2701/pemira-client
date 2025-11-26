@@ -258,14 +258,14 @@ onBeforeUnmount(() => {
                     id="hero"
                     class="scroll-m-[80px] flex items-center justify-center bg-background min-h-[calc(90vh-10rem)] w-full md:min-h-[calc(100vh-8rem)]"
                 >
-                    <div class="w-full max-w-6xl text-center px-4">
+                    <div class="w-full max-w-6xl text-center px-4 sm:px-6">
                         <img
                             src="/logo.png"
                             alt="Logo"
                             class="w-[10rem] md:w-32 aspect-square mx-auto mb-6"
                         />
                         <h1
-                            class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 bg-gradient-to-b from-[#fe7646] to-[#ee523c] bg-clip-text text-transparent min-h-[3rem] md:min-h-[4rem] lg:min-h-[5rem] leading-tight"
+                            class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 bg-gradient-to-b from-[#fe7646] to-[#ee523c] bg-clip-text text-transparent min-h-[4rem] sm:min-h-[5rem] md:min-h-[6rem] lg:min-h-[7rem] leading-tight px-2 sm:px-4 md:px-6 break-words"
                         >
                             <span v-html="typing.displayedText.value.replace(/\n/g, '<br/>')"></span>
                             <span
@@ -274,7 +274,7 @@ onBeforeUnmount(() => {
                             >|</span>
                         </h1>
                         <p
-                            class="text-lg sm:text-xl lg:text-2xl text-muted-foreground mb-6 md:mb-10 max-w-xl sm:max-w-2xl mx-auto px-2 sm:px-4"
+                            class="text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground mb-6 md:mb-10 max-w-xl sm:max-w-2xl mx-auto px-4 sm:px-6 break-words"
                         >
                             Vote for the best candidate to build a brighter
                             future for everyone.
@@ -848,6 +848,19 @@ onBeforeUnmount(() => {
 
 .overflow-x-auto::-webkit-scrollbar {
     display: none;
+}
+
+/* Prevent text from being cut off */
+h1, h2, h3, p {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+}
+
+/* Ensure text containers have proper spacing */
+#hero h1 {
+    line-height: 1.2;
+    word-break: break-word;
 }
 
 /* Typing cursor animation */
