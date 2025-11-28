@@ -60,7 +60,7 @@ export const useEventStore = defineStore('event', () => {
                 `/events/${event.value.id}/divisions/${id}`,
             );
             if (error.value) {
-                errorMessage.value = `Failed to fetch division: ${error.value.message}`;
+                errorMessage.value = `Failed to fetch division: ${error.value}`;
                 return;
             }
             division.value = data.value;
@@ -90,7 +90,7 @@ export const useEventStore = defineStore('event', () => {
             );
 
             if (error.value) {
-                errorMessage.value = `Failed to open election: ${error.value.message}`;
+                errorMessage.value = `Failed to open election: ${error.value}`;
                 return false;
             }
 
@@ -124,7 +124,7 @@ export const useEventStore = defineStore('event', () => {
             );
 
             if (error.value) {
-                errorMessage.value = `Failed to close election: ${error.value.message}`;
+                errorMessage.value = `Failed to close election: ${error.value}`;
                 return false;
             }
 

@@ -15,8 +15,15 @@ const submitBallot = async () => {
 
     const formData = new FormData();
 
-    formData.append('ktm_picture', electionStore.ktmPicture);
-    formData.append('verification_picture', electionStore.verificationPicture);
+    if (electionStore.ktmPicture) {
+        formData.append('ktm_picture', electionStore.ktmPicture);
+    }
+    if (electionStore.verificationPicture) {
+        formData.append(
+            'verification_picture',
+            electionStore.verificationPicture,
+        );
+    }
 
     for (const key in electionStore.ballots) {
         formData.append(
@@ -33,7 +40,7 @@ const submitBallot = async () => {
         `/events/${electionStore.event?.id}/ballots`,
         {
             method: 'POST',
-            body: formData,
+            data: formData,
         },
     );
 
@@ -45,7 +52,7 @@ const submitBallot = async () => {
 
 const confirm = async () => {
     await submitBallot();
-    electionStore.event = undefined;
+    electionStore.event = null;
     navigateTo('/election/done');
 };
 </script>
@@ -84,15 +91,15 @@ const confirm = async () => {
                 <div
                     class="max-w-screen-lg mx-auto grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-x-4 gap-y-4"
                 >
-                <div
-            v-for="(ballot, index) in electionStore.ballots"
-            :key="index"
-            :class="{
-                'lg:col-start-2': parseInt(index) === 4,
-                'md:col-start-2': parseInt(index) === 4,
-            }"
-            class="flex flex-col gap-2"
-        >
+                    <div
+                        v-for="(ballot, index) in electionStore.ballots"
+                        :key="index"
+                        :class="{
+                            'lg:col-start-2': parseInt(index) === 4,
+                            'md:col-start-2': parseInt(index) === 4,
+                        }"
+                        class="flex flex-col gap-2"
+                    >
                         <div
                             :class="
                                 ballot.division.name === 'KAHIMA & WAKAHIMA'

@@ -24,6 +24,7 @@ yarn-error.log*
 .fleet
 .idea
 .vscode/
+.zed/
 Thumbs.db
 
 # Local env files
@@ -43,4 +44,3 @@ Thumbs.db
 *.swn
 *.bak
 *.tmp
-

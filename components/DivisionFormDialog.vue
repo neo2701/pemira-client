@@ -22,10 +22,9 @@ const form = useForm({
 const show = ref();
 
 const submit = form.handleSubmit(async (values) => {
-    
     const { error } = await useApiFetch(`/events/${props.event.id}/divisions`, {
         method: 'POST',
-        body: JSON.stringify(values),
+        data: values,
     });
 
     if (!error.value) {
