@@ -265,7 +265,7 @@ onBeforeUnmount(() => {
                             class="w-[10rem] md:w-32 aspect-square mx-auto mb-6"
                         />
                         <h1
-                            class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 bg-gradient-to-b from-[#fe7646] to-[#ee523c] bg-clip-text text-transparent min-h-[4rem] sm:min-h-[5rem] md:min-h-[6rem] lg:min-h-[7rem] leading-tight px-2 sm:px-4 md:px-6 break-words"
+                            class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 md:mb-8 lg:mb-10 bg-gradient-to-b from-[#fe7646] to-[#ee523c] bg-clip-text text-transparent min-h-[4.5rem] sm:min-h-[5.5rem] md:min-h-[6.5rem] lg:min-h-[7.5rem] leading-normal px-2 sm:px-4 md:px-6 pb-1"
                         >
                             <span v-html="typing.displayedText.value.replace(/\n/g, '<br/>')"></span>
                             <span
@@ -859,8 +859,15 @@ h1, h2, h3, p {
 
 /* Ensure text containers have proper spacing */
 #hero h1 {
-    line-height: 1.2;
-    word-break: break-word;
+    line-height: 1.3;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    white-space: pre-line;
+    overflow: visible;
+}
+
+#hero h1 span {
+    white-space: pre-line;
 }
 
 /* Typing cursor animation */
