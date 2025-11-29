@@ -9,7 +9,8 @@ import StartCard from '@/components/StartCard.vue';
 const { year } = usePemiraConfig();
 
 // Typing effect for hero title
-const heroTitle = 'Collaboration, Innovation, and Dedication:\nBuilding Progressive Informatics';
+const heroTitle =
+    'Collaboration, Innovation, and Dedication:\nBuilding Progressive Informatics';
 const typing = useTypingEffect(heroTitle, 40);
 
 // Scroll reveal hooks for sections
@@ -265,13 +266,21 @@ onBeforeUnmount(() => {
                             class="w-[10rem] md:w-32 aspect-square mx-auto mb-6"
                         />
                         <h1
-                            class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 bg-gradient-to-b from-[#fe7646] to-[#ee523c] bg-clip-text text-transparent min-h-[3rem] md:min-h-[4rem] lg:min-h-[5rem] leading-tight"
+                            class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 bg-gradient-to-b from-[#fe7646] to-[#ee523c] bg-clip-text text-transparent min-h-[3rem] md:min-h-[4rem] lg:min-h-[5rem] leading-relaxed py-2"
                         >
-                            <span v-html="typing.displayedText.value.replace(/\n/g, '<br/>')"></span>
+                            <span
+                                v-html="
+                                    typing.displayedText.value.replace(
+                                        /\n/g,
+                                        '<br/>',
+                                    )
+                                "
+                            ></span>
                             <span
                                 v-if="typing.isTyping.value"
                                 class="typing-cursor"
-                            >|</span>
+                                >|</span
+                            >
                         </h1>
                         <p
                             class="text-lg sm:text-xl lg:text-2xl text-muted-foreground mb-6 md:mb-10 max-w-xl sm:max-w-2xl mx-auto px-2 sm:px-4"
@@ -302,7 +311,11 @@ onBeforeUnmount(() => {
                         'opacity-0 translate-y-8': !candidatesReveal.isVisible,
                         'opacity-100 translate-y-0': candidatesReveal.isVisible,
                     }"
-                    style="transition: opacity 0.6s ease-out 0.2s, transform 0.6s ease-out 0.2s;"
+                    style="
+                        transition:
+                            opacity 0.6s ease-out 0.2s,
+                            transform 0.6s ease-out 0.2s;
+                    "
                 >
                     <h2
                         class="text-4xl md:text-4xl lg:text-5xl font-bold text-primary text-center"
@@ -330,15 +343,21 @@ onBeforeUnmount(() => {
                             <!-- Card 1 - Pasangan 1 -->
                             <div
                                 class="flip-card"
-                                :class="{ 'flipped': isFlipped1 }"
+                                :class="{ flipped: isFlipped1 }"
                                 @click="toggleFlip1"
                             >
                                 <div class="flip-card-inner">
                                     <!-- Front Side - Photo & Names -->
-                                    <div class="flip-card-front bg-card rounded-xl overflow-hidden border border-border shadow-xl cursor-pointer">
-                                        <div class="relative w-full h-[500px] md:h-[600px] flex flex-col">
+                                    <div
+                                        class="flip-card-front bg-card rounded-xl overflow-hidden border border-border shadow-xl cursor-pointer"
+                                    >
+                                        <div
+                                            class="relative w-full h-[500px] md:h-[600px] flex flex-col"
+                                        >
                                             <!-- Photo Section -->
-                                            <div class="relative flex-1 bg-muted flex items-center justify-center overflow-hidden">
+                                            <div
+                                                class="relative flex-1 bg-muted flex items-center justify-center overflow-hidden"
+                                            >
                                                 <div
                                                     class="absolute inset-0 bg-gradient-to-r from-[#ee523c] via-[#fe7646] to-[#ee523c] opacity-10 blur-2xl transition-opacity duration-300"
                                                 ></div>
@@ -350,8 +369,12 @@ onBeforeUnmount(() => {
                                             </div>
 
                                             <!-- Names Section -->
-                                            <div class="p-6 md:p-8 bg-card border-t border-border">
-                                                <div class="text-center space-y-3">
+                                            <div
+                                                class="p-6 md:p-8 bg-card border-t border-border"
+                                            >
+                                                <div
+                                                    class="text-center space-y-3"
+                                                >
                                                     <div
                                                         class="text-xs md:text-sm font-semibold text-muted-foreground uppercase tracking-wider"
                                                     >
@@ -361,7 +384,8 @@ onBeforeUnmount(() => {
                                                         <h2
                                                             class="text-xl md:text-2xl lg:text-3xl font-bold text-primary leading-tight"
                                                         >
-                                                            I Gusti Ngurah Karunya Pratama
+                                                            I Gusti Ngurah
+                                                            Karunya Pratama
                                                         </h2>
                                                         <div
                                                             class="text-base md:text-lg text-muted-foreground"
@@ -371,11 +395,15 @@ onBeforeUnmount(() => {
                                                         <h2
                                                             class="text-xl md:text-2xl lg:text-3xl font-bold text-primary leading-tight"
                                                         >
-                                                            Arganta Bisma Pramata
+                                                            Arganta Bisma
+                                                            Pramata
                                                         </h2>
                                                     </div>
-                                                    <p class="text-xs md:text-sm text-muted-foreground mt-4">
-                                                        Klik untuk melihat visi &amp; misi
+                                                    <p
+                                                        class="text-xs md:text-sm text-muted-foreground mt-4"
+                                                    >
+                                                        Klik untuk melihat visi
+                                                        &amp; misi
                                                     </p>
                                                 </div>
                                             </div>
@@ -383,11 +411,19 @@ onBeforeUnmount(() => {
                                     </div>
 
                                     <!-- Back Side - Vision & Mission -->
-                                    <div class="flip-card-back bg-card rounded-xl overflow-hidden border border-border shadow-xl cursor-pointer">
-                                        <div class="w-full h-[500px] md:h-[600px] p-4 md:p-6 lg:p-8 flex flex-col justify-start space-y-4 md:space-y-6 overflow-y-auto">
+                                    <div
+                                        class="flip-card-back bg-card rounded-xl overflow-hidden border border-border shadow-xl cursor-pointer"
+                                    >
+                                        <div
+                                            class="w-full h-[500px] md:h-[600px] p-4 md:p-6 lg:p-8 flex flex-col justify-start space-y-4 md:space-y-6 overflow-y-auto"
+                                        >
                                             <!-- Vision -->
-                                            <div class="space-y-2 md:space-y-3 flex-shrink-0">
-                                                <div class="flex items-center gap-2">
+                                            <div
+                                                class="space-y-2 md:space-y-3 flex-shrink-0"
+                                            >
+                                                <div
+                                                    class="flex items-center gap-2"
+                                                >
                                                     <div
                                                         class="w-1 h-6 md:h-8 bg-gradient-to-b from-[#fe7646] to-[#ee523c] rounded-full flex-shrink-0"
                                                     ></div>
@@ -400,11 +436,15 @@ onBeforeUnmount(() => {
                                                 <p
                                                     class="text-xs md:text-sm lg:text-base text-muted-foreground leading-relaxed pl-3"
                                                 >
-                                                    Menjadikan Himatifa sebagai wadah yang
-                                                    mendukung perkembangan dan peningkatan
-                                                    kualitas mahasiswa informatika, serta mampu
-                                                    beradaptasi terhadapi lingkungan dan terbuka
-                                                    dengan ide baru dalam prosesnya.
+                                                    Menjadikan Himatifa sebagai
+                                                    wadah yang mendukung
+                                                    perkembangan dan peningkatan
+                                                    kualitas mahasiswa
+                                                    informatika, serta mampu
+                                                    beradaptasi terhadapi
+                                                    lingkungan dan terbuka
+                                                    dengan ide baru dalam
+                                                    prosesnya.
                                                 </p>
                                             </div>
 
@@ -414,8 +454,12 @@ onBeforeUnmount(() => {
                                             ></div>
 
                                             <!-- Mission -->
-                                            <div class="space-y-2 md:space-y-3 flex-shrink-0">
-                                                <div class="flex items-center gap-2">
+                                            <div
+                                                class="space-y-2 md:space-y-3 flex-shrink-0"
+                                            >
+                                                <div
+                                                    class="flex items-center gap-2"
+                                                >
                                                     <div
                                                         class="w-1 h-6 md:h-8 bg-gradient-to-b from-[#fe7646] to-[#ee523c] rounded-full flex-shrink-0"
                                                     ></div>
@@ -428,12 +472,26 @@ onBeforeUnmount(() => {
                                                 <p
                                                     class="text-xs md:text-sm lg:text-base text-muted-foreground leading-relaxed pl-3"
                                                 >
-                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                                                    Lorem ipsum dolor sit amet,
+                                                    consectetur adipiscing elit.
+                                                    Sed do eiusmod tempor
+                                                    incididunt ut labore et
+                                                    dolore magna aliqua. Ut enim
+                                                    ad minim veniam, quis
+                                                    nostrud exercitation ullamco
+                                                    laboris nisi ut aliquip ex
+                                                    ea commodo consequat. Duis
+                                                    aute irure dolor in
+                                                    reprehenderit in voluptate
+                                                    velit esse cillum dolore eu
+                                                    fugiat nulla pariatur.
                                                 </p>
                                             </div>
 
                                             <!-- Back indicator -->
-                                            <p class="text-xs text-muted-foreground text-center mt-auto pt-2 flex-shrink-0">
+                                            <p
+                                                class="text-xs text-muted-foreground text-center mt-auto pt-2 flex-shrink-0"
+                                            >
                                                 Klik untuk kembali
                                             </p>
                                         </div>
@@ -444,15 +502,21 @@ onBeforeUnmount(() => {
                             <!-- Card 2 - Pasangan 2 -->
                             <div
                                 class="flip-card"
-                                :class="{ 'flipped': isFlipped2 }"
+                                :class="{ flipped: isFlipped2 }"
                                 @click="toggleFlip2"
                             >
                                 <div class="flip-card-inner">
                                     <!-- Front Side - Photo & Names -->
-                                    <div class="flip-card-front bg-card rounded-xl overflow-hidden border border-border shadow-xl cursor-pointer">
-                                        <div class="relative w-full h-[500px] md:h-[600px] flex flex-col">
+                                    <div
+                                        class="flip-card-front bg-card rounded-xl overflow-hidden border border-border shadow-xl cursor-pointer"
+                                    >
+                                        <div
+                                            class="relative w-full h-[500px] md:h-[600px] flex flex-col"
+                                        >
                                             <!-- Photo Section -->
-                                            <div class="relative flex-1 bg-muted flex items-center justify-center overflow-hidden">
+                                            <div
+                                                class="relative flex-1 bg-muted flex items-center justify-center overflow-hidden"
+                                            >
                                                 <div
                                                     class="absolute inset-0 bg-gradient-to-r from-[#ee523c] via-[#fe7646] to-[#ee523c] opacity-10 blur-2xl transition-opacity duration-300"
                                                 ></div>
@@ -464,8 +528,12 @@ onBeforeUnmount(() => {
                                             </div>
 
                                             <!-- Names Section -->
-                                            <div class="p-6 md:p-8 bg-card border-t border-border">
-                                                <div class="text-center space-y-3">
+                                            <div
+                                                class="p-6 md:p-8 bg-card border-t border-border"
+                                            >
+                                                <div
+                                                    class="text-center space-y-3"
+                                                >
                                                     <div
                                                         class="text-xs md:text-sm font-semibold text-muted-foreground uppercase tracking-wider"
                                                     >
@@ -475,7 +543,8 @@ onBeforeUnmount(() => {
                                                         <h2
                                                             class="text-xl md:text-2xl lg:text-3xl font-bold text-primary leading-tight"
                                                         >
-                                                            I Gusti Ngurah Karunya Pratama
+                                                            I Gusti Ngurah
+                                                            Karunya Pratama
                                                         </h2>
                                                         <div
                                                             class="text-base md:text-lg text-muted-foreground"
@@ -485,11 +554,15 @@ onBeforeUnmount(() => {
                                                         <h2
                                                             class="text-xl md:text-2xl lg:text-3xl font-bold text-primary leading-tight"
                                                         >
-                                                            Arganta Bisma Pramata
+                                                            Arganta Bisma
+                                                            Pramata
                                                         </h2>
                                                     </div>
-                                                    <p class="text-xs md:text-sm text-muted-foreground mt-4">
-                                                        Klik untuk melihat visi &amp; misi
+                                                    <p
+                                                        class="text-xs md:text-sm text-muted-foreground mt-4"
+                                                    >
+                                                        Klik untuk melihat visi
+                                                        &amp; misi
                                                     </p>
                                                 </div>
                                             </div>
@@ -497,11 +570,19 @@ onBeforeUnmount(() => {
                                     </div>
 
                                     <!-- Back Side - Vision & Mission -->
-                                    <div class="flip-card-back bg-card rounded-xl overflow-hidden border border-border shadow-xl cursor-pointer">
-                                        <div class="w-full h-[500px] md:h-[600px] p-4 md:p-6 lg:p-8 flex flex-col justify-start space-y-4 md:space-y-6 overflow-y-auto">
+                                    <div
+                                        class="flip-card-back bg-card rounded-xl overflow-hidden border border-border shadow-xl cursor-pointer"
+                                    >
+                                        <div
+                                            class="w-full h-[500px] md:h-[600px] p-4 md:p-6 lg:p-8 flex flex-col justify-start space-y-4 md:space-y-6 overflow-y-auto"
+                                        >
                                             <!-- Vision -->
-                                            <div class="space-y-2 md:space-y-3 flex-shrink-0">
-                                                <div class="flex items-center gap-2">
+                                            <div
+                                                class="space-y-2 md:space-y-3 flex-shrink-0"
+                                            >
+                                                <div
+                                                    class="flex items-center gap-2"
+                                                >
                                                     <div
                                                         class="w-1 h-6 md:h-8 bg-gradient-to-b from-[#fe7646] to-[#ee523c] rounded-full flex-shrink-0"
                                                     ></div>
@@ -514,11 +595,15 @@ onBeforeUnmount(() => {
                                                 <p
                                                     class="text-xs md:text-sm lg:text-base text-muted-foreground leading-relaxed pl-3"
                                                 >
-                                                    Menjadikan Himatifa sebagai wadah yang
-                                                    mendukung perkembangan dan peningkatan
-                                                    kualitas mahasiswa informatika, serta mampu
-                                                    beradaptasi terhadapi lingkungan dan terbuka
-                                                    dengan ide baru dalam prosesnya.
+                                                    Menjadikan Himatifa sebagai
+                                                    wadah yang mendukung
+                                                    perkembangan dan peningkatan
+                                                    kualitas mahasiswa
+                                                    informatika, serta mampu
+                                                    beradaptasi terhadapi
+                                                    lingkungan dan terbuka
+                                                    dengan ide baru dalam
+                                                    prosesnya.
                                                 </p>
                                             </div>
 
@@ -528,8 +613,12 @@ onBeforeUnmount(() => {
                                             ></div>
 
                                             <!-- Mission -->
-                                            <div class="space-y-2 md:space-y-3 flex-shrink-0">
-                                                <div class="flex items-center gap-2">
+                                            <div
+                                                class="space-y-2 md:space-y-3 flex-shrink-0"
+                                            >
+                                                <div
+                                                    class="flex items-center gap-2"
+                                                >
                                                     <div
                                                         class="w-1 h-6 md:h-8 bg-gradient-to-b from-[#fe7646] to-[#ee523c] rounded-full flex-shrink-0"
                                                     ></div>
@@ -542,12 +631,26 @@ onBeforeUnmount(() => {
                                                 <p
                                                     class="text-xs md:text-sm lg:text-base text-muted-foreground leading-relaxed pl-3"
                                                 >
-                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                                                    Lorem ipsum dolor sit amet,
+                                                    consectetur adipiscing elit.
+                                                    Sed do eiusmod tempor
+                                                    incididunt ut labore et
+                                                    dolore magna aliqua. Ut enim
+                                                    ad minim veniam, quis
+                                                    nostrud exercitation ullamco
+                                                    laboris nisi ut aliquip ex
+                                                    ea commodo consequat. Duis
+                                                    aute irure dolor in
+                                                    reprehenderit in voluptate
+                                                    velit esse cillum dolore eu
+                                                    fugiat nulla pariatur.
                                                 </p>
                                             </div>
 
                                             <!-- Back indicator -->
-                                            <p class="text-xs text-muted-foreground text-center mt-auto pt-2 flex-shrink-0">
+                                            <p
+                                                class="text-xs text-muted-foreground text-center mt-auto pt-2 flex-shrink-0"
+                                            >
                                                 Klik untuk kembali
                                             </p>
                                         </div>
@@ -556,7 +659,6 @@ onBeforeUnmount(() => {
                             </div>
                         </div>
                     </div>
-
                 </section>
 
                 <!-- BLJ Kandidat Section -->
@@ -568,7 +670,11 @@ onBeforeUnmount(() => {
                         'opacity-0 translate-y-8': !bljReveal.isVisible,
                         'opacity-100 translate-y-0': bljReveal.isVisible,
                     }"
-                    style="transition: opacity 0.6s ease-out 0.2s, transform 0.6s ease-out 0.2s;"
+                    style="
+                        transition:
+                            opacity 0.6s ease-out 0.2s,
+                            transform 0.6s ease-out 0.2s;
+                    "
                 >
                     <div
                         class="items-center justify-center flex flex-col py-8 md:py-6 px-6 md:px-10 w-[900px] max-w-4xl mb-10"
@@ -692,7 +798,11 @@ onBeforeUnmount(() => {
                         'opacity-0 translate-y-8': !tutorialReveal.isVisible,
                         'opacity-100 translate-y-0': tutorialReveal.isVisible,
                     }"
-                    style="transition: opacity 0.6s ease-out 0.2s, transform 0.6s ease-out 0.2s;"
+                    style="
+                        transition:
+                            opacity 0.6s ease-out 0.2s,
+                            transform 0.6s ease-out 0.2s;
+                    "
                 >
                     <div class="w-full max-w-6xl text-center px-4">
                         <h2 class="text-4xl md:text-4xl lg:text-5xl font-bold">
@@ -809,12 +919,16 @@ onBeforeUnmount(() => {
                                     </h2>
                                     <ul class="text-gray-500 font-medium">
                                         <li class="mb-4">
-                                            <a href="#" class="hover:text-primary transition-colors duration-200"
+                                            <a
+                                                href="#"
+                                                class="hover:text-primary transition-colors duration-200"
                                                 >Privacy Policy</a
                                             >
                                         </li>
                                         <li>
-                                            <a href="#" class="hover:text-primary transition-colors duration-200"
+                                            <a
+                                                href="#"
+                                                class="hover:text-primary transition-colors duration-200"
                                                 >Terms &amp; Conditions</a
                                             >
                                         </li>
@@ -863,10 +977,12 @@ onBeforeUnmount(() => {
 }
 
 @keyframes blink {
-    0%, 50% {
+    0%,
+    50% {
         opacity: 1;
     }
-    51%, 100% {
+    51%,
+    100% {
         opacity: 0;
     }
 }
