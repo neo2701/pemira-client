@@ -17,16 +17,11 @@ const candidatesReveal = useScrollReveal();
 const bljReveal = useScrollReveal();
 const tutorialReveal = useScrollReveal();
 
-// Flip card states for candidates (2 pasangan)
-const isFlipped1 = ref(false);
-const isFlipped2 = ref(false);
+// Flip card state for candidate
+const isFlipped = ref(false);
 
-const toggleFlip1 = () => {
-    isFlipped1.value = !isFlipped1.value;
-};
-
-const toggleFlip2 = () => {
-    isFlipped2.value = !isFlipped2.value;
+const toggleFlip = () => {
+    isFlipped.value = !isFlipped.value;
 };
 
 const auth = useAuth();
@@ -322,16 +317,14 @@ onBeforeUnmount(() => {
                         Ketua Himatifa &amp; Wakil Ketua Himatifa
                     </h3>
 
-                    <!-- Candidate Cards Side by Side -->
-                    <div class="max-w-7xl mx-auto px-4">
-                        <div
-                            class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8"
-                        >
-                            <!-- Card 1 - Pasangan 1 -->
+                    <!-- Candidate Card -->
+                    <div class="max-w-4xl mx-auto px-4">
+                        <div class="flex justify-center">
+                            <!-- Single Card -->
                             <div
-                                class="flip-card"
-                                :class="{ 'flipped': isFlipped1 }"
-                                @click="toggleFlip1"
+                                class="flip-card w-full max-w-2xl"
+                                :class="{ 'flipped': isFlipped }"
+                                @click="toggleFlip"
                             >
                                 <div class="flip-card-inner">
                                     <!-- Front Side - Photo & Names -->
@@ -352,125 +345,6 @@ onBeforeUnmount(() => {
                                             <!-- Names Section -->
                                             <div class="p-6 md:p-8 bg-card border-t border-border">
                                                 <div class="text-center space-y-3">
-                                                    <div
-                                                        class="text-xs md:text-sm font-semibold text-muted-foreground uppercase tracking-wider"
-                                                    >
-                                                        Pasangan 1
-                                                    </div>
-                                                    <div class="space-y-2">
-                                                        <h2
-                                                            class="text-xl md:text-2xl lg:text-3xl font-bold text-primary leading-tight"
-                                                        >
-                                                            I Gusti Ngurah Karunya Pratama
-                                                        </h2>
-                                                        <div
-                                                            class="text-base md:text-lg text-muted-foreground"
-                                                        >
-                                                            &amp;
-                                                        </div>
-                                                        <h2
-                                                            class="text-xl md:text-2xl lg:text-3xl font-bold text-primary leading-tight"
-                                                        >
-                                                            Arganta Bisma Pramata
-                                                        </h2>
-                                                    </div>
-                                                    <p class="text-xs md:text-sm text-muted-foreground mt-4">
-                                                        Klik untuk melihat visi &amp; misi
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Back Side - Vision & Mission -->
-                                    <div class="flip-card-back bg-card rounded-xl overflow-hidden border border-border shadow-xl cursor-pointer">
-                                        <div class="w-full h-[500px] md:h-[600px] p-4 md:p-6 lg:p-8 flex flex-col justify-start space-y-4 md:space-y-6 overflow-y-auto">
-                                            <!-- Vision -->
-                                            <div class="space-y-2 md:space-y-3 flex-shrink-0">
-                                                <div class="flex items-center gap-2">
-                                                    <div
-                                                        class="w-1 h-6 md:h-8 bg-gradient-to-b from-[#fe7646] to-[#ee523c] rounded-full flex-shrink-0"
-                                                    ></div>
-                                                    <h3
-                                                        class="text-lg md:text-xl lg:text-2xl font-bold text-primary"
-                                                    >
-                                                        Visi
-                                                    </h3>
-                                                </div>
-                                                <p
-                                                    class="text-xs md:text-sm lg:text-base text-muted-foreground leading-relaxed pl-3"
-                                                >
-                                                    Menjadikan Himatifa sebagai wadah yang
-                                                    mendukung perkembangan dan peningkatan
-                                                    kualitas mahasiswa informatika, serta mampu
-                                                    beradaptasi terhadapi lingkungan dan terbuka
-                                                    dengan ide baru dalam prosesnya.
-                                                </p>
-                                            </div>
-
-                                            <!-- Divider -->
-                                            <div
-                                                class="w-full h-px bg-gradient-to-r from-transparent via-border to-transparent flex-shrink-0"
-                                            ></div>
-
-                                            <!-- Mission -->
-                                            <div class="space-y-2 md:space-y-3 flex-shrink-0">
-                                                <div class="flex items-center gap-2">
-                                                    <div
-                                                        class="w-1 h-6 md:h-8 bg-gradient-to-b from-[#fe7646] to-[#ee523c] rounded-full flex-shrink-0"
-                                                    ></div>
-                                                    <h3
-                                                        class="text-lg md:text-xl lg:text-2xl font-bold text-primary"
-                                                    >
-                                                        Misi
-                                                    </h3>
-                                                </div>
-                                                <p
-                                                    class="text-xs md:text-sm lg:text-base text-muted-foreground leading-relaxed pl-3"
-                                                >
-                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                                                </p>
-                                            </div>
-
-                                            <!-- Back indicator -->
-                                            <p class="text-xs text-muted-foreground text-center mt-auto pt-2 flex-shrink-0">
-                                                Klik untuk kembali
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Card 2 - Pasangan 2 -->
-                            <div
-                                class="flip-card"
-                                :class="{ 'flipped': isFlipped2 }"
-                                @click="toggleFlip2"
-                            >
-                                <div class="flip-card-inner">
-                                    <!-- Front Side - Photo & Names -->
-                                    <div class="flip-card-front bg-card rounded-xl overflow-hidden border border-border shadow-xl cursor-pointer">
-                                        <div class="relative w-full h-[500px] md:h-[600px] flex flex-col">
-                                            <!-- Photo Section -->
-                                            <div class="relative flex-1 bg-muted flex items-center justify-center overflow-hidden">
-                                                <div
-                                                    class="absolute inset-0 bg-gradient-to-r from-[#ee523c] via-[#fe7646] to-[#ee523c] opacity-10 blur-2xl transition-opacity duration-300"
-                                                ></div>
-                                                <img
-                                                    src="/KAHIMA/cakahima.webp"
-                                                    alt="Kandidat KAHIMA"
-                                                    class="relative z-10 w-full h-full object-contain p-4"
-                                                />
-                                            </div>
-
-                                            <!-- Names Section -->
-                                            <div class="p-6 md:p-8 bg-card border-t border-border">
-                                                <div class="text-center space-y-3">
-                                                    <div
-                                                        class="text-xs md:text-sm font-semibold text-muted-foreground uppercase tracking-wider"
-                                                    >
-                                                        Pasangan 2
-                                                    </div>
                                                     <div class="space-y-2">
                                                         <h2
                                                             class="text-xl md:text-2xl lg:text-3xl font-bold text-primary leading-tight"
