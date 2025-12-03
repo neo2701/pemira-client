@@ -336,7 +336,7 @@ onBeforeUnmount(() => {
                             <!-- Single Card -->
                             <div
                                 class="flip-card w-full max-w-2xl"
-                                :class="{ 'flipped': isFlipped }"
+                                :class="{ flipped: isFlipped }"
                                 @click="toggleFlip"
                             >
                                 <div class="flip-card-inner">
@@ -362,14 +362,18 @@ onBeforeUnmount(() => {
                                             </div>
 
                                             <!-- Names Section -->
-                                            <div class="p-6 md:p-8 bg-card border-t border-border">
-                                                <div class="text-center space-y-3">
+                                            <div
+                                                class="p-6 md:p-8 bg-card border-t border-border"
+                                            >
+                                                <div
+                                                    class="text-center space-y-3"
+                                                >
                                                     <div class="space-y-2">
                                                         <h2
                                                             class="text-xl md:text-2xl lg:text-3xl font-bold text-primary leading-tight"
                                                         >
-                                                            I Gusti Ngurah
-                                                            Karunya Pratama
+                                                            Jonathan Teguh
+                                                            Samuel Kaeng
                                                         </h2>
                                                         <div
                                                             class="text-base md:text-lg text-muted-foreground"
@@ -379,8 +383,8 @@ onBeforeUnmount(() => {
                                                         <h2
                                                             class="text-xl md:text-2xl lg:text-3xl font-bold text-primary leading-tight"
                                                         >
-                                                            Arganta Bisma
-                                                            Pramata
+                                                            Rizky Fadilatul Dwi
+                                                            Saputra
                                                         </h2>
                                                     </div>
                                                     <p
@@ -420,15 +424,16 @@ onBeforeUnmount(() => {
                                                 <p
                                                     class="text-xs md:text-sm lg:text-base text-muted-foreground leading-relaxed pl-3"
                                                 >
-                                                    Menjadikan Himatifa sebagai
-                                                    wadah yang mendukung
-                                                    perkembangan dan peningkatan
-                                                    kualitas mahasiswa
-                                                    informatika, serta mampu
-                                                    beradaptasi terhadapi
-                                                    lingkungan dan terbuka
-                                                    dengan ide baru dalam
-                                                    prosesnya.
+                                                    Lorem ipsum dolor sit amet
+                                                    consectetur adipisicing
+                                                    elit. Quia culpa excepturi
+                                                    laudantium, reiciendis amet
+                                                    temporibus deleniti,
+                                                    quisquam aperiam deserunt
+                                                    saepe dolores quibusdam
+                                                    cumque eveniet, nisi fuga
+                                                    quos laboriosam consequatur
+                                                    aliquid.
                                                 </p>
                                             </div>
 
@@ -727,7 +732,7 @@ onBeforeUnmount(() => {
                                         </li>
                                         <li>
                                             <a
-                                                href="https://wa.me/6281283635565"
+                                                href="https://wa.me/6287864934849"
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 class="hover:text-primary transition-colors duration-200"
@@ -790,7 +795,10 @@ onBeforeUnmount(() => {
 }
 
 /* Prevent text from being cut off */
-h1, h2, h3, p {
+h1,
+h2,
+h3,
+p {
     word-wrap: break-word;
     overflow-wrap: break-word;
     hyphens: auto;

@@ -1,48 +1,13 @@
 [
     {
         "image": "/person_blank.png",
-        "name": "Desta Rizky Andhika",
-        "angkatan": "2022"
-    },
-    {
-        "image": "/person_blank.png",
-        "name": "Rafie Najwan Anjasmara",
-        "angkatan": "2022"
-    },
-    {
-        "image": "/person_blank.png",
-        "name": "Muhammad Bagus Satrio Aji",
+        "name": "Yazid Fadhlurrohman",
         "angkatan": "2023"
     },
     {
         "image": "/person_blank.png",
-        "name": "Heraldi Rizky Anggriawan",
+        "name": "Iqbal Zahy Adam",
         "angkatan": "2023"
-    },
-    {
-        "image": "/person_blank.png",
-        "name": "Ghabriella Auranizza Fransrico",
-        "angkatan": "2023"
-    },
-    {
-        "image": "/person_blank.png",
-        "name": "Theodore Manuel Sahasika",
-        "angkatan": "2023"
-    },
-    {
-        "image": "/person_blank.png",
-        "name": "Feomita Ramadhany Fudiansah",
-        "angkatan": "2023"
-    },
-    {
-        "image": "/person_blank.png",
-        "name": "Evrillia Kurniawati",
-        "angkatan": "2024"
-    },
-    {
-        "image": "/person_blank.png",
-        "name": "Dio Afrizal Yona Saputra",
-        "angkatan": "2024"
     },
     {
         "image": "/person_blank.png",
@@ -53,5 +18,40 @@
         "image": "/person_blank.png",
         "name": "Henri Tri Herdiansyah",
         "angkatan": "2024"
+    },
+    {
+        "image": "/person_blank.png",
+        "name": "Alvero Fathir Rahman",
+        "angkatan": "2024"
+    },
+    {
+        "image": "/person_blank.png",
+        "name": "Mohammad Satria Putra Wicaksono",
+        "angkatan": "2024"
+    },
+    {
+        "image": "/person_blank.png",
+        "name": "Evrillia Kurniawati",
+        "angkatan": "2024"
+    },
+    {
+        "image": "/person_blank.png",
+        "name": "Cinthia Nur Laili",
+        "angkatan": "2025"
+    },
+    {
+        "image": "/person_blank.png",
+        "name": "Sebastian Kevin Hazel",
+        "angkatan": "2025"
+    },
+    {
+        "image": "/person_blank.png",
+        "name": "Achmad Naufal Pramadani",
+        "angkatan": "2025"
+    },
+    {
+        "image": "/person_blank.png",
+        "name": "Salsa Aufa Nur Huwaizha",
+        "angkatan": "2025"
     }
 ]
