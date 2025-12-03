@@ -33,7 +33,7 @@ const handleImageError = () => {
 
 const isOpen = ref(false);
 
-watchEffect(async () => {
+const fetchEvent = async () => {
     try {
         await electionStore.getEvent(1);
         isOpen.value = Boolean(electionStore.event?.is_open ?? false);
@@ -41,6 +41,19 @@ watchEffect(async () => {
         console.error('Failed to get event:', error);
         isOpen.value = false;
         alert('Terjadi kesalahan, silakan coba lagi.');
+    }
+};
+
+let intervalId: ReturnType<typeof setInterval> | null = null;
+
+onMounted(() => {
+    fetchEvent();
+    intervalId = setInterval(fetchEvent, 3500);
+});
+
+onUnmounted(() => {
+    if (intervalId) {
+        clearInterval(intervalId);
     }
 });
 
