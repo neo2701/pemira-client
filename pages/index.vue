@@ -656,6 +656,7 @@ onBeforeUnmount(() => {
                                     src="https://www.youtube.com/embed/x7oc9-yMIeg?si=xet-HA-z5vvQoAer"
                                     class="absolute inset-0 w-full h-full rounded-lg"
                                     frameborder="0"
+                                    referrerpolicy="strict-origin-when-cross-origin"
                                     allowfullscreen
                                 ></iframe>
                             </div>
