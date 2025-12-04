@@ -7,7 +7,7 @@ onMounted(async () => {
 
     const { data, error } = await useApiFetch('/auth/login', {
         method: 'POST',
-        body: JSON.stringify({ accessToken }),
+        data: { accessToken },
     });
 
     if (error.value || !data.value) {

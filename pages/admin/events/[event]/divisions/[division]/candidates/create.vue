@@ -67,12 +67,12 @@ const submit = form.handleSubmit(async (values) => {
         `/events/${route.params.event}/candidates`,
         {
             method: 'POST',
-            body: formData,
+            data: formData,
         },
     );
 
     if (error.value) {
-        alertStore.show(error.value.message, 'error');
+        alertStore.show(error.value, 'error');
         return;
     }
 

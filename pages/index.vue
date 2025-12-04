@@ -2,9 +2,28 @@
 import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
 import { useAuth } from '@/composables/useAuth';
 import { usePemiraConfig } from '@/composables/usePemiraConfig';
+import { useScrollReveal } from '@/composables/useScrollReveal';
+import { useTypingEffect } from '@/composables/useTypingEffect';
 import StartCard from '@/components/StartCard.vue';
 
 const { year } = usePemiraConfig();
+
+// Typing effect for hero title
+const heroTitle =
+    'Collaboration, Innovation, and Dedication:\nBuilding Progressive Informatics';
+const typing = useTypingEffect(heroTitle, 40);
+
+// Scroll reveal hooks for sections
+const candidatesReveal = useScrollReveal();
+const bljReveal = useScrollReveal();
+const tutorialReveal = useScrollReveal();
+
+// Flip card state for candidate
+const isFlipped = ref(false);
+
+const toggleFlip = () => {
+    isFlipped.value = !isFlipped.value;
+};
 
 const auth = useAuth();
 const user = ref(auth.user());
@@ -132,8 +151,6 @@ const handleMouseDownSlide = (event: MouseEvent) => {
 };
 const handleMouseEnterSlide = () => {
     stopAutoSlide();
-    console.log(autoSlideInterval.current);
-    console.log(sliderContainer.value?.scrollLeft);
     sliderContainer.value?.classList.add('cursor-pointer');
 };
 
@@ -237,20 +254,31 @@ onBeforeUnmount(() => {
                     id="hero"
                     class="scroll-m-[80px] flex items-center justify-center bg-background min-h-[calc(90vh-10rem)] w-full md:min-h-[calc(100vh-8rem)]"
                 >
-                    <div class="w-full max-w-6xl text-center px-4">
+                    <div class="w-full max-w-6xl text-center px-4 sm:px-6">
                         <img
                             src="/logo.png"
                             alt="Logo"
                             class="w-[10rem] md:w-32 aspect-square mx-auto mb-6"
                         />
                         <h1
-                            class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 bg-gradient-to-b from-[#fe7646] to-[#ee523c] bg-clip-text text-transparent"
+                            class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 md:mb-8 lg:mb-10 bg-gradient-to-b from-[#fe7646] to-[#ee523c] bg-clip-text text-transparent min-h-[4.5rem] sm:min-h-[5.5rem] md:min-h-[6.5rem] lg:min-h-[7.5rem] leading-normal px-2 sm:px-4 md:px-6 pb-1"
                         >
-                            Collaboration, Innovation, and Dedication:<br/> Building
-                            Progressive Informatics
+                            <span
+                                v-html="
+                                    typing.displayedText.value.replace(
+                                        /\n/g,
+                                        '<br/>',
+                                    )
+                                "
+                            ></span>
+                            <span
+                                v-if="typing.isTyping.value"
+                                class="typing-cursor"
+                                >|</span
+                            >
                         </h1>
                         <p
-                            class="text-lg sm:text-xl lg:text-2xl text-muted-foreground mb-6 md:mb-10 max-w-xl sm:max-w-2xl mx-auto px-2 sm:px-4"
+                            class="text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground mb-6 md:mb-10 max-w-xl sm:max-w-2xl mx-auto px-4 sm:px-6 break-words"
                         >
                             Vote for the best candidate to build a brighter
                             future for everyone.
@@ -272,7 +300,17 @@ onBeforeUnmount(() => {
                 <!-- Candidate Section -->
                 <section
                     id="candidates"
+                    ref="candidatesReveal.elementRef"
                     class="bg-muted min-h-[calc(100vh-4rem)] w-full px-4 py-[3rem] mt-[6rem] scroll-m-[100px]"
+                    :class="{
+                        'opacity-0 translate-y-8': !candidatesReveal.isVisible,
+                        'opacity-100 translate-y-0': candidatesReveal.isVisible,
+                    }"
+                    style="
+                        transition:
+                            opacity 0.6s ease-out 0.2s,
+                            transform 0.6s ease-out 0.2s;
+                    "
                 >
                     <h2
                         class="text-4xl md:text-4xl lg:text-5xl font-bold text-primary text-center"
@@ -292,44 +330,165 @@ onBeforeUnmount(() => {
                         Ketua Himatifa &amp; Wakil Ketua Himatifa
                     </h3>
 
-                    <div
-                        class="flex flex-col items-center gap-8 px-4 md:grid md:grid-cols-2 xl:gap-16 xl:px-16"
-                    >
-                        <div class="relative flex items-center justify-center">
+                    <!-- Candidate Card -->
+                    <div class="max-w-4xl mx-auto px-4">
+                        <div class="flex justify-center">
+                            <!-- Single Card -->
                             <div
-                                class="absolute w-96 h-96 rounded-full bg-gradient-to-r from-[#ee523c] via-[#fe7646] to-[#ee523c] opacity-20 blur-3xl"
-                            ></div>
-                            <img
-                                src="/KAHIMA/1.webp"
-                                alt="Prabowo & Gibran"
-                                class="relative object-cover z-10 aspect-square w-[20rem] md:w-[25rem]"
-                            />
-                        </div>
-
-                        <div class="mt-[4rem]">
-                            <div class="text-center text-2xl md:text-3xl">
-                                <h2>I Gusti Ngurah Karunya Pratama</h2>
-                                <h3 class="text-gray-500">&amp;</h3>
-                                <h2>Arganta Bisma Pramata</h2>
-                            </div>
-
-                            <div
-                                class="mt-5 max-w-[18rem] md:max-w-none mx-auto"
+                                class="flip-card w-full max-w-2xl"
+                                :class="{ flipped: isFlipped }"
+                                @click="toggleFlip"
                             >
-                                <h2
-                                    class="md:text-lg lg:text-xl text-lg text-center"
-                                >
-                                    Visi :
-                                </h2>
-                                <p
-                                    class="text-gray-300 md:text-current lg:text-lg text-base text-justify"
-                                >
-                                    Menjadikan Himatifa sebagai wadah yang
-                                    mendukung perkembangan dan peningkatan
-                                    kualitas mahasiswa informatika, serta mampu
-                                    beradaptasi terhadapi lingkungan dan terbuka
-                                    dengan ide baru dalam prosesnya.
-                                </p>
+                                <div class="flip-card-inner">
+                                    <!-- Front Side - Photo & Names -->
+                                    <div
+                                        class="flip-card-front bg-card rounded-xl overflow-hidden border border-border shadow-xl cursor-pointer"
+                                    >
+                                        <div
+                                            class="relative w-full h-[500px] md:h-[600px] flex flex-col"
+                                        >
+                                            <!-- Photo Section -->
+                                            <div
+                                                class="relative flex-1 bg-muted flex items-center justify-center overflow-hidden"
+                                            >
+                                                <div
+                                                    class="absolute inset-0 bg-gradient-to-r from-[#ee523c] via-[#fe7646] to-[#ee523c] opacity-10 blur-2xl transition-opacity duration-300"
+                                                ></div>
+                                                <img
+                                                    src="/KAHIMA/cakahima.webp"
+                                                    alt="Kandidat KAHIMA"
+                                                    class="relative z-10 w-full h-full object-contain p-4"
+                                                />
+                                            </div>
+
+                                            <!-- Names Section -->
+                                            <div
+                                                class="p-6 md:p-8 bg-card border-t border-border"
+                                            >
+                                                <div
+                                                    class="text-center space-y-3"
+                                                >
+                                                    <div class="space-y-2">
+                                                        <h2
+                                                            class="text-xl md:text-2xl lg:text-3xl font-bold text-primary leading-tight"
+                                                        >
+                                                            Jonathan Teguh
+                                                            Samuel Kaeng
+                                                        </h2>
+                                                        <div
+                                                            class="text-base md:text-lg text-muted-foreground"
+                                                        >
+                                                            &amp;
+                                                        </div>
+                                                        <h2
+                                                            class="text-xl md:text-2xl lg:text-3xl font-bold text-primary leading-tight"
+                                                        >
+                                                            Rizky Fadilatul Dwi
+                                                            Saputra
+                                                        </h2>
+                                                    </div>
+                                                    <p
+                                                        class="text-xs md:text-sm text-muted-foreground mt-4"
+                                                    >
+                                                        Klik untuk melihat visi
+                                                        &amp; misi
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Back Side - Vision & Mission -->
+                                    <div
+                                        class="flip-card-back bg-card rounded-xl overflow-hidden border border-border shadow-xl cursor-pointer"
+                                    >
+                                        <div
+                                            class="w-full h-[500px] md:h-[600px] p-4 md:p-6 lg:p-8 flex flex-col justify-start space-y-4 md:space-y-6 overflow-y-auto"
+                                        >
+                                            <!-- Vision -->
+                                            <div
+                                                class="space-y-2 md:space-y-3 flex-shrink-0"
+                                            >
+                                                <div
+                                                    class="flex items-center gap-2"
+                                                >
+                                                    <div
+                                                        class="w-1 h-6 md:h-8 bg-gradient-to-b from-[#fe7646] to-[#ee523c] rounded-full flex-shrink-0"
+                                                    ></div>
+                                                    <h3
+                                                        class="text-lg md:text-xl lg:text-2xl font-bold text-primary"
+                                                    >
+                                                        Visi
+                                                    </h3>
+                                                </div>
+                                                <p
+                                                    class="text-xs md:text-sm lg:text-base text-muted-foreground leading-relaxed pl-3"
+                                                >
+                                                    Mengembangkan HIMATIFA
+                                                    sebagai wadah yang
+                                                    memfasilitasi, menggerakkan,
+                                                    dan memberdayakan keluarga
+                                                    Mahasiswa Informatika agar
+                                                    lebih aktif dan berprestasi
+                                                    serta berkontribusi positif
+                                                    bagi masyarakat.
+                                                </p>
+                                            </div>
+
+                                            <!-- Divider -->
+                                            <div
+                                                class="w-full h-px bg-gradient-to-r from-transparent via-border to-transparent flex-shrink-0"
+                                            ></div>
+
+                                            <!-- Mission -->
+                                            <div
+                                                class="space-y-2 md:space-y-3 flex-shrink-0"
+                                            >
+                                                <div
+                                                    class="flex items-center gap-2"
+                                                >
+                                                    <div
+                                                        class="w-1 h-6 md:h-8 bg-gradient-to-b from-[#fe7646] to-[#ee523c] rounded-full flex-shrink-0"
+                                                    ></div>
+                                                    <h3
+                                                        class="text-lg md:text-xl lg:text-2xl font-bold text-primary"
+                                                    >
+                                                        Misi
+                                                    </h3>
+                                                </div>
+                                                <p
+                                                    class="text-xs md:text-sm lg:text-base text-muted-foreground leading-relaxed pl-3"
+                                                >
+                                                    1. Mewujudkan HIMATIFA
+                                                    sebagai sumber informasi
+                                                    yang relevan, cepat, dan
+                                                    terpercaya bagi peningkatan
+                                                    kualitas keluarga Mahasiswa
+                                                    Informatika.<br />2.
+                                                    Mewujudkan HIMATIFA sebagai
+                                                    wadah pengembangan yang
+                                                    aktif mendorong peningkatan
+                                                    soft skill dan hard skill
+                                                    keluarga Mahasiswa
+                                                    Informatika.<br />
+                                                    3. Menjadikan HIMATIFA
+                                                    sebagai pendorong keluarga
+                                                    Mahasiswa Informatika agar
+                                                    lebih terlibat dalam bidang
+                                                    akademik, non akademik,
+                                                    sosial, dan teknologi.
+                                                </p>
+                                            </div>
+
+                                            <!-- Back indicator -->
+                                            <p
+                                                class="text-xs text-muted-foreground text-center mt-auto pt-2 flex-shrink-0"
+                                            >
+                                                Klik untuk kembali
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -338,7 +497,17 @@ onBeforeUnmount(() => {
                 <!-- BLJ Kandidat Section -->
                 <section
                     id="blj"
+                    ref="bljReveal.elementRef"
                     class="flex flex-col items-center justify-center py-6 bg-muted"
+                    :class="{
+                        'opacity-0 translate-y-8': !bljReveal.isVisible,
+                        'opacity-100 translate-y-0': bljReveal.isVisible,
+                    }"
+                    style="
+                        transition:
+                            opacity 0.6s ease-out 0.2s,
+                            transform 0.6s ease-out 0.2s;
+                    "
                 >
                     <div
                         class="items-center justify-center flex flex-col py-8 md:py-6 px-6 md:px-10 w-[900px] max-w-4xl mb-10"
@@ -390,16 +559,16 @@ onBeforeUnmount(() => {
                                 <UiCard
                                     v-for="(slide, index) in slides"
                                     :key="index"
-                                    class="flex-shrink-0 w-[300px] flex snap-start flex-col items-center bg-card"
+                                    class="flex-shrink-0 w-[300px] flex snap-start flex-col items-center bg-card transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border-border"
                                 >
                                     <UiAspectRatio
                                         :ratio="1"
-                                        class="relative border-b border-white pb-0.2"
+                                        class="relative border-b border-border pb-0.2 overflow-hidden"
                                     >
                                         <img
                                             :src="slide.image"
                                             alt="BLJ Image"
-                                            class="object-cover w-full h-full rounded-t-md transition-opacity duration-300"
+                                            class="object-cover w-full h-full rounded-t-md transition-transform duration-300 hover:scale-105"
                                         />
                                     </UiAspectRatio>
                                     <UiCardHeader>
@@ -456,7 +625,17 @@ onBeforeUnmount(() => {
                 <!-- Video Tutorial Section -->
                 <section
                     id="tutorial"
+                    ref="tutorialReveal.elementRef"
                     class="flex flex-col items-center justify-center w-full py-12 px-4 mb-[2rem] scroll-m-[50px]"
+                    :class="{
+                        'opacity-0 translate-y-8': !tutorialReveal.isVisible,
+                        'opacity-100 translate-y-0': tutorialReveal.isVisible,
+                    }"
+                    style="
+                        transition:
+                            opacity 0.6s ease-out 0.2s,
+                            transform 0.6s ease-out 0.2s;
+                    "
                 >
                     <div class="w-full max-w-6xl text-center px-4">
                         <h2 class="text-4xl md:text-4xl lg:text-5xl font-bold">
@@ -470,7 +649,7 @@ onBeforeUnmount(() => {
                         </h3>
 
                         <div
-                            class="relative w-full max-w-4xl mx-auto rounded-lg overflow-hidden shadow-lg"
+                            class="relative w-full max-w-4xl mx-auto rounded-lg overflow-hidden shadow-lg transition-shadow duration-300 hover:shadow-xl"
                         >
                             <div class="aspect-video">
                                 <iframe
@@ -518,21 +697,21 @@ onBeforeUnmount(() => {
                                         <li class="mb-4">
                                             <a
                                                 href="#hero"
-                                                class="hover:underline"
+                                                class="hover:text-primary transition-colors duration-200"
                                                 >Vote Now</a
                                             >
                                         </li>
                                         <li class="mb-4">
                                             <a
                                                 href="#candidates"
-                                                class="hover:underline"
+                                                class="hover:text-primary transition-colors duration-200"
                                                 >The Candidates</a
                                             >
                                         </li>
                                         <li>
                                             <a
                                                 href="#tutorial"
-                                                class="hover:underline"
+                                                class="hover:text-primary transition-colors duration-200"
                                                 >Video Tutorial</a
                                             >
                                         </li>
@@ -548,14 +727,18 @@ onBeforeUnmount(() => {
                                         <li class="mb-4">
                                             <a
                                                 href="https://www.instagram.com/pemiraif2026"
-                                                class="hover:underline"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                class="hover:text-primary transition-colors duration-200"
                                                 >Instagram</a
                                             >
                                         </li>
                                         <li>
                                             <a
-                                                href="https://wa.me/6281283635565"
-                                                class="hover:underline"
+                                                href="https://wa.me/6287864934849"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                class="hover:text-primary transition-colors duration-200"
                                                 >Whatsapp</a
                                             >
                                         </li>
@@ -569,12 +752,16 @@ onBeforeUnmount(() => {
                                     </h2>
                                     <ul class="text-gray-500 font-medium">
                                         <li class="mb-4">
-                                            <a href="#" class="hover:underline"
+                                            <a
+                                                href="#"
+                                                class="hover:text-primary transition-colors duration-200"
                                                 >Privacy Policy</a
                                             >
                                         </li>
                                         <li>
-                                            <a href="#" class="hover:underline"
+                                            <a
+                                                href="#"
+                                                class="hover:text-primary transition-colors duration-200"
                                                 >Terms &amp; Conditions</a
                                             >
                                         </li>
@@ -608,5 +795,125 @@ onBeforeUnmount(() => {
 
 .overflow-x-auto::-webkit-scrollbar {
     display: none;
+}
+
+/* Prevent text from being cut off */
+h1,
+h2,
+h3,
+p {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+}
+
+/* Ensure text containers have proper spacing */
+#hero h1 {
+    line-height: 1.3;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    white-space: pre-line;
+    overflow: visible;
+}
+
+#hero h1 span {
+    white-space: pre-line;
+}
+
+/* Typing cursor animation */
+.typing-cursor {
+    display: inline-block;
+    background: linear-gradient(to bottom, #fe7646, #ee523c);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: blink 1s infinite;
+    font-weight: 300;
+    margin-left: 2px;
+}
+
+@keyframes blink {
+    0%,
+    50% {
+        opacity: 1;
+    }
+    51%,
+    100% {
+        opacity: 0;
+    }
+}
+
+/* Flip Card Styles */
+.flip-card {
+    perspective: 1000px;
+    width: 100%;
+    height: 500px;
+}
+
+@media (min-width: 768px) {
+    .flip-card {
+        height: 600px;
+    }
+}
+
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+}
+
+.flip-card.flipped .flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+.flip-card-back {
+    transform: rotateY(180deg);
+}
+
+/* Scrollbar styling for card back */
+.flip-card-back > div {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--muted-foreground)) transparent;
+}
+
+.flip-card-back > div::-webkit-scrollbar {
+    width: 6px;
+}
+
+.flip-card-back > div::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.flip-card-back > div::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--muted-foreground));
+    border-radius: 3px;
+}
+
+.flip-card-back > div::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(var(--primary));
+}
+
+/* Smooth scroll reveal animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 </style>

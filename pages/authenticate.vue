@@ -44,18 +44,19 @@ const handleOAuthLogin = async () => {
             return;
         }
 
-        const { data, error } = await useApiFetch('/auth/login', {
+        const { data, error, statusCode } = await useApiFetch('/auth/login', {
             method: 'POST',
-            body: JSON.stringify({
+            data: {
                 accessToken,
                 sourceUrl: window.location.href,
-            }),
+            },
         });
 
-        if (error.value) {
+        // Check for errors (network or HTTP errors)
+        if (error.value || (statusCode.value && statusCode.value >= 400)) {
             await router.push({
                 path: '/login',
-                query: { error: 'Server login failed' },
+                query: { error: error.value || 'Login failed' },
             });
             return;
         }

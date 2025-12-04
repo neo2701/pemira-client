@@ -43,7 +43,7 @@ const editCandidate = (candidate: Candidate) => {
                     />
                     <div class="absolute bottom-0 right-0 p-4">
                         <div
-                            class="w-10 h-10 bg-white flex items-center justify-center rounded-full"
+                            class="w-10 h-10 bg-white flex items-center justify-center rounded-full text-black border-2 border-gray-300 shadow-lg"
                         >
                             {{ candidate.order }}
                         </div>

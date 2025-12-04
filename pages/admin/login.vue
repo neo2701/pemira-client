@@ -10,25 +10,23 @@ const signIn = async (email: string, password: string) => {
     try {
         const { data, error } = await useApiFetch('/auth/login', {
             method: 'POST',
-            body: JSON.stringify({
+            data: {
                 email,
                 password,
-            }),
+            },
         });
 
-        if (error?.value) {
+        if (error.value) {
             // Log error dengan format lebih informatif
             console.group('Sign-In Error');
             console.error('Endpoint:', '/auth/login');
-            console.error('Status:', error.value?.status || 'Unknown');
-            console.error(
-                'Message:',
-                error.value?.message || 'No message provided',
-            );
-            console.error('Details:', error.value);
+            console.error('Message:', error.value);
             console.groupEnd();
 
-            useAlertStore().show('Email atau password tidak sesuai!', 'error');
+            useAlertStore().show(
+                error.value || 'Email atau password tidak sesuai!',
+                'error',
+            );
             loading.value = false;
             return;
         }

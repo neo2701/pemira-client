@@ -45,7 +45,7 @@ const submit = async () => {
 
     const { error } = await useApiFetch('/events', {
         method: 'POST',
-        body: formData,
+        data: formData,
     });
 
     if (error.value) {

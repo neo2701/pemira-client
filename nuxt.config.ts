@@ -1,4 +1,15 @@
 export default defineNuxtConfig({
+    vite: {
+        server: {
+            host: process.env.NUXT_PUBLIC_HOST || 'pemiraif.com',
+
+            hmr: {
+                port: 5190,
+                host: process.env.NUXT_PUBLIC_HOST || 'pemiraif.com',
+                clientPort: 443,
+            },
+        },
+    },
     // Menetapkan metadata di head tag
     app: {
         head: {
@@ -17,7 +28,13 @@ export default defineNuxtConfig({
     css: ['~/assets/css/main.css'],
 
     // Menonaktifkan devtools di production
-    devtools: { enabled: true },
+    devtools: {
+        enabled: true,
+
+        timeline: {
+            enabled: true,
+        },
+    },
 
     // Menonaktifkan SSR (Single Page Application)
     ssr: false,

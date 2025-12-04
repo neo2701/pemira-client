@@ -26,9 +26,9 @@ const save = async () => {
 
     await useApiFetch(`/events/${eventStore.event.id}/whitelists`, {
         method: 'POST',
-        body: JSON.stringify({
+        data: {
             whitelists: whitelists.value.split('\n'),
-        }),
+        },
     });
 
     isLoading.value = false;

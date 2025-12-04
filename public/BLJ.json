@@ -1,57 +1,57 @@
 [
     {
-        "image": "/person_blank.png",
-        "name": "Desta Rizky Andhika",
-        "angkatan": "2022"
-    },
-    {
-        "image": "/person_blank.png",
-        "name": "Rafie Najwan Anjasmara",
-        "angkatan": "2022"
-    },
-    {
-        "image": "/person_blank.png",
-        "name": "Muhammad Bagus Satrio Aji",
+        "image": "/BLJ/23_1.webp",
+        "name": "Yazid Fadhlurrohman",
         "angkatan": "2023"
     },
     {
-        "image": "/person_blank.png",
-        "name": "Heraldi Rizky Anggriawan",
+        "image": "/BLJ/23_2.webp",
+        "name": "Iqbal Zahy Adam",
         "angkatan": "2023"
     },
     {
-        "image": "/person_blank.png",
-        "name": "Ghabriella Auranizza Fransrico",
-        "angkatan": "2023"
-    },
-    {
-        "image": "/person_blank.png",
-        "name": "Theodore Manuel Sahasika",
-        "angkatan": "2023"
-    },
-    {
-        "image": "/person_blank.png",
-        "name": "Feomita Ramadhany Fudiansah",
-        "angkatan": "2023"
-    },
-    {
-        "image": "/person_blank.png",
-        "name": "Evrillia Kurniawati",
-        "angkatan": "2024"
-    },
-    {
-        "image": "/person_blank.png",
-        "name": "Dio Afrizal Yona Saputra",
-        "angkatan": "2024"
-    },
-    {
-        "image": "/person_blank.png",
+        "image": "/BLJ/24_1.webp",
         "name": "Fidelia Hahas Asabela",
         "angkatan": "2024"
     },
     {
-        "image": "/person_blank.png",
+        "image": "/BLJ/24_2.webp",
         "name": "Henri Tri Herdiansyah",
         "angkatan": "2024"
+    },
+    {
+        "image": "/BLJ/24_3.webp",
+        "name": "Alvero Fathir Rahman",
+        "angkatan": "2024"
+    },
+    {
+        "image": "/BLJ/24_4.webp",
+        "name": "Mohammad Satria Putra Wicaksono",
+        "angkatan": "2024"
+    },
+    {
+        "image": "/BLJ/24_5.webp",
+        "name": "Evrillia Kurniawati",
+        "angkatan": "2024"
+    },
+    {
+        "image": "/BLJ/25_1.webp",
+        "name": "Cinthia Nur Laili",
+        "angkatan": "2025"
+    },
+    {
+        "image": "/BLJ/25_2.webp",
+        "name": "Sebastian Kevin Hazel",
+        "angkatan": "2025"
+    },
+    {
+        "image": "/BLJ/25_3.webp",
+        "name": "Achmad Naufal Pramadani",
+        "angkatan": "2025"
+    },
+    {
+        "image": "/BLJ/25_4.webp",
+        "name": "Salsa Aufa Nur Huwaizha",
+        "angkatan": "2025"
     }
 ]

@@ -19,10 +19,10 @@ const percentage = (candidate: Candidate) => {
 
 <template>
     <div
-        class="max-w-screen-lg mx-auto grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-8"
+        class="max-w-screen-lg mx-auto grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-10"
     >
         <div v-for="candidate in sortedCandidates" class="flex flex-col gap-2">
-            <ElectionCandidateCard :candidate="candidate" display />
+            <ElectionCandidateCardValidation :candidate="candidate" display />
             <div class="grid grid-cols-3 gap-2 text-sm">
                 <div class="col-span-2">Suara Sah:</div>
                 <div>{{ candidate.votes_count }}</div>
