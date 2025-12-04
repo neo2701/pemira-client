@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { usePemiraConfig } from '~/composables/usePemiraConfig';
+
 definePageMeta({
     layout: 'main',
 });
@@ -17,9 +19,9 @@ const signIn = () => {
     const params = {
         client_id: runtimeConfig.public.googleClientId as string,
         redirect_uri: runtimeConfig.public.googleRedirectUrl as string,
-        response_type: 'token',
+        response_type: 'code', // Changed from 'token' to 'code' for Authorization Code Flow
         scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
-        include_granted_scopes: 'true',
+        access_type: 'offline',
         prompt: 'consent',
     };
 
@@ -29,15 +31,14 @@ const signIn = () => {
     authUrl.searchParams.append('redirect_uri', params.redirect_uri);
     authUrl.searchParams.append('response_type', params.response_type);
     authUrl.searchParams.append('scope', params.scope);
-    authUrl.searchParams.append(
-        'include_granted_scopes',
-        params.include_granted_scopes,
-    );
+    authUrl.searchParams.append('access_type', params.access_type);
     authUrl.searchParams.append('prompt', params.prompt);
 
     // Arahkan pengguna ke URL Google OAuth
     window.open(authUrl.toString(), '_self');
 };
+
+const { year } = usePemiraConfig();
 </script>
 
 <template>
