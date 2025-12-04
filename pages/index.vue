@@ -424,16 +424,14 @@ onBeforeUnmount(() => {
                                                 <p
                                                     class="text-xs md:text-sm lg:text-base text-muted-foreground leading-relaxed pl-3"
                                                 >
-                                                    Lorem ipsum dolor sit amet
-                                                    consectetur adipisicing
-                                                    elit. Quia culpa excepturi
-                                                    laudantium, reiciendis amet
-                                                    temporibus deleniti,
-                                                    quisquam aperiam deserunt
-                                                    saepe dolores quibusdam
-                                                    cumque eveniet, nisi fuga
-                                                    quos laboriosam consequatur
-                                                    aliquid.
+                                                    Mengembangkan HIMATIFA
+                                                    sebagai wadah yang
+                                                    memfasilitasi, menggerakkan,
+                                                    dan memberdayakan keluarga
+                                                    Mahasiswa Informatika agar
+                                                    lebih aktif dan berprestasi
+                                                    serta berkontribusi positif
+                                                    bagi masyarakat.
                                                 </p>
                                             </div>
 
@@ -461,19 +459,24 @@ onBeforeUnmount(() => {
                                                 <p
                                                     class="text-xs md:text-sm lg:text-base text-muted-foreground leading-relaxed pl-3"
                                                 >
-                                                    Lorem ipsum dolor sit amet,
-                                                    consectetur adipiscing elit.
-                                                    Sed do eiusmod tempor
-                                                    incididunt ut labore et
-                                                    dolore magna aliqua. Ut enim
-                                                    ad minim veniam, quis
-                                                    nostrud exercitation ullamco
-                                                    laboris nisi ut aliquip ex
-                                                    ea commodo consequat. Duis
-                                                    aute irure dolor in
-                                                    reprehenderit in voluptate
-                                                    velit esse cillum dolore eu
-                                                    fugiat nulla pariatur.
+                                                    1. Mewujudkan HIMATIFA
+                                                    sebagai sumber informasi
+                                                    yang relevan, cepat, dan
+                                                    terpercaya bagi peningkatan
+                                                    kualitas keluarga Mahasiswa
+                                                    Informatika.<br />2.
+                                                    Mewujudkan HIMATIFA sebagai
+                                                    wadah pengembangan yang
+                                                    aktif mendorong peningkatan
+                                                    soft skill dan hard skill
+                                                    keluarga Mahasiswa
+                                                    Informatika.<br />
+                                                    3. Menjadikan HIMATIFA
+                                                    sebagai pendorong keluarga
+                                                    Mahasiswa Informatika agar
+                                                    lebih terlibat dalam bidang
+                                                    akademik, non akademik,
+                                                    sosial, dan teknologi.
                                                 </p>
                                             </div>
 

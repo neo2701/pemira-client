@@ -151,14 +151,14 @@ const { year } = usePemiraConfig();
                                         name="fluent:calendar-24-regular"
                                         class="shrink-0"
                                     />
-                                    Jumat, 13 Desember 2024
+                                    Jumat, 12 Desember 2025
                                 </li>
                                 <li class="flex items-center gap-2">
                                     <Icon
                                         name="fluent:clock-24-regular"
                                         class="shrink-0"
                                     />
-                                    15:30 WIB
+                                    07:00 WIB
                                 </li>
                                 <li class="flex items-center gap-2">
                                     <Icon
