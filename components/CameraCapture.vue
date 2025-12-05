@@ -217,36 +217,6 @@ watch(
             </UiCardDescription>
         </UiCardHeader>
 
-        <UiCardFooter class="flex justify-center gap-4">
-            <template v-if="picture">
-                <UiButton
-                    :disabled="!videoStream || !picture"
-                    size="lg"
-                    variant="secondary"
-                    @click="retake"
-                >
-                    Ulangi
-                </UiButton>
-                <ConfirmationDialog
-                    title="Apakah kamu yakin?"
-                    :description="`Pastikan ${title.toLowerCase()} terlihat jelas dan tidak blur karena akan digunakan untuk verifikasi pemilihanmu.`"
-                    @confirm="confirm"
-                >
-                    <UiButton size="lg" :disabled="!videoStream || !picture">
-                        Selanjutnya
-                    </UiButton>
-                </ConfirmationDialog>
-            </template>
-            <template v-else>
-                <UiButton size="lg" variant="secondary" @click="back">
-                    Kembali
-                </UiButton>
-                <UiButton :disabled="!videoStream" size="lg" @click="capture">
-                    Ambil Foto
-                </UiButton>
-            </template>
-        </UiCardFooter>
-
         <UiCardContent v-if="!isMobile" class="flex items-center">
             <UiSelect v-model="electionStore.deviceId">
                 <UiSelectTrigger class="mx-auto max-w-sm">
@@ -364,5 +334,34 @@ watch(
                 </template>
             </div>
         </UiCardContent>
+        <UiCardFooter class="flex justify-center gap-4">
+            <template v-if="picture">
+                <UiButton
+                    :disabled="!videoStream || !picture"
+                    size="lg"
+                    variant="secondary"
+                    @click="retake"
+                >
+                    Ulangi
+                </UiButton>
+                <ConfirmationDialog
+                    title="Apakah kamu yakin?"
+                    :description="`Pastikan ${title.toLowerCase()} terlihat jelas dan tidak blur karena akan digunakan untuk verifikasi pemilihanmu.`"
+                    @confirm="confirm"
+                >
+                    <UiButton size="lg" :disabled="!videoStream || !picture">
+                        Selanjutnya
+                    </UiButton>
+                </ConfirmationDialog>
+            </template>
+            <template v-else>
+                <UiButton size="lg" variant="secondary" @click="back">
+                    Kembali
+                </UiButton>
+                <UiButton :disabled="!videoStream" size="lg" @click="capture">
+                    Ambil Foto
+                </UiButton>
+            </template>
+        </UiCardFooter>
     </UiCard>
 </template>
