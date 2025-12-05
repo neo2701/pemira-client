@@ -45,9 +45,8 @@ export default defineNuxtConfig({
             // API base URL untuk frontend (akses di klien)
             apiBase: process.env.NUXT_PUBLIC_API_BASE,
 
-            // Google OAuth configuration
+            // Google OAuth configuration (public values only - no secret!)
             googleClientId: process.env.NUXT_PUBLIC_GOOGLE_CLIENT_ID,
-            googleClientSecret: process.env.NUXT_PUBLIC_GOOGLE_CLIENT_SECRET,
             googleRedirectUrl: process.env.NUXT_PUBLIC_GOOGLE_REDIRECT_URL,
 
             // Variabel build untuk mengidentifikasi build atau environment

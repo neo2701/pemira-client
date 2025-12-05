@@ -26,7 +26,7 @@ const handleBack = () => {
             :portrait="false"
             :show-guides="true"
             guide-type="ktm-only"
-            :mirror-video="false"
+            :mirror-video="true"
             @capture="handleCapture"
             @back="handleBack"
         />

@@ -12,6 +12,15 @@ const result = reactive({
     accepted: 0,
     rejected: 0,
 });
+const enlargedImage = ref<string | null>(null);
+
+const viewEnlarged = (imageUrl: string) => {
+    enlargedImage.value = imageUrl;
+};
+
+const closeEnlarged = () => {
+    enlargedImage.value = null;
+};
 
 const getCurrentResult = async () => {
     loading.value = true;
@@ -230,19 +239,29 @@ onMounted(() => {
         <UiCardContent v-else>
             <Icon v-if="loading" name="svg-spinners:ring-resize" size="24" />
             <div v-if="ballot && !loading" class="grid gap-4">
-                <div class="grid grid-cols-2 gap-4">
-                    <UiAspectRatio :ratio="16 / 9">
+                <div class="grid grid-cols-2 gap-4 h-[calc(100vh-300px)]">
+                    <div
+                        class="flex items-center justify-center bg-muted rounded-lg overflow-hidden cursor-pointer hover:opacity-90 transition"
+                        @click="
+                            viewEnlarged(
+                                storageUrl + ballot?.verification_picture,
+                            )
+                        "
+                    >
                         <img
                             :src="storageUrl + ballot?.verification_picture"
-                            class="w-full rounded-lg"
+                            class="max-w-full max-h-full object-contain rounded-lg"
                         />
-                    </UiAspectRatio>
-                    <UiAspectRatio :ratio="16 / 9">
+                    </div>
+                    <div
+                        class="flex items-center justify-center bg-muted rounded-lg overflow-hidden cursor-pointer hover:opacity-90 transition"
+                        @click="viewEnlarged(storageUrl + ballot?.ktm_picture)"
+                    >
                         <img
                             :src="storageUrl + ballot?.ktm_picture"
-                            class="w-full rounded-lg"
+                            class="max-w-full max-h-full object-contain rounded-lg"
                         />
-                    </UiAspectRatio>
+                    </div>
                 </div>
             </div>
         </UiCardContent>
@@ -260,5 +279,38 @@ onMounted(() => {
                 Sah
             </div>
         </template>
+
+        <!-- Enlarged Image Modal -->
+        <div
+            v-if="enlargedImage"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
+            @click="closeEnlarged"
+        >
+            <button
+                class="absolute top-4 right-4 text-white hover:text-gray-300 transition z-10"
+                @click="closeEnlarged"
+                aria-label="Close"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="32"
+                    height="32"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <img
+                :src="enlargedImage"
+                class="max-w-full max-h-full object-contain"
+                @click.stop
+            />
+        </div>
     </UiCard>
 </template>

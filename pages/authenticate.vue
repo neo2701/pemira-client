@@ -12,43 +12,39 @@ const route = useRoute();
 const router = useRouter();
 
 /**
- * Ekstrak access token dari URL hash atau query.
- * @returns Access token atau undefined jika tidak ditemukan.
+ * Ekstrak authorization code dari URL query.
+ * @returns Authorization code atau undefined jika tidak ditemukan.
  */
-const getAccessToken = (): string | undefined => {
-    const hashParams = route.hash
-        ? new URLSearchParams(route.hash.replace(/^#/, ''))
-        : null;
-    const tokenFromHash = hashParams?.get('access_token');
-    const tokenFromQuery = route.query.access_token as string;
-
-    return tokenFromHash || tokenFromQuery;
+const getAuthorizationCode = (): string | undefined => {
+    return route.query.code as string;
 };
 
 /**
- * Proses login OAuth menggunakan access token.
+ * Proses login OAuth menggunakan authorization code.
  */
 const handleOAuthLogin = async () => {
     isProcessing.value = true;
 
     try {
-        const accessToken = getAccessToken();
+        const authorizationCode = getAuthorizationCode();
 
-        if (!accessToken || accessToken.length < 20) {
+        if (!authorizationCode || authorizationCode.length < 10) {
             await router.push({
                 path: '/login',
                 query: {
-                    error: 'Invalid or missing token',
+                    error: 'Invalid or missing authorization code',
                 },
             });
             return;
         }
 
+        // Kirim authorization code ke backend
+        // Backend akan menggunakan client secret untuk menukar code dengan access token
         const { data, error, statusCode } = await useApiFetch('/auth/login', {
             method: 'POST',
             data: {
-                accessToken,
-                sourceUrl: window.location.href,
+                code: authorizationCode,
+                redirectUri: window.location.origin + '/authenticate',
             },
         });
 
@@ -64,6 +60,7 @@ const handleOAuthLogin = async () => {
         if (data.value) {
             auth.signIn(data.value);
             if (process.client) {
+                // Bersihkan URL dari authorization code
                 window.history.replaceState(
                     {},
                     document.title,
