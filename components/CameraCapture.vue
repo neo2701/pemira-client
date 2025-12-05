@@ -32,6 +32,7 @@ const sources = ref<MediaDeviceInfo[]>([]);
 const canvas = ref<HTMLCanvasElement>();
 const picture = ref<string>();
 const isMobile = ref(false);
+const facingMode = ref<'user' | 'environment'>('user');
 
 const getDevices = async () => {
     if (!navigator.mediaDevices) {
@@ -84,10 +85,14 @@ const startCamera = (id?: string) => {
     // Configure camera based on device
     const videoConstraints: any = mobileCheck()
         ? {
+              width: { ideal: 1920 },
+              height: { ideal: 1080 },
               aspectRatio: 16 / 9,
-              facingMode: 'user', // Front camera for mobile
+              facingMode: facingMode.value, // Use dynamic facing mode for mobile
           }
         : {
+              width: { ideal: 1920 },
+              height: { ideal: 1080 },
               aspectRatio: 16 / 9,
           };
 
@@ -119,6 +124,11 @@ const startCamera = (id?: string) => {
         });
 };
 
+const flipCamera = () => {
+    facingMode.value = facingMode.value === 'user' ? 'environment' : 'user';
+    startCamera();
+};
+
 const capture = () => {
     if (!video.value || !video.value.srcObject) {
         return;
@@ -126,26 +136,41 @@ const capture = () => {
 
     const context = canvas.value!.getContext('2d')!;
 
-    canvas.value!.width = video.value.videoWidth;
-    canvas.value!.height = video.value.videoHeight;
+    // Crop for KTM only mode to match the guide overlay
+    if (props.guideType === 'ktm-only') {
+        // Guide is 75% width with 17:10 aspect ratio, centered
+        const cropWidth = video.value.videoWidth * 0.75;
+        const cropHeight = cropWidth * (10 / 17);
+        const cropX = (video.value.videoWidth - cropWidth) / 2;
+        const cropY = (video.value.videoHeight - cropHeight) / 2;
 
-    context.save();
+        canvas.value!.width = cropWidth;
+        canvas.value!.height = cropHeight;
 
-    // Mirror the image if mirrorVideo is true
-    if (props.mirrorVideo) {
-        context.scale(-1, 1);
-        context.translate(-video.value.videoWidth, 0);
+        context.drawImage(
+            video.value,
+            cropX,
+            cropY,
+            cropWidth,
+            cropHeight,
+            0,
+            0,
+            cropWidth,
+            cropHeight,
+        );
+    } else {
+        // Normal full capture
+        canvas.value!.width = video.value.videoWidth;
+        canvas.value!.height = video.value.videoHeight;
+
+        context.drawImage(
+            video.value,
+            0,
+            0,
+            video.value.videoWidth,
+            video.value.videoHeight,
+        );
     }
-
-    context.drawImage(
-        video.value,
-        0,
-        0,
-        video.value.videoWidth,
-        video.value.videoHeight,
-    );
-
-    context.restore();
 
     const data = canvas.value!.toDataURL('image/png');
     picture.value = data;
@@ -217,36 +242,6 @@ watch(
             </UiCardDescription>
         </UiCardHeader>
 
-        <UiCardFooter class="flex justify-center gap-4">
-            <template v-if="picture">
-                <UiButton
-                    :disabled="!videoStream || !picture"
-                    size="lg"
-                    variant="secondary"
-                    @click="retake"
-                >
-                    Ulangi
-                </UiButton>
-                <ConfirmationDialog
-                    title="Apakah kamu yakin?"
-                    :description="`Pastikan ${title.toLowerCase()} terlihat jelas dan tidak blur karena akan digunakan untuk verifikasi pemilihanmu.`"
-                    @confirm="confirm"
-                >
-                    <UiButton size="lg" :disabled="!videoStream || !picture">
-                        Selanjutnya
-                    </UiButton>
-                </ConfirmationDialog>
-            </template>
-            <template v-else>
-                <UiButton size="lg" variant="secondary" @click="back">
-                    Kembali
-                </UiButton>
-                <UiButton :disabled="!videoStream" size="lg" @click="capture">
-                    Ambil Foto
-                </UiButton>
-            </template>
-        </UiCardFooter>
-
         <UiCardContent v-if="!isMobile" class="flex items-center">
             <UiSelect v-model="electionStore.deviceId">
                 <UiSelectTrigger class="mx-auto max-w-sm">
@@ -276,16 +271,11 @@ watch(
             <div
                 class="relative lg:max-w-2xl xl:max-w-3xl mx-auto border-4 rounded-lg overflow-hidden"
             >
-                <UiAspectRatio
+                <canvas
                     v-show="picture"
-                    :ratio="portrait ? 9 / 16 : 16 / 9"
-                    class="flex"
-                >
-                    <canvas
-                        ref="canvas"
-                        class="w-full h-full bg-muted"
-                    ></canvas>
-                </UiAspectRatio>
+                    ref="canvas"
+                    class="w-full h-auto bg-muted"
+                ></canvas>
                 <video
                     v-show="!picture"
                     ref="video"
@@ -294,7 +284,10 @@ watch(
                     playsinline="true"
                     :class="[
                         'w-full h-auto object-cover',
-                        { 'transform scale-x-[-1]': mirrorVideo },
+                        {
+                            'transform scale-x-[-1]':
+                                mirrorVideo && facingMode === 'user',
+                        },
                     ]"
                 ></video>
 
@@ -307,6 +300,31 @@ watch(
                         class="w-4 h-4 bg-red-400 border border-white rounded-full"
                     ></span>
                 </div>
+
+                <!-- Flip Camera Button for Mobile KTM Only -->
+                <button
+                    v-if="!picture && isMobile && guideType === 'ktm-only'"
+                    @click="flipCamera"
+                    class="absolute top-4 left-4 bg-black/50 text-white p-3 rounded-full hover:bg-black/70 transition-colors"
+                    aria-label="Flip Camera"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <path d="M21 2v6h-6"></path>
+                        <path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path>
+                        <path d="M3 22v-6h6"></path>
+                        <path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path>
+                    </svg>
+                </button>
 
                 <!-- Guide Overlays -->
                 <template v-if="showGuides && !picture">
@@ -364,5 +382,34 @@ watch(
                 </template>
             </div>
         </UiCardContent>
+        <UiCardFooter class="flex justify-center gap-4">
+            <template v-if="picture">
+                <UiButton
+                    :disabled="!videoStream || !picture"
+                    size="lg"
+                    variant="secondary"
+                    @click="retake"
+                >
+                    Ulangi
+                </UiButton>
+                <ConfirmationDialog
+                    title="Apakah kamu yakin?"
+                    :description="`Pastikan ${title.toLowerCase()} terlihat jelas dan tidak blur karena akan digunakan untuk verifikasi pemilihanmu.`"
+                    @confirm="confirm"
+                >
+                    <UiButton size="lg" :disabled="!videoStream || !picture">
+                        Selanjutnya
+                    </UiButton>
+                </ConfirmationDialog>
+            </template>
+            <template v-else>
+                <UiButton size="lg" variant="secondary" @click="back">
+                    Kembali
+                </UiButton>
+                <UiButton :disabled="!videoStream" size="lg" @click="capture">
+                    Ambil Foto
+                </UiButton>
+            </template>
+        </UiCardFooter>
     </UiCard>
 </template>
