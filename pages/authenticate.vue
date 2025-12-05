@@ -20,12 +20,42 @@ const getAuthorizationCode = (): string | undefined => {
 };
 
 /**
+ * Clear all cookies and get fresh CSRF token
+ */
+const clearCookiesAndGetCsrf = async () => {
+    const config = useRuntimeConfig();
+
+    try {
+        // Clear all cookies
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i];
+            const eqPos = cookie.indexOf('=');
+            const name =
+                eqPos > -1 ? cookie.substr(0, eqPos).trim() : cookie.trim();
+            document.cookie =
+                name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
+        }
+
+        // Get fresh CSRF token
+        await $fetch(config.public.apiBase + '/../sanctum/csrf-cookie', {
+            credentials: 'include',
+        });
+    } catch (error) {
+        console.error('Failed to clear cookies and get CSRF token:', error);
+    }
+};
+
+/**
  * Proses login OAuth menggunakan authorization code.
  */
 const handleOAuthLogin = async () => {
     isProcessing.value = true;
 
     try {
+        // Clear cookies and get fresh CSRF token before authentication
+        await clearCookiesAndGetCsrf();
+
         const authorizationCode = getAuthorizationCode();
 
         if (!authorizationCode || authorizationCode.length < 10) {
