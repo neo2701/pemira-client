@@ -653,7 +653,7 @@ onBeforeUnmount(() => {
                         >
                             <div class="aspect-video">
                                 <iframe
-                                    src="https://www.youtube.com/embed/x7oc9-yMIeg?si=xet-HA-z5vvQoAer"
+                                    src="https://www.youtube.com/embed/o2s_vdQNlW4?si=_Aqh-QU-v0zYI9Mv"
                                     class="absolute inset-0 w-full h-full rounded-lg"
                                     frameborder="0"
                                     referrerpolicy="strict-origin-when-cross-origin"
